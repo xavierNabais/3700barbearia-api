@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Barbearia</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/css/3700barber.css">
+</head>
+<body>
+
+    <a href="/painel/marcacoes/novo" class="btn btn-primary btn-xs"><b>+</b> Adicionar nova marcação</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Id_barbeiro</th>
+                <th>Id_utilizador</th>
+                <th>Id_servico</th>
+                <th>Data</th>
+                <th>Notas</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% dados.forEach((dados) => { %>
+            <tr>
+                <td><%= dados.Id %></td>
+                <td><%= dados.Id_barbeiro %></td>
+                <td><%= dados.Id_utilizador %></td>
+                <td><%= dados.Id_servico %></td>
+                <td><%= dados.Data %></td>
+                <td><%= dados.Notas %></td>
+                <td><a href="/painel/marcacoes/update/<%= dados.Id %>">Editar</a>|<a href="/painel/marcacoes/delete/<%= dados.Id %>">Apagar</a></td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
+
+
+</body>
+</html>

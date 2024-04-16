@@ -1,0 +1,61 @@
+<html>
+<head>
+
+</head>
+<body>
+
+    <form method="POST" id="novaMarcacao" name="novaMarcacao">
+        <table>
+            <tr>
+                <th>Id</th>
+                <td><input type="text" name="id" value="<%= dados[0].Id %>"></td>
+            </tr>
+            <tr>
+                <th>Utilizador</th>
+                <td>
+                    <select form="novaMarcacao" name="utilizador">
+                        <option value="Escolha um utilizador" disabled selected>Escolha um utilizador:</option>
+                        <% utilizador.forEach((utilizador) => { %>
+                        <option value="<%=utilizador.Id%>" ><%=utilizador.Nome%></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Barbeiro</th>
+                <td>
+                    <select form="novaMarcacao" name="barbeiro">
+                        <option value="Escolha um barbeiro" disabled selected>Escolha um barbeiro:</option>
+                        <% barbeiro.forEach((barbeiro) => { %>
+                        <option value="<%=barbeiro.Id%>" ><%=barbeiro.Nome%></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Serviço</th>
+                <td>
+                    <select form="novaMarcacao" name="servico">
+                        <option value="Escolha um serviço" disabled selected>Escolha um serviço:</option>
+                        <% servico.forEach((servico) => { %>
+                        <option value="<%=servico.Id%>" ><%=servico.Nome%></option>
+                        <% }); %>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Data</th>
+                <td><input type="date" name="data" value="<%= dados[0].Data %>"></td>
+            </tr>
+            <tr>
+                <th>Notas</th>
+                <td><input type="text" name="notas" value="<%= dados[0].Notas %>"></td>
+            </tr>
+        </table>
+        <input type="submit" value="Enviar">
+    </form>
+    
+
+</body>
+
+</html>

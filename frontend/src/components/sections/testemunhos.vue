@@ -1,0 +1,49 @@
+<template>
+
+
+            <section class="testemunhos-block">
+
+            <p style="font-size: 32px; color: black; font-weight: bold;">TESTEMUNHOS</p>
+            <div class="linha-imagem-linha">
+                <hr class="linha">
+                <img src="../../assets/images/bigode.png" alt="Bigode" class="imagem">
+                <hr class="linha">
+            </div>
+
+            <div class="all_testemunho">
+                <div class="cada_testemunho">
+                    <p style="color: #F2B802;"><i class="fas fa-user"></i> Xavier Nabais</p>
+                    <p>16/04/2023</p>
+                    <p style="color: #F2B802;">★★★★</p>
+                    <p>Excelente trabalho!
+            Barbeiro bem profissional e ótima pessoa!</p>
+                </div>
+                <div class="cada_testemunho">
+                    <p style="color: #F2B802;"><i class="fas fa-user"></i> Xavier Nabais</p>
+                    <p>16/04/2023</p>
+                    <p style="color: #F2B802;">★★★★</p>
+                    <p>Bom staff
+            </p>
+                </div>
+                <div class="cada_testemunho">
+                    <p style="color: #F2B802;"><i class="fas fa-user"></i> Xavier Nabais</p>
+                    <p>16/04/2023</p>
+                    <p style="color: #F2B802;">★★★★</p>
+                    <p>Atendimento top! Melhor barbearia de São João da madeira
+            </p>
+                </div>
+                <br style="clear: left;" />
+            </div>
+
+
+            </section>
+        </template>
+        
+        
+        <script>
+        export default {
+        name: 'SectionTestemunhos',
+        
+        }
+        
+        </script>
