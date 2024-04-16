@@ -484,8 +484,7 @@ a {
   padding-bottom:10%;
 }
 
-.linha-imagem-linha {
-  display: flex;
+.separador {
   align-items: center;
 }
 
@@ -498,9 +497,6 @@ a {
   max-width: 36px; /* Largura máxima desejada */
 }
 
-.imagem {
-  width: 54px; /* Ajuste conforme necessário */
-}
 
 
 .conteudo {
@@ -573,20 +569,95 @@ a {
 .servico {
   display: flex;
   align-items: center;
+  margin-top:5%;
 }
 
 .blocks {
   display: flex;
   flex-wrap: wrap; /* Permite que os blocos de serviço sejam distribuídos em várias linhas */
-  justify-content: space-between; /* Distribui os blocos de serviço uniformemente ao longo do contêiner */
+  flex: 2;
+  justify-content: flex-end;
+}
+.block{
+  display: flex;
+  flex-wrap: wrap; /* Permite que os blocos de serviço sejam distribuídos em várias linhas */
+  flex: 2;
+  justify-content: flex-start;
+  margin-left:10%;
+
 }
 
+
+
+
+.scroller__inner {
+  padding-block: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 5%;
+}
+
+.scroller__inner img {
+  width:700px;
+}
+
+
+.scroller[data-animated="true"] {
+  overflow: hidden;
+  -webkit-mask: linear-gradient(
+    90deg,
+    transparent,
+    white 20%,
+    white 80%,
+    transparent
+  );
+  mask: linear-gradient(90deg, transparent, white 10%, white 90%, transparent);
+}
+
+.scroller[data-animated="true"] .scroller__inner {
+  width: max-content;
+  flex-wrap: nowrap;
+  animation: scroll var(--_animation-duration, 40s)
+    var(--_animation-direction, forwards) linear infinite;
+}
+
+
+.scroller[data-direction="left"] {
+  --_animation-direction: forwards;
+}
+
+.scroller[data-speed="fast"] {
+  --_animation-duration: 40s;
+}
+
+
+@keyframes scroll {
+  to {
+    transform: translate(calc(-50% - 0.5rem));
+  }
+}
+
+@keyframes infiniteScroll {
+  from {transform: translateX(0) }
+  to {transform: translateX(calc(0px - 50% - 25px));}
+}
+
+
+
+
+
+
+
 .bloco-servico {
-  flex: 1;
-  text-align: center;
+  text-align: left;
   background-color:#1E1E1E;
-  height:320px;
-  width:320px;
+  height:290px;
+  width:290px;
+  margin:1%;
+  padding:2%;
+  background-image: url("../images/textura.png");
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.342);
 }
 
 .bloco-servico h3 {
@@ -604,8 +675,8 @@ a {
 }
 
 .servico-conteudo {
-  margin-top: 5%;
-    flex: 2;
+  flex: 1;
+  text-align: left;
 }
 
 
@@ -630,7 +701,7 @@ a {
 
 .portfolio-block {
   text-align: center;
-  padding-top: 5%;
+  padding-top: 10%;
   background-color:#1E1E1E;
   padding-bottom:10%;
 }
@@ -793,7 +864,7 @@ a {
 .icon {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 5%;
 }
 
 .icon img {

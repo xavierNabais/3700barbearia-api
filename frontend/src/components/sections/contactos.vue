@@ -4,27 +4,27 @@
             <section class="contactos">
 
             <p style="font-size: 32px; color: white; font-weight: bold;">CONTACTOS</p>
-            <div class="linha-imagem-linha">
-                <hr class="linha">
-                <img src="../../assets/images/bigode.png" alt="Bigode" class="imagem">
-                <hr class="linha">
+            <div class="separador">
+                <img src="../../assets/images/bigode_line.png" alt="Bigode" style="width:10%;">
             </div>
             
             <section class="contactos-block">
                 <div class="redes-sociais">
                     <h3>REDES SOCIAIS</h3>
-                    <div class="icon">
-                        <img src="" alt="Ícone 1">
-                        <p>3700 BARBERSHOP</p>
-                    </div>
-                    <div class="icon">
-                        <img src="" alt="Ícone 2">
-                        <p>3700 BARBERSHOP</p>
-                    </div>
-                    <div class="icon">
-                        <img src="" alt="Ícone 3">
-                        <p>3700 BARBERSHOP</p>
-                    </div>
+                        <div>
+                            <div class="icon">
+                                <i class="fa fa-instagram" style="color:white;margin-right:2%;font-size:32px"></i>
+                                <p>3700 BARBERSHOP</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-facebook-square" style="color:white;margin-right:2%;font-size:32px"></i>
+                                <p>3700 BARBERSHOP</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-twitter-square" style="color:white;margin-right:2%;font-size:32px"></i>
+                                <p>3700 BARBERSHOP</p>
+                            </div>
+                        </div>
                 </div>
                 <div class="mapa">
                     <h3>ONDE ESTAMOS?</h3>

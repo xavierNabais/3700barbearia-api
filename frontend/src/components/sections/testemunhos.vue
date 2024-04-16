@@ -4,12 +4,9 @@
             <section class="testemunhos-block">
 
             <p style="font-size: 32px; color: black; font-weight: bold;">TESTEMUNHOS</p>
-            <div class="linha-imagem-linha">
-                <hr class="linha">
-                <img src="../../assets/images/bigode.png" alt="Bigode" class="imagem">
-                <hr class="linha">
+            <div class="separador">
+                <img src="../../assets/images/bigode_line.png" alt="Bigode" style="width:10%;">
             </div>
-
             <div class="all_testemunho">
                 <div class="cada_testemunho">
                     <p style="color: #F2B802;"><i class="fas fa-user"></i> Xavier Nabais</p>

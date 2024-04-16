@@ -1,11 +1,9 @@
 <template>
         <section class="barbearia">
             <p style="font-size: 32px; color: white; font-weight: bold;">A BARBEARIA</p>
-        <div class="linha-imagem-linha">
-            <hr class="linha">
-            <img src="../../assets/images/bigode.png" alt="Bigode" class="imagem">
-            <hr class="linha">
-        </div>
+            <div class="separador">
+                <img src="../../assets/images/bigode_line.png" alt="Bigode" style="width:10%;">
+            </div>
         <div class="conteudo">
             <div class="conteudo-imagem">
             <img src="../../assets/images/about_logo.jpg" alt="Imagem" class="imagem-conteudo">
