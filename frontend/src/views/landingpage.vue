@@ -1,5 +1,9 @@
 <template>
 
+
+<Loader />
+
+
 <Header />
 
 <div class="section">
@@ -19,9 +23,6 @@
 <div v-if="showPopup" class="popup">
   <Popup />
 </div>
-
-
-
 
     </div>
     <div class="image">
@@ -71,10 +72,12 @@
   import Testemunhos from '../components/sections/testemunhos.vue';
   import Servicos from '../components/sections/servicos.vue';
   import Certificados from '../components/sections/certificados.vue';
+  import Loader from '../components/loading.vue';
 
   export default {
     data() {
       return {
+        isLoading: true,
         showPopup: false,
         currentTab: 0,
         buttonHover: false,
@@ -90,6 +93,7 @@
       Testemunhos,
       Servicos,
       Certificados,
+      Loader,
     },
     name:'LandingPage',
     methods: {
@@ -104,7 +108,15 @@
         document.body.classList.remove('no-scroll');
         this.currentTab = 0; // Reinicie a guia atual ao fechar o popup
       },
-    }
+    },
+    mounted() {
+      document.body.classList.add('no-scroll');
+    // Simulando o carregamento por 3 segundos
+    setTimeout(() => {
+      this.isLoading = false;
+      document.body.classList.remove('no-scroll');
+    }, 3000);
+  }
 
   }
   </script>
