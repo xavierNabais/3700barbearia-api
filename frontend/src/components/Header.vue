@@ -12,7 +12,15 @@
     <li><a href="#">AGENDAR</a></li>
     <li><a href="#">CONTACTOS</a></li>
   </ul>
-  <a v-if="!userName" href="/login" style="color:white;margin-top: 4%;color:#F4B604">Entrar  <i class="fas fa-user-alt	" style="font-size:16px;"></i></a>
+  <div class="dropdown" style="margin-left: 8%; align-self: self-end">
+
+    <button class="dropbtn" >
+        <div v-if="!userName" class="profile-nav" >
+          <a href="/login">Iniciar sessão <i class="fas fa-scissors" :class="{ 'rotate': dropdownOpen, 'rotate-back': !dropdownOpen }"></i></a>
+        </div>
+      </button>
+
+  </div>
 
   <Dropdown/>
 

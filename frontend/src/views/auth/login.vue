@@ -44,7 +44,7 @@
             <a href=""><p style="font-size:15px; text-decoration:underline;color:#F2B709">Perdeu a senha?</p></a>
             <button type="submit" class="login-button">INICIAR SESSÃO</button>
               <div class="success-message" v-if="perfilAtualizado">
-                Perfil atualizado com sucesso!
+                A iniciar sessão...
               </div>
             </form>
         </div>

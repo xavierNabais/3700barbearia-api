@@ -70,7 +70,7 @@
               </div>
               <button class="save-button">Guardar</button>
               <div class="success-message" v-if="perfilAtualizado1">
-                Perfil atualizado com sucesso!
+                A atualizar perfil...
               </div>  
               <div class="success-message" v-if="erro1">
                 Ocorreu um erro ao editar o perfil!
@@ -216,7 +216,7 @@
                       setTimeout(() => {
                         this.perfilAtualizado1 = false;
                         window.location.reload();
-                      }, 3000);
+                      }, 1500);
                      } else {
                       this.erro1 = true;
                       console.error('Erro ao editar o perfil.');
