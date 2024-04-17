@@ -72,8 +72,44 @@ Utilizador.update = (dados, result) => {
 };
 
 
+//Model Atualizar Utilizador STEP 1
+Utilizador.update1 = (dados, result) => {
+    sql.query('UPDATE utilizadores SET Nome=?, Apelido=?, Username=? WHERE id=?', [dados.Nome, dados.Apelido, dados.Username, dados.Id], (error,res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(null, error);
+            return;
+        }
+        console.log("Utilizador alterado com sucesso!");
+        result(null,res);
+    });
+};
 
+//Model Atualizar Utilizador STEP 1
+Utilizador.update2 = (dados, result) => {
+    sql.query('UPDATE utilizadores SET Email=? WHERE id=?', [dados.New, dados.Id], (error,res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(null, error);
+            return;
+        }
+        console.log("Utilizador alterado com sucesso!");
+        result(null,res);
+    });
+};
 
+//Model Atualizar Utilizador STEP 1
+Utilizador.update3 = (dados, result) => {
+    sql.query('UPDATE utilizadores SET Nome=?, Apelido=?, Username=? WHERE id=?', [dados.Nome, dados.Apelido, dados.Username, dados.Id], (error,res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(null, error);
+            return;
+        }
+        console.log("Utilizador alterado com sucesso!");
+        result(null,res);
+    });
+};
 
 
 //Model Eliminar Atualizador

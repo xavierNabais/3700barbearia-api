@@ -15,6 +15,10 @@ var path = require('path');
 //Rota Visualização Painel de administrador
 router.get("/painel/utilizadores"/*, isAdmin*/, utilizadorController.findAll);
 
+//Rota Visualização Painel de administrador
+router.get("/painel/utilizadores/:id"/*, isAdmin*/, utilizadorController.findById);
+
+
 //Rota Formulário Criação Utilizador Frontend
 router.get("/painel/utilizadores/novo", function(req,res){
     res.render(path.resolve('views/pages/administrador/utilizador/create.ejs'));  
@@ -28,6 +32,15 @@ router.get("/painel/utilizadores/update/:id", (req, res) => {
 
 //Rota Criação Utilizador Backend
 router.post("/painel/utilizadores/novo", utilizadorController.create);
+
+//Rota Atualização Utilizador Step 1 Backend
+router.post("/perfil/editar/1/:id", utilizadorController.update1);
+
+//Rota Atualização Utilizador Step 2 Backend
+router.post("/perfil/editar/2/:id", utilizadorController.update2);
+
+//Rota Atualização Utilizador Step 3 Backend
+router.post("/perfil/editar/3/:id", utilizadorController.update3);
 
 //Rota Atualização Utilizador Backend
 router.post("/painel/utilizadores/update/:id", utilizadorController.update);

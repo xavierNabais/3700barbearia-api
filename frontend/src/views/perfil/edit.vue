@@ -48,25 +48,36 @@
                 Personalize o seu perfil facilmente! Atualize as suas informações pessoais de forma rápida e simples para garantir que sua conta esteja sempre atualizada.
               </div>
             </div>
+            
             <div class="form-container">
+              <form @submit.prevent="submitForm1">
               <div class="input-group" style="display:flex; flex-direction: row;">
                 <div>
                   <label for="nome">Nome</label>
                   <br>
-                  <input type="text" id="nome">
+                  <input type="text" id="nome" v-model="utilizador.Nome" style="text-indent: 10px; color:grey">
                 </div>
                 <div style="margin-left: 5%;">
                   <label for="apelido">Apelido</label>
                   <br>
-                  <input type="text" id="apelido">
+                  <input type="text" id="apelido" v-model="utilizador.Apelido" style="text-indent: 10px; color:grey">
                 </div>
               </div>
               <div class="input-group">
                 <label for="username">Username</label>
                 <br>
-                <input type="text" id="username">
+                <input type="text" id="username" name="username" v-model="utilizador.Username" style="text-indent: 10px; color:grey">
               </div>
               <button class="save-button">Guardar</button>
+              <div class="success-message" v-if="perfilAtualizado1">
+                Perfil atualizado com sucesso!
+              </div>  
+              <div class="success-message" v-if="erro1">
+                Ocorreu um erro ao editar o perfil!
+              </div>  
+            </form>
+
+
             </div>
 
 
@@ -75,7 +86,7 @@
 
                 <div class="bottom-division">
                         <div class="left-division">
-
+                          <form @submit.prevent="submitForm2">
                             <div class="personal-info">
                               <div class="info-header">
                                 Email
@@ -90,17 +101,23 @@
                                 <div>
                                   <label for="email" class="email">Endereço de email atual</label>
                                   <br>
-                                  <input type="text" id="nome">
+                                  <input type="text" id="old_email" v-model=" email.Old">
                                 </div>
                               </div>
                               <div class="input-group">
                                 <label for="emailNew" class="email">Novo endereço de email</label>
                                 <br>
-                                <input type="text" id="username">
+                                <input type="text" id="email" v-model="email.New">
                               </div>
-                              <button class="save-button">Guardar</button>
+                              <button type="submit" class="save-button">Guardar</button>
                             </div>
-
+                              <div class="success-message" v-if="perfilAtualizado2">
+                              Perfil atualizado com sucesso!
+                              </div>
+                              <div class="success-message" v-if="erro2">
+                              O endereço de email atual está incorreto!
+                            </div>  
+                            </form>
                         </div>
 
 
@@ -118,15 +135,15 @@
                           <div class="form-container">
                             <div class="input-group" style="display:flex; flex-direction: row;">
                               <div>
-                                <label for="email" class="email">Password atual*</label>
+                                <label for="password" class="password">Password atual*</label>
                                 <br>
-                                <input type="text" id="nome">
+                                <input type="password" id="password">
                               </div>
                             </div>
                             <div class="input-group">
                               <label for="emailNew" class="email">Nova password*</label>
                               <br>
-                              <input type="text" id="username">
+                              <input type="password" id="new_password">
                             </div>
                             <button class="save-button">Guardar</button>
                           </div>
@@ -168,16 +185,101 @@
       export default {
         data() {
           return {
-            utilizador: [], // Propriedade para armazenar os dados dos serviços
+            utilizador: [], // Propriedade para armazenar os dados do form nome, apelido, username
+            email: [], // Propriedade para armazenar os dados do form email
+            perfilAtualizado1: false,
+            perfilAtualizado2: false,
+            erro1: false,
+            erro2: false
             };
         },
         methods: {
+                async submitForm1() {
+                  console.log('teste');
+                  try {
+                    const userId = localStorage.getItem('userId');
+                    if (!userId) {
+                      console.error('UserId não encontrado na sessionStorage.');
+                      return;
+                    }
+                    const url = `http://localhost:5000/perfil/editar/1/${userId}`;
+                    const response = await fetch(url, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(this.utilizador),
+                    });
+                    if (response.ok) {
+                      console.log('Perfil editado com sucesso!');
+                      this.perfilAtualizado1 = true;
+                      setTimeout(() => {
+                        this.perfilAtualizado1 = false;
+                        window.location.reload();
+                      }, 3000);
+                     } else {
+                      this.erro1 = true;
+                      console.error('Erro ao editar o perfil.');
+                    }
+                  } catch (error) {
+                    console.error('Erro ao enviar o formulário:', error);
+                  }
+                },
+                async submitForm2() {
+                try {
+                    const userId = localStorage.getItem('userId');
+                    if (!userId) {
+                        console.error('UserId não encontrado na sessionStorage.');
+                        return;
+                    }
+                    
+                    // Crie um objeto com as propriedades Old, New e Id
+                    const data = {
+                        Old: this.email.Old,
+                        New: this.email.New,
+                        Id: userId // Busca o ID do usuário do localStorage
+                    };
+
+                    const url = `http://localhost:5000/perfil/editar/2/${userId}`;
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    if (response.ok) {
+                        console.log('Perfil editado com sucesso!');
+                        this.perfilAtualizado2 = true;
+                        setTimeout(() => {
+                            this.perfilAtualizado2 = false;
+                        }, 3000);
+                    } else {
+                      console.error('Erro ao editar o perfil.');
+                      this.erro2 = true;
+                      setTimeout(() => {
+                            this.erro2 = false;
+                        }, 3000);
+                    }
+                } catch (error) {
+                    console.error('Erro ao enviar o formulário:', error);
+                }
+            },
+
           async fetchUtilizador() {
             try {
-              const response = await fetch('http://localhost:5000/painel/utilizadores');
+              const userId = localStorage.getItem('userId'); // Obtém o userId da sessionStorage
+              if (!userId) {
+                console.error('UserId não encontrado na sessionStorage.');
+                return;
+              }
+              const url = `http://localhost:5000/painel/utilizadores/${userId}`;
+              const response = await fetch(url);
               const data = await response.json();
-              this.utilizador = data;
-            } catch (error) {
+              this.utilizador = data[0];
+            }
+            catch (error) {
               console.error('Erro ao buscar os dados dos serviços:', error);
             }
           },
@@ -193,3 +295,16 @@
     
       }
       </script>
+
+<style scoped>
+.success-message {
+  color: black;
+  font-weight: bold;
+  border-bottom:1px solid #F4B604;
+  padding: 15px 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+  width:250px;
+}
+</style>
