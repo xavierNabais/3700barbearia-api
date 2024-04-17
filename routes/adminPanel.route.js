@@ -13,7 +13,7 @@ var path = require('path');
 
 
 //Rota Visualização Painel de administrador
-router.get("/painel/utilizadores"/*, isAdmin*/, utilizadorController.findAll);
+router.get("/painel/utilizadores", utilizadorController.findAll);
 
 //Rota Visualização Painel de administrador
 router.get("/painel/utilizadores/:id"/*, isAdmin*/, utilizadorController.findById);
