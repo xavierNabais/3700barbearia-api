@@ -43,6 +43,9 @@
             </div>
             <a href=""><p style="font-size:15px; text-decoration:underline;color:#F2B709">Perdeu a senha?</p></a>
             <button type="submit" class="login-button">INICIAR SESSÃO</button>
+              <div class="success-message" v-if="perfilAtualizado">
+                Perfil atualizado com sucesso!
+              </div>
             </form>
         </div>
 
@@ -109,7 +112,8 @@
         data() {
           return {
             email: '',
-            password: ''
+            password: '',
+            perfilAtualizado: false,
           };
         },
         methods: {
@@ -133,8 +137,11 @@
                 localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
                 localStorage.setItem('userName', data.userName);
                 localStorage.setItem('type', data.type);
-                console.log('redirect');
-                window.location.href = "/"
+                this.perfilAtualizado = true;
+                setTimeout(() => {
+                    this.perfilAtualizado = false;
+                    window.location.href= '/';
+                }, 1500);
               } else {
                 console.log(data); // Se o login não foi bem-sucedido, imprima os dados do erro no console
               }
@@ -146,3 +153,17 @@
       };
       </script>
       
+
+      <style scoped>
+      .success-message {
+      color: black;
+      font-weight: bold;
+      font-size:18px;
+      border-bottom:1px solid #F4B604;
+      padding: 15px 20px;
+      border-radius: 5px;
+      margin-top: 20px;
+      text-align: center;
+      width:300px;
+    }
+      </style>
