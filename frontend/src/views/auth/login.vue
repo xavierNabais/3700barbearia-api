@@ -43,8 +43,11 @@
             </div>
             <a href=""><p style="font-size:15px; text-decoration:underline;color:#F2B709">Perdeu a senha?</p></a>
             <button type="submit" class="login-button">INICIAR SESSÃO</button>
-              <div class="success-message" v-if="perfilAtualizado">
+              <div class="success-message" v-if="login_success">
                 A iniciar sessão...
+              </div>
+              <div class="success-message" v-if="login_error">
+                Ocorreu um erro ao iniciar sessão.
               </div>
             </form>
         </div>
@@ -59,24 +62,31 @@
                 Para criar uma nova conta, preencha o formulário com suas informações pessoais e escolha um nome de usuário e senha únicos.
               </div>
             </div>
+            <form id="loginForm" @submit.prevent="registo">
             <div class="form-container">
             <div class="input-group">
                 <div>
-                  <label for="nome" class="login-label">Endereço de email</label>
+                  <label for="email" class="login-label">Endereço de email</label>
                   <br>
-                  <input type="text" id="nome" class="login">
+                  <input type="text" id="email" class="login" v-model="r_email"> 
                 </div>
               </div>
               <div class="input-group">
-                <label for="username" class="login-label">Password</label>
+                <label for="password" class="login-label">Password</label>
                 <br>
-                <input type="text" id="username" class="login">
+                <input type="password" id="password" class="login" v-model="r_password">
               </div>
             </div>
             <p>Os seus dados pessoais serão usados para apoiar a sua experiência no site 3700barbershop.pt
             Serão utilizados para gerir o acesso à sua conta e outros fins descritos na nossa política de privacidade</p>
-            <button class="login-button">REGISTAR NOVA CONTA</button>
-
+            <button type="submit" class="login-button">REGISTAR NOVA CONTA</button>
+            <div class="success-message" v-if="registo_success">
+                A criar conta...
+            </div>
+            <div class="success-message" v-if="registo_error">
+                Erro ao criar conta.
+            </div>
+          </form>
         </div>
 
 
@@ -113,7 +123,12 @@
           return {
             email: '',
             password: '',
-            perfilAtualizado: false,
+            r_email: '',
+            r_password: '',
+            login_error: false,
+            login_success: false,
+            registo_success: false,
+            registo_error: false,
           };
         },
         methods: {
@@ -137,12 +152,44 @@
                 localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
                 localStorage.setItem('userName', data.userName);
                 localStorage.setItem('type', data.type);
-                this.perfilAtualizado = true;
+                this.login_error = true;
                 setTimeout(() => {
-                    this.perfilAtualizado = false;
+                    this.login_error = false;
                     window.location.href= '/';
                 }, 1500);
               } else {
+                console.log(data); // Se o login não foi bem-sucedido, imprima os dados do erro no console
+              }
+            } catch (error) {
+              console.error('Erro ao efetuar login:', error);
+            }
+          },
+          async registo() {
+            try {
+              const response = await fetch('http://localhost:5000/registo', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  email: this.r_email,
+                  password: this.r_password
+                })
+              });
+              const data = await response.json();
+              
+              // Verifique se o login foi bem-sucedido
+              if (response.ok) {
+                console.log(data);
+                localStorage.setItem('userId', data.insertId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('type', 0);
+                this.registo_success = true;
+                setTimeout(() => {
+                    this.registo_success = false;
+                    window.location.href= '/';
+                }, 1500);
+              } else {
+                this.registo_error = true;
                 console.log(data); // Se o login não foi bem-sucedido, imprima os dados do erro no console
               }
             } catch (error) {

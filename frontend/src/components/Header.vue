@@ -15,7 +15,7 @@
   <div class="dropdown" style="margin-left: 8%; align-self: self-end">
 
     <button class="dropbtn" >
-        <div v-if="!userName" class="profile-nav" >
+        <div v-if="!userId" class="profile-nav">
           <a href="/login">Iniciar sessão <i class="fas fa-scissors" :class="{ 'rotate': dropdownOpen, 'rotate-back': !dropdownOpen }"></i></a>
         </div>
       </button>
@@ -43,13 +43,11 @@
     components: {
       Dropdown,
     },
-    props: {
-      userId: String
-    },
     data() {
     return {
       userName: '',
       type: '',
+      userId: '',
       dropdownOpen: false
 
     };
@@ -61,6 +59,7 @@
     },
     mounted() {
       // Recupera o userName do localStorage
+      this.userId = localStorage.getItem('userId')
       this.userName = localStorage.getItem('userName');
       this.type = localStorage.getItem('type');
     }

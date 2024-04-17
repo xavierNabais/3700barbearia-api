@@ -80,12 +80,12 @@ Utilizador.update1 = (dados, result) => {
             result(null, error);
             return;
         }
-        console.log("Utilizador alterado com sucesso!");
+        console.log("Nome do utilizador alterado com sucesso!");
         result(null,res);
     });
 };
 
-//Model Atualizar Utilizador STEP 1
+//Model Atualizar Utilizador STEP 2
 Utilizador.update2 = (dados, result) => {
     sql.query('UPDATE utilizadores SET Email=? WHERE id=?', [dados.New, dados.Id], (error,res) => {
         if (error) {
@@ -93,20 +93,20 @@ Utilizador.update2 = (dados, result) => {
             result(null, error);
             return;
         }
-        console.log("Utilizador alterado com sucesso!");
+        console.log("Email do utilizador alterado com sucesso!");
         result(null,res);
     });
 };
 
-//Model Atualizar Utilizador STEP 1
+//Model Atualizar Utilizador STEP 3
 Utilizador.update3 = (dados, result) => {
-    sql.query('UPDATE utilizadores SET Nome=?, Apelido=?, Username=? WHERE id=?', [dados.Nome, dados.Apelido, dados.Username, dados.Id], (error,res) => {
+    sql.query('UPDATE utilizadores SET Password=? WHERE id=?', [dados.New, dados.Id], (error,res) => {
         if (error) {
             console.log("error: ", error);
             result(null, error);
             return;
         }
-        console.log("Utilizador alterado com sucesso!");
+        console.log("Password do utilizador alterada com sucesso!");
         result(null,res);
     });
 };

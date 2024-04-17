@@ -99,20 +99,20 @@
                             <div class="form-container">
                               <div class="input-group" style="display:flex; flex-direction: row;">
                                 <div>
-                                  <label for="email" class="email">Endereço de email atual</label>
+                                  <label for="email" class="email">Endereço de email atual*</label>
                                   <br>
                                   <input type="text" id="old_email" v-model=" email.Old">
                                 </div>
                               </div>
                               <div class="input-group">
-                                <label for="emailNew" class="email">Novo endereço de email</label>
+                                <label for="emailNew" class="email">Novo endereço de email*</label>
                                 <br>
                                 <input type="text" id="email" v-model="email.New">
                               </div>
                               <button type="submit" class="save-button">Guardar</button>
                             </div>
                               <div class="success-message" v-if="perfilAtualizado2">
-                              Perfil atualizado com sucesso!
+                              A atualizar endereço de email...
                               </div>
                               <div class="success-message" v-if="erro2">
                               O endereço de email atual está incorreto!
@@ -122,7 +122,7 @@
 
 
                         <div class="right-division">
-                          
+                          <form @submit.prevent="submitForm3">
                           <div class="personal-info">
                             <div class="info-header">
                               Password
@@ -137,16 +137,17 @@
                               <div>
                                 <label for="password" class="password">Password atual*</label>
                                 <br>
-                                <input type="password" id="password">
+                                <input type="password" id="password" v-model="password.Old">
                               </div>
                             </div>
                             <div class="input-group">
                               <label for="emailNew" class="email">Nova password*</label>
                               <br>
-                              <input type="password" id="new_password">
+                              <input type="password" id="new_password" v-model="password.New">
                             </div>
-                            <button class="save-button">Guardar</button>
+                            <button type="submit" class="save-button">Guardar</button>
                           </div>
+                          </form>
 
                       </div>
 
@@ -187,10 +188,13 @@
           return {
             utilizador: [], // Propriedade para armazenar os dados do form nome, apelido, username
             email: [], // Propriedade para armazenar os dados do form email
+            password: [],
             perfilAtualizado1: false,
             perfilAtualizado2: false,
+            perfilAtualizado3: false,
             erro1: false,
-            erro2: false
+            erro2: false,
+            erro3: false
             };
         },
         methods: {
@@ -204,7 +208,7 @@
                     }
                     const url = `http://localhost:5000/perfil/editar/1/${userId}`;
                     const response = await fetch(url, {
-                      method: 'POST',
+                      method: 'PUT',
                       headers: {
                         'Content-Type': 'application/json'
                       },
@@ -214,6 +218,7 @@
                       console.log('Perfil editado com sucesso!');
                       this.perfilAtualizado1 = true;
                       setTimeout(() => {
+                        localStorage.setItem('userName', this.utilizador.Nome); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
                         this.perfilAtualizado1 = false;
                         window.location.reload();
                       }, 1500);
@@ -242,7 +247,7 @@
 
                     const url = `http://localhost:5000/perfil/editar/2/${userId}`;
                     const response = await fetch(url, {
-                        method: 'POST',
+                        method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -251,16 +256,59 @@
 
                     if (response.ok) {
                         console.log('Perfil editado com sucesso!');
-                        this.perfilAtualizado2 = true;
+                        this.perfilAtualizado3 = true;
                         setTimeout(() => {
-                            this.perfilAtualizado2 = false;
-                        }, 3000);
+                            this.perfilAtualizado3 = false;
+                            window.location.reload();
+                        }, 1500);
                     } else {
                       console.error('Erro ao editar o perfil.');
                       this.erro2 = true;
                       setTimeout(() => {
-                            this.erro2 = false;
+                            this.erro3 = false;
                         }, 3000);
+                    }
+                } catch (error) {
+                    console.error('Erro ao enviar o formulário:', error);
+                }
+            },
+            async submitForm3() {
+                try {
+                    const userId = localStorage.getItem('userId');
+                    if (!userId) {
+                        console.error('UserId não encontrado na sessionStorage.');
+                        return;
+                    }
+                    
+                    // Crie um objeto com as propriedades Old, New e Id
+                    const data = {
+                        Old: this.password.Old,
+                        New: this.password.New,
+                        Id: userId // Busca o ID do usuário do localStorage
+                    };
+
+                    const url = `http://localhost:5000/perfil/editar/3/${userId}`;
+                    const response = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data),
+                    });
+
+                    if (response.ok) {
+                        console.log('Perfil editado com sucesso!');
+                        this.perfilAtualizado3 = true;
+                        setTimeout(() => {
+                            this.perfilAtualizado3 = false;
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                      console.error('Erro ao editar o perfil.');
+                      this.erro3 = true;
+                      setTimeout(() => {
+                            this.erro3 = false;
+                        }, 1500);
                     }
                 } catch (error) {
                     console.error('Erro ao enviar o formulário:', error);

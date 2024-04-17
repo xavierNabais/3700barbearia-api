@@ -1229,7 +1229,7 @@ a {
   }
   label {
     display: inline-block;
-    width: 100px; /* Ajuste conforme necessário */
+    width: 150px; /* Ajuste conforme necessário */
   }
 
     input{

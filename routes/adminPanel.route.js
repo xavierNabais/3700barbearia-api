@@ -34,13 +34,13 @@ router.get("/painel/utilizadores/update/:id", (req, res) => {
 router.post("/painel/utilizadores/novo", utilizadorController.create);
 
 //Rota Atualização Utilizador Step 1 Backend
-router.post("/perfil/editar/1/:id", utilizadorController.update1);
+router.put("/perfil/editar/1/:id", utilizadorController.update1);
 
 //Rota Atualização Utilizador Step 2 Backend
-router.post("/perfil/editar/2/:id", utilizadorController.update2);
+router.put("/perfil/editar/2/:id", utilizadorController.update2);
 
 //Rota Atualização Utilizador Step 3 Backend
-router.post("/perfil/editar/3/:id", utilizadorController.update3);
+router.put("/perfil/editar/3/:id", utilizadorController.update3);
 
 //Rota Atualização Utilizador Backend
 router.post("/painel/utilizadores/update/:id", utilizadorController.update);
