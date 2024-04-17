@@ -23,7 +23,17 @@ Marcacoes.getAll = result => {
     });
 };
 
-
+//Model Procurar Marcações de Utilizador Específico
+Marcacoes.getSpecific = (id, result) => {
+    sql.query('SELECT * FROM marcacoes WHERE id_utilizador=?', [id.params.id], (error,res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(null, error);
+            return;
+        }
+        result(null,res);
+    });
+};
 
 
 //Model Procurar ID Marcação

@@ -43,12 +43,10 @@ Servico.FindById = (id, result) => {
             result(error, null);
             return;
         }
-        
-        if (res.length > 0) {
+        else {
             result(null, res);
-        } else {
-            result("Serviço não encontrado", null);
         }
+    
     });
 };
 

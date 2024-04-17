@@ -19,6 +19,87 @@ exports.findAll = (req, res) => {
 };
 
 
+// Controller Procurar Marcações De User Específico
+exports.findSpecific = (req, res) => {
+    marcacoesModel.getSpecific(req, (error, dados) => {
+        if (error) {
+            res.status(500).send({
+                message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+            });
+            return;
+        }
+
+        // Função para formatar a data
+        const formatarData = (data) => {
+            const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+            const dataFormatada = new Date(data);
+    
+            const diaSemana = diasSemana[dataFormatada.getDay()];
+            const dia = String(dataFormatada.getDate()).padStart(2, '0');
+            const mes = String(dataFormatada.getMonth() + 1).padStart(2, '0');
+            const ano = dataFormatada.getFullYear();
+            const horas = String(dataFormatada.getHours()).padStart(2, '0');
+            const minutos = String(dataFormatada.getMinutes()).padStart(2, '0');
+    
+            return `${diaSemana}, ${dia}/${mes}/${ano}, às ${horas}:${minutos}`;
+        };
+
+            // Função para buscar o nome do barbeiro
+            const getBarberName = (id_barbeiro) => {
+                return new Promise((resolve, reject) => {
+                    barbeiroModel.FindById(id_barbeiro, (error, barbeiros) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            if (barbeiros.length > 0) {
+                                resolve(barbeiros[0].Nome);
+                            } else {
+                                resolve(null);
+                            }
+                        }
+                    });
+                });
+            };
+
+
+        // Função para buscar o nome e o preço do serviço
+        const getServicoInfo = (id_servico) => {
+            return new Promise((resolve, reject) => {
+                servicoModel.FindById(id_servico, (error, servico) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve({ nome: servico[0].Nome, preco: servico[0].Preco });
+                    }
+                });
+            });
+        };
+
+            // Função assíncrona para buscar todas as informações necessárias e formatar os dados
+            const processarDados = async () => {
+                for (const marcacao of dados) {
+                    marcacao.Data = formatarData(marcacao.Data);
+                    const nomeBarbeiro = await getBarberName(marcacao.Id_barbeiro);
+                    marcacao.nomeBarbeiro = nomeBarbeiro !== null ? nomeBarbeiro : "Nome não encontrado";
+                    const infoServico = await getServicoInfo(marcacao.Id_servico);
+                    marcacao.nomeServico = infoServico.nome;
+                    marcacao.precoServico = infoServico.preco;
+                }
+                res.json(dados);
+            };
+
+
+        // Executar o processamento assíncrono
+        processarDados().catch(error => {
+            res.status(500).send({
+                message: error.message || "Ocorreu um erro ao processar os dados das marcações"
+            });
+        });
+    });
+};
+
+
+
 //Controller Procurar Marcação Consoante ID
 exports.findById = (req, res) => {
     marcacoesModel.FindById(req, (error, dados) => {
