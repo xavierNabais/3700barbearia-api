@@ -14,7 +14,7 @@
       
       <div class="single-title">
         <p>Para Agendar ou Cancelar Agendamentos, clique no botão abaixo.</p>
-        <button>VER MARCAÇÕES</button>
+        <a href="/perfil/marcacoes"><button style="cursor: pointer;">VER MARCAÇÕES</button></a>
       </div>
 
 
