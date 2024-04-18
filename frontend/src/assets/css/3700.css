@@ -1343,7 +1343,7 @@ a {
 }
 
 
-.profile-anterior{
+.marcacoesButtons{
   box-sizing: border-box;
   width: 190px;
   height: 44px;
@@ -1354,7 +1354,7 @@ a {
 }
 
 
-.profile-proximo{
+.active{
   box-sizing: border-box;
   width: 190px;
   height: 44px;
@@ -1363,5 +1363,4 @@ a {
   border-radius: 9px;
   font-size: 20px;
   color: white;
-  margin-left: 3%;
 }

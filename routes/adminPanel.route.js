@@ -124,8 +124,11 @@ router.get("/painel/barbeiros/delete/:id", barbeiroController.remove);
 //Rota Visualização Painel de administrador
 router.get("/painel/marcacoes", marcacoesController.findAll);
 
-//Rota Visualização Painel de administrador
-router.get("/perfil/marcacoes/:id", marcacoesController.findSpecific);
+//Rota Obter dados das marcações anteriores ao dia de hoje
+router.get("/perfil/marcacoes/anteriores/:id", marcacoesController.findSpecificOld);
+
+//Rota Obter dados das marcações próximas ao dia de hoje
+router.get("/perfil/marcacoes/proximas/:id", marcacoesController.findSpecificNew);
 
 //Rota Formulário Criação Marcação Frontend
 router.get("/painel/marcacoes/novo", marcacoesController.getActive);
