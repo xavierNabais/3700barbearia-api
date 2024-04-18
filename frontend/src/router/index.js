@@ -3,6 +3,7 @@ import LandingPage from '../views/landingpage.vue';
 import Utilizadores from '../views/painel/utilizadores.vue';
 import Servicos from '../views/painel/servicos.vue';
 import Barbeiros from '../views/painel/barbeiros.vue';
+import Marcacoes from '../views/painel/marcacoes.vue';
 import loginPage from '../views/auth/login.vue';
 import editarPerfil from '../views/perfil/edit.vue';
 import perfilMarcacoes from '../views/perfil/marcacoes.vue';
@@ -60,6 +61,11 @@ const routes = [
     path: '/painel/barbeiros',
     name: 'PainelBarbeiros',
     component: Barbeiros
+  },
+  {
+    path: '/painel/marcacoes',
+    name: 'PainelMarcacoes',
+    component: Marcacoes
   },
   {
     path: '/:catchAll(.*)',

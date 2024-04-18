@@ -122,7 +122,7 @@ router.get("/painel/barbeiros/delete/:id", barbeiroController.remove);
 
 
 //Rota Visualização Painel de administrador
-router.get("/painel/marcacoes"/*, isAdmin*/, marcacoesController.findAll);
+router.get("/painel/marcacoes", marcacoesController.findAll);
 
 //Rota Visualização Painel de administrador
 router.get("/perfil/marcacoes/:id", marcacoesController.findSpecific);

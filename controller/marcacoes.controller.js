@@ -13,7 +13,7 @@ exports.findAll = (req, res) => {
             message:
             error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
         });
-        else res.render(path.resolve('views/pages/administrador/marcacoes/index.ejs'), { dados });   
+        else res.json(dados);   
 
     });
 };

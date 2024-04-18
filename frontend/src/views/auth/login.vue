@@ -1,5 +1,6 @@
 <template>
 
+
     <Header />
     
     <div class="section2">
@@ -47,7 +48,7 @@
                 A iniciar sessão...
               </div>
               <div class="success-message" v-if="login_error">
-                Ocorreu um erro ao iniciar sessão.
+                Email ou password incorretos.
               </div>
             </form>
         </div>
@@ -112,11 +113,11 @@
       <script>
       import Header from '../../components/Header.vue';
       import Footer from '../../components/Footer.vue';
-      
+
       export default {
         components: {
           Header,
-          Footer
+          Footer,
         },
         name: 'loginPage',
         data() {
@@ -152,13 +153,14 @@
                 localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
                 localStorage.setItem('userName', data.userName);
                 localStorage.setItem('type', data.type);
-                this.login_error = true;
+                this.login_error = false;
+                this.login_success = true;
                 setTimeout(() => {
                     this.login_error = false;
                     window.location.href= '/';
                 }, 1500);
               } else {
-                console.log(data); // Se o login não foi bem-sucedido, imprima os dados do erro no console
+                this.login_error = true;
               }
             } catch (error) {
               console.error('Erro ao efetuar login:', error);

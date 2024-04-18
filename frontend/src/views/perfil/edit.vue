@@ -146,6 +146,12 @@
                               <input type="password" id="new_password" v-model="password.New">
                             </div>
                             <button type="submit" class="save-button">Guardar</button>
+                            <div class="success-message" v-if="perfilAtualizado3">
+                            A atualizar password...
+                            </div>  
+                            <div class="success-message" v-if="erro3">
+                              A password atual está incorreta!
+                            </div>  
                           </div>
                           </form>
 
@@ -256,16 +262,16 @@
 
                     if (response.ok) {
                         console.log('Perfil editado com sucesso!');
-                        this.perfilAtualizado3 = true;
+                        this.perfilAtualizado2 = true;
                         setTimeout(() => {
-                            this.perfilAtualizado3 = false;
+                            this.perfilAtualizado2 = false;
                             window.location.reload();
                         }, 1500);
                     } else {
                       console.error('Erro ao editar o perfil.');
                       this.erro2 = true;
                       setTimeout(() => {
-                            this.erro3 = false;
+                            this.erro2 = false;
                         }, 3000);
                     }
                 } catch (error) {
