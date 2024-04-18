@@ -56,7 +56,7 @@
 
           <button class="profile-anterior" :class="{ 'disabled': utilizador && utilizador.length > 0 && utilizador[0].Pontos < 10 }">
             <a href="" v-if="utilizador && utilizador.length > 0 && utilizador[0].Pontos < 10" style="pointer-events: none"><i class='fas fa-lock' style="margin-right:5%"></i> MARCAÇÃO GRATUITA {{ utilizador && utilizador.length > 0 ? utilizador[0].Pontos : 0 }}/10 </a>
-            <a v-if="utilizador && utilizador.length > 0 && utilizador[0].Pontos == 10"> MARCAÇÃO GRATUITA {{ utilizador && utilizador.length > 0 ? utilizador[0].Pontos : 0 }}/10 </a>
+            <a v-if="utilizador && utilizador.length > 0 && utilizador[0].Pontos == 10"> MARCAÇÃO GRATUITA</a>
 
           </button>
         </div>
