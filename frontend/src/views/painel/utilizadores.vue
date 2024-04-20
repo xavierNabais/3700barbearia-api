@@ -1,6 +1,51 @@
 <template>
 
-<div v-if="showEditPopup" class="popup">
+<div v-if="showCreatePopup" class="popup" style="height:auto">
+
+<form @submit="createUtilizador" style="display:contents">
+      <div class="popup-content">
+        <span class="close" @click="closeCreatePopup">&times;</span>
+        <h2>Criar Utilizador</h2>
+        <!-- Campos de edição com títulos -->
+        <div class="input-group">
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome">
+        </div>
+        <div class="input-group">
+          <label for="apelido">Apelido:</label>
+          <input type="text" id="apelido" name="apelido">
+        </div>
+        <div class="input-group">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username">
+        </div>
+        <div class="input-group">
+          <label for="email">Email:</label>
+          <input type="text" id="email" name="email">
+        </div>
+        <div class="input-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password">
+        </div>
+        <div class="input-group">
+          <label for="password">Telemóvel:</label>
+          <input type="number" id="telemovel" name="telemovel">
+        </div>
+        <div class="input-group">
+          <label for="pontos">Pontos:</label>
+          <input type="number" id="pontos" name="pontos">
+        </div>
+        <div class="input-group">
+          <label for="cargo">Admin:</label>
+          <input type="text" id="cargo" name="cargo">
+        </div>
+        <button class="savePanel">Criar</button>
+      </div>
+</form>
+</div>
+
+
+<div v-if="showEditPopup" class="popup" style="height:auto">
   <form @submit="submitEdit" style="display:contents">
         <div class="popup-content">
           <span class="close" @click="closeEditPopup">&times;</span>
@@ -27,6 +72,14 @@
             <input type="password" id="password" v-model="editedUser.Password">
           </div>
           <div class="input-group">
+            <label for="number">Telemóvel:</label>
+            <input type="telemovel" id="telemovel" v-model="editedUser.Telemovel">
+          </div>
+          <div class="input-group">
+            <label for="number">Pontos:</label>
+            <input type="pontos" id="pontos" v-model="editedUser.Pontos">
+          </div>
+          <div class="input-group">
             <label for="admin">Admin:</label>
             <input type="text" id="admin" v-model="editedUser.Cargo" placeholder="Admin">
           </div>
@@ -36,8 +89,10 @@
       </div>
 
 
-  <div>
-    <form style="margin:5%;">
+      <button class="save-button" style="margin: 0% 5%;width:auto" @click="showCreateConfirmation()">+ Novo utilizador</button>
+
+  
+    <form style="margin:1% 5%;">
       <table class="user-table">
         <thead>
           <tr>
@@ -47,6 +102,8 @@
             <th>Username</th>
             <th>Email</th>
             <th>Password</th>
+            <th>Telemóvel</th>
+            <th>Pontos</th>
             <th>Admin</th>
             <th style="text-align:center">Ações</th>
           </tr>
@@ -70,10 +127,13 @@
                     <i class="fas fa-eye-slash"></i>
                   </button>
                 </div>
-              </td>            <td>{{ dados.Cargo }}</td>
+              </td>     
+            <td>{{ dados.Telemovel }}</td>
+            <td>{{ dados.Pontos }}</td>       
+            <td>{{ dados.Cargo }}</td>
             <td style="text-align:center">
-              <button class="editPanel" @click.prevent="showEditConfirmation(dados.id)" style="color:black;margin-right:25px;"><i class="fas fa-edit"></i></button>
-              <button class="editPanel" @click.prevent="showDeleteConfirmation(dados.id)" style="color:black;"><i class="fas fa-trash"></i></button>
+              <button class="editPanel" @click.prevent="showEditConfirmation(dados.Id)" style="color:black;margin-right:25px;"><i class="fas fa-edit"></i></button>
+              <button class="editPanel" @click.prevent="showDeleteConfirmation(dados.Id)" style="color:black;"><i class="fas fa-trash"></i></button>
               </td>
           </tr>
         </tbody>
@@ -93,7 +153,15 @@
       :onConfirm="deleteUser"
       :onCancel="hideDeleteModal"
     />
-  </div>
+
+    <ConfirmationModal
+      :showModal="showCreateModal"
+      :message="'Tem a certeza que quer criar um utilizador?'"
+      :onConfirm="openCreatePopup"
+      :onCancel="hideCreateModal"
+    />
+
+
 </template>
 <script>
 import ConfirmationModal from "../../components/confirmation/ConfirmationModal.vue";
@@ -113,6 +181,8 @@ export default {
       editedUser: {},
       showEditPopup: false,
       novaPassword: '',
+      showCreateModal: false,
+      showCreatePopup: false,
     };
   },
   methods: {
@@ -125,9 +195,46 @@ export default {
         console.error('Erro ao buscar os dados dos serviços:', error);
       }
     },
-    async excluirUtilizador() {
+    async createUtilizador() {
+          const nome = document.getElementById('nome').value;
+          const apelido = document.getElementById('apelido').value;
+          const username = document.getElementById('username').value;
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          const telemovel = document.getElementById('telemovel').value;
+          const pontos = document.getElementById('pontos').value;
+          const cargo = document.getElementById('cargo').value;
+          try {
+            const response = await fetch('http://localhost:5000/painel/utilizadores', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                nome,
+                apelido,
+                username,
+                email,
+                password,
+                telemovel,
+                pontos,
+                cargo
+                })
+              });
+              if (response.ok) {
+                console.log('Utlizador criado com sucesso!');
+                this.hideUtilizadorModal();
+                this.fetchUtilizadores();
+              } else {
+                console.error('Erro ao criar o utilizador:', response.statusText);
+              }
+            } catch (error) {
+              console.error('Erro ao criar o utilizador:', error);
+            }
+            },
+    async excluirUtilizador(userIdToDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/painel/utilizadores/${this.userIdToDelete}`, {
+        const response = await fetch(`http://localhost:5000/painel/utilizadores/${userIdToDelete}`, {
           method: 'DELETE'
         });
 
@@ -157,6 +264,9 @@ export default {
     },
     closeEditPopup() {
       this.showEditPopup = false;
+    },
+    closeCreatePopup(){
+      this.showCreatePopup = false;
     },
         async submitEdit() {
       if (this.editedUser.Password.trim() == '') {
@@ -212,14 +322,26 @@ export default {
       this.showEditModal = false;
     },
     showDeleteConfirmation(userId) {
-      this.deleteUser(userId);
+      this.userIdToDelete = userId;
+      this.showDeleteModal = true;
     },
-    deleteUser(userId) {
-      this.excluirUtilizador(userId);
+    deleteUser() {
+      this.excluirUtilizador(this.userIdToDelete);
     },
     hideDeleteModal() {
       this.showDeleteModal = false;
-    }
+    },
+    showCreateConfirmation() {
+          this.showCreateModal = true;
+          },  
+          openCreatePopup() {
+            this.showCreateModal = false;
+            this.showCreatePopup = true;
+          },
+          hideCreateModal() {
+            this.showCreateModal = false;
+          },
+
   },
   mounted() {
     this.fetchUtilizadores();

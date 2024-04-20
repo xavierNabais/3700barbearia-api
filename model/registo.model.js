@@ -5,12 +5,12 @@ const sql = require('./conexao.db');
 const novoRegisto = function (data) {
     this.email = data.email,
     this.password = data.password,
-    this.cargo = 0
+    this.cargo = 0,
+    this.pontos = 0
 } 
 
 // Model Criar Cliente
 novoRegisto.create = (novoRegisto, result) => {
-    console.log(novoRegisto);
     // Verificações Cliente Existente (Email)
     sql.query('SELECT * FROM utilizadores WHERE Email=?', [novoRegisto.email], (error, res) => {
         if (error) {

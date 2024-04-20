@@ -38,13 +38,17 @@ exports.create = (req, res) => {
         });
         return;
     }
-
+    const saltRounds = 10;
+    const pwHashed = bcrypt.hashSync(req.body.password, saltRounds);
     const utilizador = new UtilizadorModel({
         nome: req.body.nome,
+        apelido: req.body.apelido,
+        username: req.body.username,
         email: req.body.email,
-        password: req.body.password,
-        pontos: 0,
-        cargo: 0
+        password: pwHashed,
+        telemovel: req.body.telemovel,
+        pontos: req.body.pontos,
+        cargo: req.body.cargo
     });
 
     UtilizadorModel.create(utilizador, (error, data) => {
@@ -275,14 +279,14 @@ exports.update3 = async (req, res) => {
 
 //Controller Eliminar Utilizador
 exports.remove = (req, res) => {
-    const id = req.params.id; 
+    const id = req.params.id;
     UtilizadorModel.remove(id, (error, dados) => {
         if (error)
         res.status(500).send({
             message:
             error.message || "Ocorreu um erro ao tentar eliminar os dados do utilizador"
         });
-        else res.status(200).json({ message: 'Perfil excluído com sucesso!' });
+        else res.status(200).json({ message: 'Utilizador eliminado com sucesso!' });
 
     });
 };

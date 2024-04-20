@@ -19,7 +19,7 @@ router.get("/painel/utilizadores", utilizadorController.findAll);
 router.get("/painel/utilizadores/:id", utilizadorController.findById);
 
 //Rota Criação Utilizador Backend
-router.post("/painel/utilizadores/novo", utilizadorController.create);
+router.post("/painel/utilizadores", utilizadorController.create);
 
 //Rota Atualização Utilizador Backend
 router.put("/painel/utilizadores/:id", utilizadorController.update);

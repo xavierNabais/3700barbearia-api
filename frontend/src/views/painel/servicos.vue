@@ -221,18 +221,21 @@
             console.error('Erro ao editar o serviço:', error);
           }
         },
-        showEditConfirmation(userId) {
+        showEditConfirmation(id) {
+        this.userIdToEdit = id;
         this.showEditModal = true;
-        this.editedUser = Object.assign({}, this.fetchServicos(userId));
         },
         openEditPopup() {
           this.showEditModal = false;
           this.showEditPopup = true;
           // Carregar os dados do utilizador a ser editado
-          this.editedUser = this.servicos.find(user => user.id === this.userId);
+          this.editedUser = this.servicos.find(user => user.Id === this.userIdToEdit);
         },
         closeEditPopup() {
-          this.showEditPopup = false;
+        this.showEditPopup = false;
+        },
+        closeCreatePopup(){
+          this.showCreatePopup = false;
         },
         showDeleteConfirmation(userId) {
           this.userIdToDelete = userId;

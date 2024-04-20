@@ -28,8 +28,40 @@
       </form>
 </div>
 
+<div v-if="showCreatePopup" class="popup">
 
-  <form style="margin:5%;">
+<form @submit="createBarbeiro" style="display:contents">
+      <div class="popup-content">
+        <span class="close" @click="closeCreatePopup">&times;</span>
+        <h2>Criar Barbeiro</h2>
+        <!-- Campos de edição com títulos -->
+        <div class="input-group">
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome">
+        </div>
+        <div class="input-group">
+          <label for="apelido">Descrição:</label>
+          <input type="text" id="descricao" name="descricao">
+        </div>
+        <div class="input-group">
+          <label for="username">Especialização:</label>
+          <input type="text" id="especializacao" name="especializacao">
+        </div>
+        <div class="input-group">
+          <label for="admin">Ativo:</label>
+          <input type="text" id="ativo" name="ativo">
+        </div>
+        <button class="savePanel">Criar</button>
+      </div>
+</form>
+</div>
+
+
+
+
+<button class="save-button" style="margin: 0% 5%;width:auto" @click="showCreateConfirmation()">+ Novo barbeiro</button>
+
+  <form style="margin:1% 5%;">
   <table class="user-table">
     <thead>
       <tr>
@@ -71,11 +103,16 @@
     <ConfirmationModal
       :showModal="showDeleteModal"
       :message="'Tem a certeza que quer apagar este Barbeiro?'"
-      :onConfirm="deleteServico"
+      :onConfirm="deleteBarbeiro"
       :onCancel="hideDeleteModal"
     />
 
-
+    <ConfirmationModal
+      :showModal="showCreateModal"
+      :message="'Tem a certeza que quer criar um barbeiro?'"
+      :onConfirm="openCreatePopup"
+      :onCancel="hideCreateModal"
+    />
     
     
       </template>
@@ -93,6 +130,8 @@
             userIdToDelete: null,
             editedUser: {},
             showEditPopup: false,
+            showCreateModal: false,
+            showCreatePopup: false,
             };
         },
         methods: {
@@ -105,7 +144,36 @@
               console.error('Erro ao buscar os dados dos barbeiros:', error);
             }
           },
-          async excluirServico(userIdToDelete) {
+          async createBarbeiro() {
+          const nome = document.getElementById('nome').value;
+          const descricao = document.getElementById('descricao').value;
+          const especializacao = document.getElementById('especializacao').value;
+          const ativo = document.getElementById('ativo').value;
+          try {
+            const response = await fetch(`http://localhost:5000/painel/barbeiros`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                nome,
+                descricao,
+                especializacao,
+                ativo
+                })
+              });
+              if (response.ok) {
+                console.log('Serviço criado com sucesso!');
+                this.hideBarbeiroModal();
+                this.fetchBarbeiros();
+              } else {
+                console.error('Erro ao criar o serviço:', response.statusText);
+              }
+            } catch (error) {
+              console.error('Erro ao criar o serviço:', error);
+            }
+            },
+          async excluirBarbeiro(userIdToDelete) {
           try {
             const response = await fetch(`http://localhost:5000/painel/barbeiros/${userIdToDelete}`, {
               method: 'DELETE'
@@ -124,7 +192,6 @@
           },
           async submitEdit() {
           try {
-            console.log(this.editedUser);
             const response = await fetch(`http://localhost:5000/painel/barbeiros/${this.userIdToEdit}`, {
               method: 'PUT',
               headers: {
@@ -144,19 +211,21 @@
             console.error('Erro ao editar o Barbeiro:', error);
           }
           },
-          showEditConfirmation(userId) {
-          this.showEditModal = true;
-          this.editedUser = Object.assign({}, this.fetchBarbeiros(userId));
+          showEditConfirmation(id) {
+            this.userIdToEdit = id;
+            this.showEditModal = true;
           },
-
           openEditPopup() {
             this.showEditModal = false;
             this.showEditPopup = true;
             // Carregar os dados do utilizador a ser editado
-            this.editedUser = this.barbeiros.find(user => user.id === this.userId);
+            this.editedUser = this.barbeiros.find(user => user.Id === this.userIdToEdit);
           },
           closeEditPopup() {
-            this.showEditPopup = false;
+          this.showEditPopup = false;
+          },
+          closeCreatePopup(){
+            this.showCreatePopup = false;
           },
           hideEditModal() {
             this.showEditModal = false;
@@ -165,13 +234,24 @@
             this.userIdToDelete = userId;
             this.showDeleteModal = true;
           },
-          deleteServico() {
-            this.excluirServico(this.userIdToDelete);
+          deleteBarbeiro() {
+            this.excluirBarbeiro(this.userIdToDelete);
           },
 
           hideDeleteModal() {
             this.showDeleteModal = false;
           },  
+          showCreateConfirmation() {
+          this.showCreateModal = true;
+          },  
+          openCreatePopup() {
+            this.showCreateModal = false;
+            this.showCreatePopup = true;
+          },
+          hideCreateModal() {
+            this.showCreateModal = false;
+          },
+
         },
         mounted() {
           this.fetchBarbeiros();    
