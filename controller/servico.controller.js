@@ -78,15 +78,15 @@ exports.update = (req, res) => {
 
 
 //Controller Eliminar Serviço
-exports.remove = (req, res) => {
-    const id = req.params.id; 
+exports.remove = (id, res) => {
+    console.log(id);
     servicoModel.remove(id, (error, dados) => {
         if (error)
         res.status(500).send({
             message:
             error.message || "Ocorreu um erro ao tentar eliminar os dados do serviço"
         });
-        else res.redirect('/painel/servicos'); 
+        else res.status(200).json({ message: 'Serviço excluído com sucesso!' });
 
     });
 };

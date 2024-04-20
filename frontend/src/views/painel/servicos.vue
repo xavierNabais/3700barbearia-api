@@ -1,25 +1,41 @@
 <template>
 
-    <Header />
-    
-    <div class="section2">
-      <div class="content2">
-        <span class="title2">PAINEL DE CONTROLO</span>
-      </div>
-    </div>
-
-
-    <div style="width: 100%; height: auto; background-color: white; padding-bottom: 10%;">
-        <div style="padding:5%">
-        <p style="font-size: 24px; font-weight: bold;">Gestão de Serviços</p>
-        <p>Facilite a organização do seu negócio com o nosso painel de controle de marcações para funcionários! Gerencie eficientemente os horários de trabalho, atribua tarefas, acompanhe as marcações dos clientes e garanta uma gestão de agenda otimizada.</p>
-        <p>Ações:</p>
-        <p>X Ver marcação</p>
-        <p>X Editar marcação</p>
-        <p>X Cancelar marcação</p>
+<div v-if="showEditPopup" class="popup">
+  <form @submit="submitEdit" style="display:contents">
+        <div class="popup-content">
+          <span class="close" @click="closeEditPopup">&times;</span>
+          <h2>Editar Utilizador</h2>
+          <!-- Campos de edição com títulos -->
+          <div class="input-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" v-model="editedUser.Nome" placeholder="Nome">
+          </div>
+          <div class="input-group">
+            <label for="apelido">Descrição:</label>
+            <input type="text" id="apelido" v-model="editedUser.Descricao" placeholder="Apelido">
+          </div>
+          <div class="input-group">
+            <label for="username">Preço:</label>
+            <input type="text" id="username" v-model="editedUser.Preco">
+          </div>
+          <div class="input-group">
+            <label for="email">Duracao:</label>
+            <input type="text" id="email" v-model="editedUser.Duracao" placeholder="Email">
+          </div>
+          <div class="input-group">
+            <label for="admin">Ativo:</label>
+            <input type="text" id="admin" v-model="editedUser.Ativo" placeholder="Admin">
+          </div>
+          <button class="savePanel">Guardar</button>
         </div>
-        <div style="padding:5%;padding-top: 0;">
-        <form>
+      </form>
+      </div>
+
+
+
+
+
+<form style="margin:5%;">
   <table class="user-table">
     <thead>
       <tr>
@@ -33,7 +49,7 @@
     </thead>
     <tbody>
       <!-- Aqui você pode iterar sobre os dados dos usuários e criar linhas para cada usuário -->
-      <tr v-for="dados in servicos" :key="dados.id" class="ag-courses_item">
+      <tr v-for="dados in servicos" :key="dados.Id" class="ag-courses_item">
         <td>{{ dados.Id }}</td>
         <td>{{ dados.Nome }}</td>
         <td>{{ dados.Preco }}</td>
@@ -42,32 +58,44 @@
         <!-- Coluna de ações -->
         <td>
           <!-- Aqui você pode adicionar botões para editar, excluir, etc. -->
-          <button @click="editarUsuario(dados.id)">Editar</button>
-          <button @click="excluirUsuario(dados.id)">Excluir</button>
+          <button class="editPanel" @click.prevent="showEditConfirmation(dados.Id)" style="color:black;margin-right:25px;"><i class="fas fa-edit"></i></button>
+          <button class="editPanel" @click.prevent="showDeleteConfirmation(dados.Id)" style="color:black;"><i class="fas fa-trash"></i></button>
         </td>
       </tr>
     </tbody>
   </table>
 </form>
-</div>
 
-    </div>
+<ConfirmationModal
+      :showModal="showEditModal"
+      :message="'Tem a certeza que quer editar este serviço?'"
+      :onConfirm="openEditPopup"
+      :onCancel="hideEditModal"
+    />
 
-
-
-    
-    <Footer />
+    <ConfirmationModal
+      :showModal="showDeleteModal"
+      :message="'Tem a certeza que quer apagar este serviço?'"
+      :onConfirm="deleteServico"
+      :onCancel="hideDeleteModal"
+    />
     
       </template>
       
       <script>
-      import Header from '../../components/Header.vue';
-      import Footer from '../../components/Footer.vue';
-      
+  import ConfirmationModal from "../../components/confirmation/ConfirmationModal.vue";
+
       export default {
         data() {
           return {
             servicos: [], // Propriedade para armazenar os dados dos serviços
+            showEditModal: false,
+            showDeleteModal: false,
+            userIdToEdit: null,
+            userIdToDelete: null,
+            editedUser: {},
+            showEditPopup: false,
+
             };
         },
         methods: {
@@ -80,15 +108,81 @@
               console.error('Erro ao buscar os dados dos serviços:', error);
             }
           },
+
+        async excluirServico(userIdToDelete) {
+        try {
+          const response = await fetch(`http://localhost:5000/painel/servicos/${userIdToDelete}`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            console.log('Serviço excluído com sucesso!');
+            this.hideDeleteModal();
+            this.fetchServicos();
+          } else {
+            console.error('Erro ao excluir o serviço:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Erro ao excluir o serviço:', error);
+        }
         },
-        mounted() {
+        async submitEdit() {
+          try {
+            console.log(this.editedUser);
+            const response = await fetch(`http://localhost:5000/painel/servicos/${this.userIdToEdit}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(this.editedUser) // Envia a cópia do objeto sem a propriedade Password
+            });
+
+            if (response.ok) {
+              console.log('Serviço atualizado com sucesso!');
+              this.closeEditPopup();
+              this.fetchServicos();
+            } else {
+              console.error('Erro ao editar o serviço:', response.statusText);
+            }
+          } catch (error) {
+            console.error('Erro ao editar o serviço:', error);
+          }
+        },
+        showEditConfirmation(userId) {
+        this.showEditModal = true;
+        this.editedUser = Object.assign({}, this.fetchServicos(userId));
+        },
+
+        openEditPopup() {
+          this.showEditModal = false;
+          this.showEditPopup = true;
+          // Carregar os dados do utilizador a ser editado
+          this.editedUser = this.servicos.find(user => user.id === this.userId);
+        },
+        closeEditPopup() {
+          this.showEditPopup = false;
+        },
+        hideEditModal() {
+          this.showEditModal = false;
+        },
+        showDeleteConfirmation(userId) {
+          this.userIdToDelete = userId;
+          this.showDeleteModal = true;
+        },
+        deleteServico() {
+          this.excluirServico(this.userIdToDelete);
+        },
+
+        hideDeleteModal() {
+          this.showDeleteModal = false;
+        },  
+      },
+      mounted() {
           this.fetchServicos();    
         },
+      name:'painelServicos',
         components: {
-          Header,
-          Footer
+          ConfirmationModal
         },
-        name:'painelServicos',
-    
-      }
+    }
       </script>

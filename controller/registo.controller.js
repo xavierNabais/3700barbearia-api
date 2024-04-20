@@ -12,27 +12,13 @@ exports.create = (req, res) => {
         });
     }
 
-
-    //Formatar data no formato YYYY/MM/DD
-    const dataOriginal = req.body.data;
-    // Dividir a string em partes utilizando '/'
-    const partesData = dataOriginal.split('/');
-    // Reorganizar as partes da data e juntá-las utilizando '-'
-    const dataFormatada = `${partesData[2]}-${partesData[0]}-${partesData[1]}`;
-
     //Encriptar password
     const saltRounds = 10;
     const pwHashed = bcrypt.hashSync(req.body.password, saltRounds);
-    
 
     const novoRegisto = new RegistoModel({
-        nome: req.body.nome,
-        username: req.body.username,
         email: req.body.email,
-        data: dataFormatada,
-        sexo: req.body.sexo,
         password: pwHashed, // Password encriptada
-        admin: 0,
     })
 
     RegistoModel.create(novoRegisto, (error, data) => {
@@ -59,14 +45,15 @@ exports.create = (req, res) => {
             }
             
                 else
-                RegistoModel.FindByUsername(req.body.username, (error, dados) => {
+                RegistoModel.FindByUsername(data.insertId, (error, dados) => {
                     if (error)
                     res.status(500).send({
                         message:
                         error.message || "Ocorreu um erro ao tentar criar um utilizador."
                     });
                     else 
-                    res.redirect('/request/'+data.insertId); 
+                    console.log(dados);
+                    res.json(dados);
                 
                 });
         });

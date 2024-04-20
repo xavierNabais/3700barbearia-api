@@ -20,7 +20,7 @@
     mounted() {
     setTimeout(() => {
       this.isLoading = false;
-    }, 3000); // 3000 milissegundos = 3 segundos
+    }, 1500); // 3000 milissegundos = 3 segundos
   },
     name: 'loadingIcon',
   };

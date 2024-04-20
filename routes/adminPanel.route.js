@@ -43,11 +43,11 @@ router.put("/perfil/editar/2/:id", utilizadorController.update2);
 router.put("/perfil/editar/3/:id", utilizadorController.update3);
 
 //Rota Atualização Utilizador Backend
-router.post("/painel/utilizadores/update/:id", utilizadorController.update);
+router.put("/painel/utilizadores/:id", utilizadorController.update);
 
 
 //Rota Eliminar Utilizador Backend
-router.get("/painel/utilizadores/delete/:id", utilizadorController.remove);
+router.delete("/painel/utilizadores/:id", utilizadorController.remove);
 
 
 
@@ -58,7 +58,7 @@ router.get("/painel/utilizadores/delete/:id", utilizadorController.remove);
 
 
 //Rota Visualização Painel de administrador
-router.get("/painel/servicos"/*, isAdmin*/, servicoController.findAll);
+router.get("/painel/servicos", servicoController.findAll);
 
 //Rota Formulário Criação Serviço Frontend
 router.get("/painel/servicos/novo", function(req,res){
@@ -76,11 +76,11 @@ router.get("/painel/servicos/update/:id", (req, res) => {
 router.post("/painel/servicos/novo", servicoController.create);
 
 //Rota Atualização Serviço Backend
-router.post("/painel/servicos/update/:id", servicoController.update);
+router.put("/painel/servicos/:id", servicoController.update);
 
 
 //Rota Eliminar Serviço Backend
-router.get("/painel/servicos/delete/:id", servicoController.remove);
+router.delete("/painel/servicos/:id", servicoController.remove);
 
 
 
@@ -108,11 +108,11 @@ router.get("/painel/barbeiros/update/:id", (req, res) => {
 router.post("/painel/barbeiros/novo", barbeiroController.create);
 
 //Rota Atualização Barbeiro Backend
-router.post("/painel/barbeiros/update/:id", barbeiroController.update);
+router.put("/painel/barbeiros/update/:id", barbeiroController.update);
 
 
 //Rota Eliminar Barbeiro Backend
-router.get("/painel/barbeiros/delete/:id", barbeiroController.remove);
+router.delete("/painel/barbeiros/delete/:id", barbeiroController.remove);
 
 
 
@@ -145,11 +145,11 @@ router.get("/painel/marcacoes/update/:id", (req, res) => {
 router.post("/painel/marcacoes/novo", marcacoesController.create);
 
 //Rota Atualização Marcação Backend
-router.post("/painel/marcacoes/update/:id", marcacoesController.update);
+router.put("/painel/marcacoes/update/:id", marcacoesController.update);
 
 
 //Rota Eliminar Marcação Backend
-router.get("/painel/marcacoes/delete/:id", marcacoesController.remove);
+router.delete("/painel/marcacoes/delete/:id", marcacoesController.remove);
 
 
 

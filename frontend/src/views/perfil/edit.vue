@@ -10,7 +10,7 @@
 
 
 
-    <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;">
+    <div style="width: 100%; height: 1200px; background-color: white; padding-bottom: 10%;">
       
       <div class="single-title">
         <p>Para Agendar ou Cancelar Agendamentos, clique no botão abaixo.</p>
@@ -72,9 +72,9 @@
               <div class="success-message" v-if="perfilAtualizado1">
                 A atualizar perfil...
               </div>  
-              <div class="success-message" v-if="erro1">
-                Ocorreu um erro ao editar o perfil!
-              </div>  
+                            <div class="success-message" v-if="erro1">
+                              {{  erro1Message.message }}
+                            </div>  
             </form>
 
 
@@ -101,13 +101,13 @@
                                 <div>
                                   <label for="email" class="email">Endereço de email atual*</label>
                                   <br>
-                                  <input type="text" id="old_email" v-model=" email.Old">
+                                  <input type="email" id="old_email" v-model=" email.Old">
                                 </div>
                               </div>
                               <div class="input-group">
                                 <label for="emailNew" class="email">Novo endereço de email*</label>
                                 <br>
-                                <input type="text" id="email" v-model="email.New">
+                                <input type="email" id="email" v-model="email.New">
                               </div>
                               <button type="submit" class="save-button">Guardar</button>
                             </div>
@@ -115,7 +115,7 @@
                               A atualizar endereço de email...
                               </div>
                               <div class="success-message" v-if="erro2">
-                              O endereço de email atual está incorreto!
+                              {{  erro2Message.message }}
                             </div>  
                             </form>
                         </div>
@@ -150,7 +150,7 @@
                             A atualizar password...
                             </div>  
                             <div class="success-message" v-if="erro3">
-                              A password atual está incorreta!
+                              {{  erro3Message.message }}
                             </div>  
                           </div>
                           </form>
@@ -199,13 +199,15 @@
             perfilAtualizado2: false,
             perfilAtualizado3: false,
             erro1: false,
+            erro1Message: '',
             erro2: false,
-            erro3: false
+            erro2Message: '',
+            erro3: false,
+            erro3Message: '',
             };
         },
         methods: {
                 async submitForm1() {
-                  console.log('teste');
                   try {
                     const userId = localStorage.getItem('userId');
                     if (!userId) {
@@ -221,6 +223,7 @@
                       body: JSON.stringify(this.utilizador),
                     });
                     if (response.ok) {
+                      this.erro1 = false;
                       console.log('Perfil editado com sucesso!');
                       this.perfilAtualizado1 = true;
                       setTimeout(() => {
@@ -229,7 +232,9 @@
                         window.location.reload();
                       }, 1500);
                      } else {
+                      const responseData1 = await response.json(); // Obtem os dados da resposta JSON
                       this.erro1 = true;
+                      this.erro1Message = responseData1;
                       console.error('Erro ao editar o perfil.');
                     }
                   } catch (error) {
@@ -259,8 +264,8 @@
                         },
                         body: JSON.stringify(data),
                     });
-
                     if (response.ok) {
+                        this.erro2 = false;
                         console.log('Perfil editado com sucesso!');
                         this.perfilAtualizado2 = true;
                         setTimeout(() => {
@@ -268,11 +273,10 @@
                             window.location.reload();
                         }, 1500);
                     } else {
+                      const responseData2 = await response.json(); // Obtem os dados da resposta JSON
                       console.error('Erro ao editar o perfil.');
                       this.erro2 = true;
-                      setTimeout(() => {
-                            this.erro2 = false;
-                        }, 3000);
+                      this.erro2Message = responseData2;
                     }
                 } catch (error) {
                     console.error('Erro ao enviar o formulário:', error);
@@ -303,6 +307,7 @@
                     });
 
                     if (response.ok) {
+                        this.erro3 = false;
                         console.log('Perfil editado com sucesso!');
                         this.perfilAtualizado3 = true;
                         setTimeout(() => {
@@ -310,33 +315,47 @@
                             window.location.reload();
                         }, 1500);
                     } else {
+                      const responseData3 = await response.json(); // Obtem os dados da resposta JSON
                       console.error('Erro ao editar o perfil.');
                       this.erro3 = true;
-                      setTimeout(() => {
-                            this.erro3 = false;
-                        }, 1500);
+                      this.erro3Message = responseData3;
                     }
                 } catch (error) {
                     console.error('Erro ao enviar o formulário:', error);
                 }
             },
 
-          async fetchUtilizador() {
-            try {
-              const userId = localStorage.getItem('userId'); // Obtém o userId da sessionStorage
-              if (!userId) {
-                console.error('UserId não encontrado na sessionStorage.');
-                return;
+            async fetchUtilizador() {
+              try {
+                  const userId = localStorage.getItem('userId');
+                  if (!userId) {
+                      console.error('UserId não encontrado na sessionStorage.');
+                      return;
+                  }
+                  const url = `http://localhost:5000/painel/utilizadores/${userId}`;
+                  const response = await fetch(url);
+                  const data = await response.json();
+
+                  // Verificar se há dados de utilizador
+                  if (data && data.length > 0) {
+                      const userData = data[0];
+
+                      // Verificar campos e atribuir valores padrão se estiverem vazios
+                      this.utilizador = {
+                          Nome: userData.Nome ? userData.Nome : '',
+                          Apelido: userData.Apelido ? userData.Apelido : '',
+                          Username: userData.Username ? userData.Username : ''
+                      };
+                  } else {
+                      // Se não houver dados, atribuir valores padrão vazios
+                      this.utilizador = { Nome: '', Apelido: '', Username: '' };
+                  }
+              } catch (error) {
+                  console.error('Erro ao buscar os dados dos serviços:', error);
               }
-              const url = `http://localhost:5000/painel/utilizadores/${userId}`;
-              const response = await fetch(url);
-              const data = await response.json();
-              this.utilizador = data[0];
-            }
-            catch (error) {
-              console.error('Erro ao buscar os dados dos serviços:', error);
-            }
           },
+
+
         },
         mounted() {
           this.fetchUtilizador();    

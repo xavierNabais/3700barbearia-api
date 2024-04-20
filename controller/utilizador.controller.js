@@ -63,102 +63,199 @@ exports.create = (req, res) => {
 
 
 
-//Controller Atualizar Utilizador
-exports.update = (req, res) => {
-    UtilizadorModel.update(req.body, (error, dados) => {
-        if (error)
-        res.status(500).send({
-            message:
-            error.message || "Ocorreu um erro ao tentar atualizar os dados do utilizador"
-        });
-        else res.redirect('/painel/utilizadores');  
+exports.update = async (req, res) => {
+    // Verificar se a senha está presente na requisição
+    if (req.body.Password != undefined) {
+        // Hash da senha usando bcrypt
+        const hashedPassword = await bcrypt.hash(req.body.Password, 10);
+            // Atualizar a senha encriptada nos dados da requisição
+            req.body.Password = hashedPassword;
 
-    });
+            // Chamar o model para atualizar o utilizador com a senha encriptada
+            UtilizadorModel.update(req.body, (error, dados) => {
+                if (error)
+                res.status(500).send({
+                    message:
+                    error.message || "Ocorreu um erro ao tentar atualizar os dados do utilizador"
+                });
+                else res.status(200).json({ message: 'Perfil editado com sucesso!' });
+            });
+
+    } else {
+        console.log(req.body);
+
+        UtilizadorModel.update(req.body, (error, dados) => {
+            if (error)
+            res.status(500).send({
+                message:
+                error.message || "Ocorreu um erro ao tentar atualizar os dados do utilizador"
+            });
+            else res.status(200).json({ message: 'Perfil editado com sucesso!' });
+        });
+    }
 };
 
-
-//Controller Atualizar Utilizador STEP 1
+// Controller Atualizar Utilizador STEP 1
 exports.update1 = (req, res) => {
-    UtilizadorModel.update1(req.body, (error, dados) => {
-        if (error)
-        res.status(500).send({
-            message:
-            error.message || "Ocorreu um erro ao tentar atualizar os dados do utilizador"
-        });
-        else res.status(200).json({ message: 'Perfil editado com sucesso!' });
+    // Verificar se o corpo da solicitação contém os campos obrigatórios (Nome, Apelido e Username)
+    if (!req.body.Nome || !req.body.Apelido || !req.body.Username) {
+        return res.status(400).send({ message: "Os campos 'Nome', 'Apelido' e 'Username' são obrigatórios." });
+    }
 
+    // Verificar se o username já está em uso por outro utilizador
+    UtilizadorModel.FindUsername(req.body.Username, (err, existingUser) => {
+        if (err) {
+            console.log("Erro ao verificar o username:", err);
+            return res.status(500).send({ message: "Ocorreu um erro ao verificar o username." });
+        }
+
+        if (existingUser && existingUser.length != 0 && existingUser[0].Id != req.params.id) {
+            return res.status(400).send({ message: "O username já está em uso por outro utilizador." });
+        }
+
+        // Se o username não estiver em uso por outro usuário, prosseguir com a atualização do perfil do utilizador
+        UtilizadorModel.FindById(req.params.id, (err, userToUpdate) => {
+            if (err) {
+                console.log("Erro ao buscar o usuário:", err);
+                return res.status(500).send({ message: "Ocorreu um erro ao buscar o usuário." });
+            }
+
+            if (!userToUpdate) {
+                return res.status(404).send({ message: "Usuário não encontrado com o ID fornecido." });
+            }
+
+            // Verificar se o username a ser atualizado é igual ao username atual do usuário
+            if (req.body.Username === userToUpdate.Username) {
+                // Atualizar apenas o nome e o apelido
+                const updatedUserData = {
+                    Nome: req.body.Nome,
+                    Apelido: req.body.Apelido,
+                    Id: req.params.id,
+                };
+
+                // Atualizar o perfil do usuário com os novos dados
+                UtilizadorModel.update1(updatedUserData, (error, dados) => {
+                    if (error) {
+                        console.log("Erro ao atualizar o perfil do usuário:", error);
+                        return res.status(500).send({
+                            message: error.message || "Ocorreu um erro ao tentar atualizar o perfil do usuário."
+                        });
+                    }
+                    return res.status(200).json({ message: 'Perfil editado com sucesso!' });
+                });
+            } else {
+                // Se o username foi alterado, atualizar também o username
+                const updatedUserData = {
+                    Nome: req.body.Nome,
+                    Apelido: req.body.Apelido,
+                    Username: req.body.Username,
+                    Id: req.params.id,
+                };
+
+                // Atualizar o perfil do usuário com os novos dados
+                UtilizadorModel.update1(updatedUserData, (error, dados) => {
+                    if (error) {
+                        console.log("Erro ao atualizar o perfil do usuário:", error);
+                        return res.status(500).send({
+                            message: error.message || "Ocorreu um erro ao tentar atualizar o perfil do usuário."
+                        });
+                    }
+                    return res.status(200).json({ message: 'Perfil editado com sucesso!' });
+                });
+            }
+        });
     });
 };
+
 
 // Controller Atualizar Utilizador STEP 2
 exports.update2 = (req, res) => {
     // Verifique se o corpo da solicitação contém os campos necessários (Old e New)
     if (!req.body.Old || !req.body.New || !req.body.Id) {
-        return res.status(400).send({ message: "Os campos Old e New são obrigatórios." });
+        return res.status(400).send({ message: "Por favor preencha todos os campos." });
     }
     // Encontre o utilizador pelo ID
-    UtilizadorModel.FindById(req.body.Id, (err, usuario) => {
+    UtilizadorModel.FindById(req.body.Id, (err, utilizador) => {
         if (err) {  
             console.log("Erro ao buscar o utilizador:", err);
             return res.status(500).send({ message: "Ocorreu um erro ao buscar o utilizador." });
         }
     
-        if (!usuario) {
-            // Usuário não encontrado com o ID fornecido
-            return res.status(404).send({ message: "Usuário não encontrado com o ID fornecido." });
+        if (!utilizador) {
+            // utilizador não encontrado com o ID fornecido
+            return res.status(404).send({ message: "Utilizador não encontrado com o ID fornecido." });
         }
 
-        // Verifique se o email antigo é igual ao email do usuário encontrado
-        if (req.body.Old !== usuario[0].Email) {
-            return res.status(400).send({ message: "O email antigo não corresponde ao email atual do usuário." });
+        // Verifique se o email antigo é igual ao email do utilizador
+        if (req.body.Old !== utilizador[0].Email) {
+            return res.status(400).send({ message: "O email atual não corresponde ao email do utilizador." });
         }
-        // Atualize o email do usuário
-        UtilizadorModel.update2(req.body, (error, dados) => {
-            if (error) {
-                console.log("Erro ao atualizar o email do usuário:", error);
-                return res.status(500).send({
-                    message: error.message || "Ocorreu um erro ao tentar atualizar os dados do utilizador"
-                });
+
+        // Verifique se o novo email já está em uso por outro utilizador
+        UtilizadorModel.FindEmail(req.body.New, (err, existingUser) => {
+            if (err) {
+                console.log("Erro ao buscar o utilizador pelo novo email:", err);
+                return res.status(500).send({ message: "Ocorreu um erro ao verificar o novo email." });
             }
-            console.log("Email do utilizador alterado com sucesso!");
-            return res.status(200).json({ message: 'Perfil editado com sucesso!' });
+
+            if (existingUser && existingUser.length !== 0) {
+                return res.status(400).send({ message: "O novo email já está em uso por outro utilizador." });
+            }
+
+            // Atualize o email do utilizador
+            UtilizadorModel.update2(req.body, (error, dados) => {
+                if (error) {
+                    console.log("Erro ao atualizar o email do utilizador:", error);
+                    return res.status(500).send({
+                        message: error.message || "Ocorreu um erro ao tentar atualizar os dados do utilizador"
+                    });
+                }
+                console.log("Email do utilizador alterado com sucesso!");
+                return res.status(200).json({ message: 'Perfil editado com sucesso!' });
+            });
         });
     });
 };
 
 
-exports.update3 = (req, res) => {
+
+exports.update3 = async (req, res) => {
     // Verifique se o corpo da solicitação contém os campos necessários (Old, New e Id)
     if (!req.body.Old || !req.body.New || !req.body.Id) {
-        return res.status(400).send({ message: "Os campos Old, New e Id são obrigatórios." });
+        return res.status(400).send({ message: "Por favor preencha todos os campos." });
     }
     
     // Encontre o utilizador pelo ID
-    UtilizadorModel.FindById(req.body.Id, async (err, usuario) => {
+    UtilizadorModel.FindById(req.body.Id, async (err, utilizador) => {
         if (err) {  
             console.log("Erro ao buscar o utilizador:", err);
             return res.status(500).send({ message: "Ocorreu um erro ao buscar o utilizador." });
         }
     
-        if (!usuario) {
-            // Usuário não encontrado com o ID fornecido
-            return res.status(404).send({ message: "Usuário não encontrado com o ID fornecido." });
+        if (!utilizador) {
+            // utilizador não encontrado com o ID fornecido
+            return res.status(404).send({ message: "Utilizador não encontrado com o ID fornecido." });
         }
 
         try {
-            // Compare a senha antiga com a senha hash do usuário
-            const match = await bcrypt.compare(req.body.Old, usuario[0].Password);
+            // Compare a password antiga com a password hash do utilizador
+            const match = await bcrypt.compare(req.body.Old, utilizador[0].Password);
             if (!match) {
-                return res.status(400).send({ message: "A senha antiga não corresponde à senha atual do usuário." });
+                return res.status(400).send({ message: "A password atual não corresponde à password do utilizador." });
             }
 
-            // Hash a nova senha antes de atualizar
+            // Verifique se a nova senha tem pelo menos 6 caracteres
+            if (req.body.New.length < 6) {
+                return res.status(400).send({ message: "A sua password tem de ter no mínimo 6 caracteres." });
+            }
+
+            // Hash a nova password antes de atualizar
             const hashedPassword = await bcrypt.hash(req.body.New, saltRounds);
             
-            // Atualize a senha do usuário
+            // Atualize a password do utilizador
             UtilizadorModel.update3({ ...req.body, New: hashedPassword }, (error, dados) => {
                 if (error) {
-                    console.log("Erro ao atualizar a senha do usuário:", error);
+                    console.log("Erro ao atualizar a senha do utilizador:", error);
                     return res.status(500).send({
                         message: error.message || "Ocorreu um erro ao tentar atualizar os dados do utilizador"
                     });
@@ -175,6 +272,7 @@ exports.update3 = (req, res) => {
 
 
 
+
 //Controller Eliminar Utilizador
 exports.remove = (req, res) => {
     const id = req.params.id; 
@@ -184,7 +282,7 @@ exports.remove = (req, res) => {
             message:
             error.message || "Ocorreu um erro ao tentar eliminar os dados do utilizador"
         });
-        else res.redirect('/painel/utilizadores'); 
+        else res.status(200).json({ message: 'Perfil excluído com sucesso!' });
 
     });
 };

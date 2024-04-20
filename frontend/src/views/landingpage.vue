@@ -109,14 +109,7 @@
         this.currentTab = 0; // Reinicie a guia atual ao fechar o popup
       },
     },
-    mounted() {
-      document.body.classList.add('no-scroll');
-    // Simulando o carregamento por 3 segundos
-    setTimeout(() => {
-      this.isLoading = false;
-      document.body.classList.remove('no-scroll');
-    }, 3000);
-  }
+
 
   }
   </script>

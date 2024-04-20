@@ -85,7 +85,7 @@
                 A criar conta...
             </div>
             <div class="success-message" v-if="registo_error">
-                Erro ao criar conta.
+                Endereço de email existente!
             </div>
           </form>
         </div>
@@ -182,8 +182,7 @@
               
               // Verifique se o login foi bem-sucedido
               if (response.ok) {
-                console.log(data);
-                localStorage.setItem('userId', data.insertId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('userId', data[0].Id); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
                 localStorage.setItem('type', 0);
                 this.registo_success = true;
                 setTimeout(() => {

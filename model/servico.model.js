@@ -68,7 +68,7 @@ Servico.create = (novoServico, result) => {
 
 //Model Atualizar Serviço
 Servico.update = (dados, result) => {
-    sql.query('UPDATE servico SET nome=?, preco=?, duracao=?, ativo=? WHERE id=?', [dados.nome, dados.preco, dados.duracao, dados.ativo, dados.id], (error,res) => {
+    sql.query('UPDATE servico SET Nome=?, Descricao=?, Preco=?, Duracao=?, Ativo=? WHERE Id=?', [dados.Nome, dados.Descricao, dados.Preco, dados.Duracao, dados.Ativo, dados.Id], (error,res) => {
         if (error) {
             console.log("error: ", error);
             result(null, error);
@@ -86,7 +86,7 @@ Servico.update = (dados, result) => {
 
 //Model Eliminar Serviço
 Servico.remove = (id, result) => {
-    sql.query('DELETE FROM servico WHERE id=?', [id], (error,res) => {
+    sql.query('DELETE FROM servico WHERE Id=?', [id.params.id], (error,res) => {
         if (error) {
             console.log("error: ", error);
             result(null, error);

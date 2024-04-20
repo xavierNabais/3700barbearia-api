@@ -25,6 +25,30 @@ Utilizador.getAll = result => {
     });
 };
 
+//Model Procurar Utilizadores Com Username Específico
+Utilizador.FindUsername = (dados, result) => {
+    sql.query('SELECT * FROM utilizadores WHERE Username=?',dados, (error,res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(null, error);
+            return;
+        }
+        result(null,res);
+    });
+};
+
+//Model Procurar Utilizadores Com o Email Recebido
+Utilizador.FindEmail = (dados, result) => {
+    sql.query('SELECT * FROM utilizadores WHERE Email=?', dados, (error,res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(null, error);
+            return;
+        }
+        result(null,res);
+    });
+};
+
 //Model Procurar ID Utilizador
 Utilizador.FindById = (id, result) => {
     sql.query('SELECT * FROM utilizadores WHERE ID=?', [id], (error, res) => {
@@ -60,7 +84,19 @@ Utilizador.create = (novoUtilizador, result) => {
 
 //Model Atualizar Utilizador
 Utilizador.update = (dados, result) => {
-    sql.query('UPDATE utilizadores SET nome=?, email=?, password=?, telemovel=?, pontos=?, cargo=? WHERE id=?', [dados.nome, dados.email, dados.password, dados.telemovel, dados.pontos, dados.cargo, dados.id], (error,res) => {
+    console.log(dados);
+    if (!dados.Password){
+        sql.query('UPDATE utilizadores SET Nome=?, Username=?, Apelido=?, Email=?, Telemovel=?, Pontos=?, Cargo=? WHERE id=?', [dados.Nome, dados.Username, dados.Apelido, dados.Email, dados.Telemovel, dados.Pontos, dados.Cargo, dados.Id], (error,res) => {
+            if (error) {
+                console.log("error: ", error);
+                result(null, error);
+                return;
+            }
+            console.log("Utilizador alterado com sucesso!");
+            result(null,res);
+        });
+    } else{
+    sql.query('UPDATE utilizadores SET Nome=?, Username=?, Apelido=?, Email=?, Password=?, Telemovel=?, Pontos=?, Cargo=? WHERE id=?', [dados.Nome, dados.Username, dados.Apelido, dados.Email, dados.Password, dados.Telemovel, dados.Pontos, dados.Cargo, dados.Id], (error,res) => {
         if (error) {
             console.log("error: ", error);
             result(null, error);
@@ -69,6 +105,7 @@ Utilizador.update = (dados, result) => {
         console.log("Utilizador alterado com sucesso!");
         result(null,res);
     });
+    }
 };
 
 
