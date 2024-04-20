@@ -1,6 +1,7 @@
 <template>
 
 <div v-if="showEditPopup" class="popup">
+
   <form @submit="submitEdit" style="display:contents">
         <div class="popup-content">
           <span class="close" @click="closeEditPopup">&times;</span>
@@ -28,14 +29,46 @@
           </div>
           <button class="savePanel">Guardar</button>
         </div>
-      </form>
+  </form>
+</div>
+
+<div v-if="showCreatePopup" class="popup">
+
+<form @submit="createServico" style="display:contents">
+      <div class="popup-content">
+        <span class="close" @click="closeCreatePopup">&times;</span>
+        <h2>Criar Serviço</h2>
+        <!-- Campos de edição com títulos -->
+        <div class="input-group">
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome">
+        </div>
+        <div class="input-group">
+          <label for="apelido">Descrição:</label>
+          <input type="text" id="descricao" name="descricao">
+        </div>
+        <div class="input-group">
+          <label for="username">Preço:</label>
+          <input type="text" id="preco" name="preco">
+        </div>
+        <div class="input-group">
+          <label for="email">Duracao:</label>
+          <input type="text" id="duracao" name="duracao">
+        </div>
+        <div class="input-group">
+          <label for="admin">Ativo:</label>
+          <input type="text" id="ativo" name="ativo">
+        </div>
+        <button class="savePanel">Criar</button>
       </div>
+</form>
+</div>
 
 
 
+<button class="save-button" style="margin: 0% 5%;width:auto" @click="showCreateConfirmation()">+ Novo serviço</button>
 
-
-<form style="margin:5%;">
+<form style="margin:1% 5%;">
   <table class="user-table">
     <thead>
       <tr>
@@ -79,6 +112,13 @@
       :onConfirm="deleteServico"
       :onCancel="hideDeleteModal"
     />
+
+    <ConfirmationModal
+      :showModal="showCreateModal"
+      :message="'Tem a certeza que quer criar um serviço?'"
+      :onConfirm="openCreatePopup"
+      :onCancel="hideCreateModal"
+    />
     
       </template>
       
@@ -91,15 +131,16 @@
             servicos: [], // Propriedade para armazenar os dados dos serviços
             showEditModal: false,
             showDeleteModal: false,
+            showCreateModal: false,
             userIdToEdit: null,
             userIdToDelete: null,
             editedUser: {},
             showEditPopup: false,
-
+            showCreatePopup: false,
             };
         },
         methods: {
-          async fetchServicos() {
+        async fetchServicos() {
             try {
               const response = await fetch('http://localhost:5000/painel/servicos');
               const data = await response.json();
@@ -107,12 +148,45 @@
             } catch (error) {
               console.error('Erro ao buscar os dados dos serviços:', error);
             }
-          },
-
-        async excluirServico(userIdToDelete) {
+        },
+        async createServico() {
+          const nome = document.getElementById('nome').value;
+          const descricao = document.getElementById('descricao').value;
+          const preco = document.getElementById('preco').value;
+          const duracao = document.getElementById('duracao').value;
+          const ativo = document.getElementById('ativo').value;
         try {
-          const response = await fetch(`http://localhost:5000/painel/servicos/${userIdToDelete}`, {
-            method: 'DELETE'
+          const response = await fetch(`http://localhost:5000/painel/servicos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+              nome,
+              descricao,
+              preco,
+              duracao,
+              ativo
+              })
+          });
+          if (response.ok) {
+            console.log('Serviço criado com sucesso!');
+            this.hideServicoModal();
+            this.fetchServicos();
+          } else {
+            console.error('Erro ao criar o serviço:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Erro ao criar o serviço:', error);
+        }
+        },
+        async excluirServico() {
+        try {
+          const response = await fetch(`http://localhost:5000/painel/servicos/${this.userIdToDelete}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+              },
           });
 
           if (response.ok) {
@@ -128,7 +202,6 @@
         },
         async submitEdit() {
           try {
-            console.log(this.editedUser);
             const response = await fetch(`http://localhost:5000/painel/servicos/${this.userIdToEdit}`, {
               method: 'PUT',
               headers: {
@@ -152,7 +225,6 @@
         this.showEditModal = true;
         this.editedUser = Object.assign({}, this.fetchServicos(userId));
         },
-
         openEditPopup() {
           this.showEditModal = false;
           this.showEditPopup = true;
@@ -162,9 +234,6 @@
         closeEditPopup() {
           this.showEditPopup = false;
         },
-        hideEditModal() {
-          this.showEditModal = false;
-        },
         showDeleteConfirmation(userId) {
           this.userIdToDelete = userId;
           this.showDeleteModal = true;
@@ -172,10 +241,20 @@
         deleteServico() {
           this.excluirServico(this.userIdToDelete);
         },
-
         hideDeleteModal() {
           this.showDeleteModal = false;
+        },
+        showCreateConfirmation() {
+        this.showCreateModal = true;
         },  
+        openCreatePopup() {
+          this.showCreateModal = false;
+          this.showCreatePopup = true;
+        },
+        hideCreateModal() {
+          this.showCreateModal = false;
+        },
+        
       },
       mounted() {
           this.fetchServicos();    

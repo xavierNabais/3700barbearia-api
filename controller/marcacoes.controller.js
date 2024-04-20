@@ -247,7 +247,6 @@ exports.getActive = (req, res) => {
 
 //Controller Criar Marcação
 exports.create = (req, res) => {
-
     if(!req.body){
         res.status(400).send({
             message: "O conteúdo não pode estar vazio!"

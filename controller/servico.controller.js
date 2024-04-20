@@ -36,7 +36,6 @@ exports.create = (req, res) => {
             message: "O conteúdo não pode estar vazio!"
         });
     }
-
     const servico = new servicoModel ({
         nome: req.body.nome,
         preco: req.body.preco,
@@ -79,8 +78,7 @@ exports.update = (req, res) => {
 
 //Controller Eliminar Serviço
 exports.remove = (id, res) => {
-    console.log(id);
-    servicoModel.remove(id, (error, dados) => {
+    servicoModel.remove(id, (error, message) => {
         if (error)
         res.status(500).send({
             message:

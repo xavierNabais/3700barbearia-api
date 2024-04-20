@@ -48,11 +48,10 @@ router.delete("/painel/utilizadores/:id", utilizadorController.remove);
 router.get("/painel/servicos", servicoController.findAll);
 
 //Rota Criação Serviço Backend
-router.post("/painel/servicos/novo", servicoController.create);
+router.post("/painel/servicos", servicoController.create);
 
 //Rota Atualização Serviço Backend
 router.put("/painel/servicos/:id", servicoController.update);
-
 
 //Rota Eliminar Serviço Backend
 router.delete("/painel/servicos/:id", servicoController.remove);

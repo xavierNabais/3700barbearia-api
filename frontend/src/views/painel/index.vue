@@ -14,7 +14,7 @@
         <p style="font-size: 24px; font-weight: bold;">Gestão de Serviços</p>
         <p>Facilite a organização do seu negócio com o nosso painel de controle de marcações para funcionários! Gerencie eficientemente os horários de trabalho, atribua tarefas, acompanhe as marcações dos clientes e garanta uma gestão de agenda otimizada.</p>
       </div>
-      <div class="panel-main">
+    <div class="panel-main" style="margin-bottom:5%;">
       <div class="panel-buttons">
         <button class="save-button" style="margin: 1%;" @click="mostrarComponente('utilizadores')">Utilizadores</button>
         <button class="save-button" style="margin: 1%;" @click="mostrarComponente('barbeiros')">Barbeiros</button>
