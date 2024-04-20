@@ -252,15 +252,15 @@ export default {
     toggleShowPassword(dados) {
       dados.showPassword = !dados.showPassword;
     },
-    showEditConfirmation(userId) {
-      this.editedUser = Object.assign({}, this.fetchUtilizadores(userId));
+    showEditConfirmation(id) {
+      this.userIdToEdit = id;
       this.showEditModal = true;
     },
     openEditPopup() {
       this.showEditModal = false;
       this.showEditPopup = true;
       // Carregar os dados do utilizador a ser editado
-      this.editedUser = this.utilizadores.find(user => user.id === this.userId);
+      this.editedUser = this.utilizadores.find(user => user.Id === this.userIdToEdit);
     },
     closeEditPopup() {
       this.showEditPopup = false;
