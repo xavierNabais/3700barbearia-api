@@ -8,11 +8,11 @@
           <!-- Campos de edição com títulos -->
           <div class="input-group">
             <label for="nome">Nome:</label>
-            <input type="text" id="nome" v-model="editedUser.Nome" placeholder="Nome">
+            <input type="text" id="nome" v-model="editedUser.Nome">
           </div>
           <div class="input-group">
             <label for="apelido">Descrição:</label>
-            <input type="text" id="apelido" v-model="editedUser.Descricao" placeholder="Apelido">
+            <input type="text" id="apelido" v-model="editedUser.Descricao">
           </div>
           <div class="input-group">
             <label for="username">Preço:</label>
@@ -20,11 +20,11 @@
           </div>
           <div class="input-group">
             <label for="email">Duracao:</label>
-            <input type="text" id="email" v-model="editedUser.Duracao" placeholder="Email">
+            <input type="text" id="email" v-model="editedUser.Duracao">
           </div>
           <div class="input-group">
             <label for="admin">Ativo:</label>
-            <input type="text" id="admin" v-model="editedUser.Ativo" placeholder="Admin">
+            <input type="text" id="admin" v-model="editedUser.Ativo">
           </div>
           <button class="savePanel">Guardar</button>
         </div>
@@ -134,7 +134,7 @@
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify(this.editedUser) // Envia a cópia do objeto sem a propriedade Password
+              body: JSON.stringify(this.editedUser) 
             });
 
             if (response.ok) {

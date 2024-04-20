@@ -289,7 +289,7 @@ exports.update = (req, res) => {
             message:
             error.message || "Ocorreu um erro ao tentar atualizar os dados da marcação"
         });
-        else res.redirect('/painel/marcacoes');  
+        else res.status(200).json({ message: 'Marcação atualizda com sucesso!' });
 
     });
 };
@@ -304,7 +304,7 @@ exports.remove = (req, res) => {
             message:
             error.message || "Ocorreu um erro ao tentar eliminar os dados da marcação"
         });
-        else res.redirect('/painel/marcacoes'); 
+        else res.status(200).json({ message: 'Marcação excluída com sucesso!' });
 
     });
 };

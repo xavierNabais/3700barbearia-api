@@ -72,7 +72,7 @@ exports.update = (req, res) => {
             message:
             error.message || "Ocorreu um erro ao tentar atualizar os dados do barbeiro"
         });
-        else res.redirect('/painel/barbeiros');  
+        else res.status(200).json({ message: 'Barbeiro atualizado com sucesso!' });
 
     });
 };
@@ -87,7 +87,7 @@ exports.remove = (req, res) => {
             message:
             error.message || "Ocorreu um erro ao tentar eliminar os dados do barbeiro"
         });
-        else res.redirect('/painel/barbeiros'); 
+        else res.status(200).json({ message: 'Barbeiro excluído com sucesso!' });
 
     });
 };

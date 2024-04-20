@@ -81,7 +81,7 @@ Marcacoes.create = (novoServico, result) => {
 
 //Model Atualizar Marcação
 Marcacoes.update = (dados, result) => {
-    sql.query('UPDATE marcacoes SET id_barbeiro=?, id_utilizador=?, id_servico=?, data=?, notas=? WHERE id=?', [dados.barbeiro, dados.utilizador, dados.servico, dados.data, dados.notas, dados.id], (error,res) => {
+    sql.query('UPDATE marcacoes SET id_barbeiro=?, id_utilizador=?, id_servico=?, data=?, notas=? WHERE id=?', [dados.Id_barbeiro, dados.Id_utilizador, dados.Id_servico, dados.Data, dados.Notas, dados.Id], (error,res) => {
         if (error) {
             console.log("error: ", error);
             result(null, error);

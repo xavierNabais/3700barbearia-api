@@ -70,7 +70,7 @@ Barbeiro.create = (novoBarbeiro, result) => {
 
 //Model Atualizar Barbeiro
 Barbeiro.update = (dados, result) => {
-    sql.query('UPDATE barbeiros SET nome=?, descricao=?, especializacao=?, ativo=? WHERE id=?', [dados.nome, dados.descricao, dados.especializacao, dados.ativo, dados.id], (error,res) => {
+    sql.query('UPDATE barbeiros SET nome=?, descricao=?, especializacao=?, ativo=? WHERE id=?', [dados.Nome, dados.Descricao, dados.Especializacao, dados.Ativo, dados.Id], (error,res) => {
         if (error) {
             console.log("error: ", error);
             result(null, error);
