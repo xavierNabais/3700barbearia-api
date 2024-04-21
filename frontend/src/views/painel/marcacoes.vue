@@ -352,7 +352,10 @@
 
 <style scoped>
 
-
+.input-group select {
+  width:347px;
+  height: 48px
+}
 .popup {
   position: fixed;
   z-index: 99;
