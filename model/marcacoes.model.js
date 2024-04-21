@@ -58,7 +58,7 @@ Marcacoes.FindById = (id, result) => {
         if (res.length > 0) {
             result(null, res);
         } else {
-            result("Serviço não encontrado", null);
+            result("Marcação não encontrada", null);
         }
     });
 };
@@ -73,7 +73,7 @@ Marcacoes.create = (novoServico, result) => {
             return;
         }
 
-        console.log("Serviço criado com sucesso!");
+        console.log("Marcação criada com sucesso!");
         result(null,res);
     });
 };
@@ -107,7 +107,7 @@ Marcacoes.remove = (id, result) => {
             return;
         }
 
-        console.log("Serviço eliminado com sucesso!");
+        console.log("Marcação eliminada com sucesso!");
         result(null,res);
     });
 };

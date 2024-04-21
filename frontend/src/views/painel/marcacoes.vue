@@ -26,7 +26,7 @@
           </div>
           <div class="input-group">
             <label for="email">Data:</label>
-            <input type="text" id="data" name="data">
+            <input type="date" id="data" name="data">
           </div>
           <div class="input-group">
             <label for="admin">Notas:</label>
@@ -65,7 +65,7 @@
           </div>
           <div class="input-group">
             <label for="Data">Data:</label>
-            <input type="text" id="Data" v-model="editedUser.Data">
+            <input type="date" id="Data" v-model="editedUser.Data">
           </div>
           <div class="input-group">
             <label for="Notas">Notas:</label>
@@ -103,7 +103,7 @@
         <td>{{ dados.nomeBarbeiro }}</td>
         <td>{{ dados.nomeUtilizador }}</td>
         <td>{{ dados.nomeServico }}</td>
-        <td>{{ dados.Data }}</td>
+        <td>{{ dados.DataFormatada }}</td>
         <td>{{ dados.Notas }}</td>
         <!-- Coluna de ações -->
         <td>

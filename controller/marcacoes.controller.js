@@ -16,6 +16,20 @@ exports.findAll = (req, res) => {
             return;
         }
 
+        const formatarData = (data) => {
+            const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+            const dataFormatada = new Date(data);
+    
+            const diaSemana = diasSemana[dataFormatada.getDay()];
+            const dia = String(dataFormatada.getDate()).padStart(2, '0');
+            const mes = String(dataFormatada.getMonth() + 1).padStart(2, '0');
+            const ano = dataFormatada.getFullYear();
+            const horas = String(dataFormatada.getHours()).padStart(2, '0');
+            const minutos = String(dataFormatada.getMinutes()).padStart(2, '0');
+    
+            return `${diaSemana}, ${dia}/${mes}/${ano}, às ${horas}:${minutos}`;
+        };
+
         const buscarDetalhesUtilizador = (marcacao) => {
             return new Promise((resolve, reject) => {
                 utilizadorModel.FindById(marcacao.Id_utilizador, (erro, utilizador) => {
@@ -63,10 +77,12 @@ exports.findAll = (req, res) => {
                 buscarDetalhesBarbeiro(marcacao)
             ]);
         });
-
         // Aguarde todas as promessas serem resolvidas antes de enviar a resposta
         Promise.all(promessas)
             .then(() => {
+                dados.forEach(dado => {
+                    dado.DataFormatada = formatarData(dado.Data);
+                });
                 res.json(dados);
             })
             .catch(erro => {
@@ -75,7 +91,7 @@ exports.findAll = (req, res) => {
                     mensagem: erro.message || "Ocorreu um erro ao buscar detalhes"
                 });
             });
-    });
+        });
 };
 
 
