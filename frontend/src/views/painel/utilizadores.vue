@@ -6,7 +6,6 @@
       <div class="popup-content">
         <span class="close" @click="closeCreatePopup">&times;</span>
         <h2>Criar Utilizador</h2>
-        <!-- Campos de edição com títulos -->
         <div class="input-group">
           <label for="nome">Nome:</label>
           <input type="text" id="nome" name="nome">
@@ -21,14 +20,14 @@
         </div>
         <div class="input-group">
           <label for="email">Email:</label>
-          <input type="text" id="email" name="email">
+          <input type="email" id="email" name="email">
         </div>
         <div class="input-group">
           <label for="password">Password:</label>
           <input type="password" id="password" name="password">
         </div>
         <div class="input-group">
-          <label for="password">Telemóvel:</label>
+          <label for="telemovel">Telemóvel:</label>
           <input type="number" id="telemovel" name="telemovel">
         </div>
         <div class="input-group">
@@ -36,8 +35,12 @@
           <input type="number" id="pontos" name="pontos">
         </div>
         <div class="input-group">
-          <label for="cargo">Admin:</label>
-          <input type="text" id="cargo" name="cargo">
+          <label for="admin">Cargo:</label>
+          <select id="cargo" v-model="editedUser.Cargo" name="cargo">
+            <option value="0">Utilizador</option>
+            <option value="1">Admin</option>
+            <option value="2">Funcionário</option>
+          </select>
         </div>
         <button class="savePanel">Criar</button>
       </div>
@@ -65,23 +68,27 @@
           </div>
           <div class="input-group">
             <label for="email">Email:</label>
-            <input type="text" id="email" v-model="editedUser.Email" placeholder="Email">
+            <input type="email" id="email" v-model="editedUser.Email" placeholder="Email">
           </div>
           <div class="input-group">
             <label for="password">Password:</label>
             <input type="password" id="password" v-model="editedUser.Password">
           </div>
           <div class="input-group">
-            <label for="number">Telemóvel:</label>
-            <input type="telemovel" id="telemovel" v-model="editedUser.Telemovel">
+            <label for="telemovel">Telemóvel:</label>
+            <input type="number" id="telemovel" v-model="editedUser.Telemovel">
           </div>
           <div class="input-group">
             <label for="number">Pontos:</label>
             <input type="pontos" id="pontos" v-model="editedUser.Pontos">
           </div>
           <div class="input-group">
-            <label for="admin">Admin:</label>
-            <input type="text" id="admin" v-model="editedUser.Cargo" placeholder="Admin">
+            <label for="admin">Cargo:</label>
+            <select id="cargo" v-model="editedUser.Cargo" name="cargo">
+              <option value="0">Utilizador</option>
+              <option value="1">Admin</option>
+              <option value="2">Funcionário</option>
+            </select>
           </div>
           <button class="savePanel">Guardar</button>
         </div>
@@ -192,7 +199,7 @@ export default {
         const data = await response.json();
         this.utilizadores = data;
       } catch (error) {
-        console.error('Erro ao buscar os dados dos serviços:', error);
+        console.error('Erro ao procurar os dados dos serviços:', error);
       }
     },
     async createUtilizador() {
@@ -362,16 +369,11 @@ export default {
 }
 
 
-/* Estilos adicionais */
-.input-group {
-  margin-bottom: 10px;
-}
-.input-group label {
-  display: inline-block;
-  width: 100px;
-}
-.input-group input {
-  width: calc(100% - 110px);
-  padding: 5px;
+
+
+.input-group select{
+  width: 200px;
+    padding: 5px;
+    height: 48px;
 }
 </style>

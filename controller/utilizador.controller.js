@@ -1,7 +1,7 @@
 const UtilizadorModel = require("../model/utilizador.model.js");
 var path = require('path');
 const bcrypt = require('bcrypt');
-const saltRounds = 10; // Número de saltos para gerar o salt
+const saltRounds = 10; 
 
 //Controller Procurar Utilizadores
 exports.findAll = (req, res) => {
@@ -58,7 +58,6 @@ exports.create = (req, res) => {
             });
             return;
         } else {
-            // Adicione o ID do novo utilizador ao objeto data antes de enviar como resposta
             data.id = data.insertId;
             res.json(data);
         }
@@ -68,14 +67,14 @@ exports.create = (req, res) => {
 
 
 exports.update = async (req, res) => {
-    // Verificar se a senha está presente na requisição
+    // Verificar se a password está presente na requisição
     if (req.body.Password != undefined) {
-        // Hash da senha usando bcrypt
+        // Hash da password com bcrypt
         const hashedPassword = await bcrypt.hash(req.body.Password, 10);
-            // Atualizar a senha encriptada nos dados da requisição
+            // Atualizar a password encriptada nos dados da requisição
             req.body.Password = hashedPassword;
 
-            // Chamar o model para atualizar o utilizador com a senha encriptada
+            // Chamar o model para atualizar o utilizador com a password encriptada
             UtilizadorModel.update(req.body, (error, dados) => {
                 if (error)
                 res.status(500).send({
@@ -117,18 +116,18 @@ exports.update1 = (req, res) => {
             return res.status(400).send({ message: "O username já está em uso por outro utilizador." });
         }
 
-        // Se o username não estiver em uso por outro usuário, prosseguir com a atualização do perfil do utilizador
+        // Se o username não estiver em uso por outro utilizador, prosseguir com a atualização do perfil do utilizador
         UtilizadorModel.FindById(req.params.id, (err, userToUpdate) => {
             if (err) {
-                console.log("Erro ao buscar o usuário:", err);
-                return res.status(500).send({ message: "Ocorreu um erro ao buscar o usuário." });
+                console.log("Erro ao buscar o utilizador:", err);
+                return res.status(500).send({ message: "Ocorreu um erro ao buscar o utilizador." });
             }
 
             if (!userToUpdate) {
-                return res.status(404).send({ message: "Usuário não encontrado com o ID fornecido." });
+                return res.status(404).send({ message: "Utilizador não encontrado com o ID fornecido." });
             }
 
-            // Verificar se o username a ser atualizado é igual ao username atual do usuário
+            // Verificar se o username a ser atualizado é igual ao username atual do utilizador
             if (req.body.Username === userToUpdate.Username) {
                 // Atualizar apenas o nome e o apelido
                 const updatedUserData = {
@@ -137,12 +136,12 @@ exports.update1 = (req, res) => {
                     Id: req.params.id,
                 };
 
-                // Atualizar o perfil do usuário com os novos dados
+                // Atualizar o perfil do utilizador com os novos dados
                 UtilizadorModel.update1(updatedUserData, (error, dados) => {
                     if (error) {
-                        console.log("Erro ao atualizar o perfil do usuário:", error);
+                        console.log("Erro ao atualizar o perfil do utilizador:", error);
                         return res.status(500).send({
-                            message: error.message || "Ocorreu um erro ao tentar atualizar o perfil do usuário."
+                            message: error.message || "Ocorreu um erro ao tentar atualizar o perfil do utilizador."
                         });
                     }
                     return res.status(200).json({ message: 'Perfil editado com sucesso!' });
@@ -156,12 +155,12 @@ exports.update1 = (req, res) => {
                     Id: req.params.id,
                 };
 
-                // Atualizar o perfil do usuário com os novos dados
+                // Atualizar o perfil do utilizador com os novos dados
                 UtilizadorModel.update1(updatedUserData, (error, dados) => {
                     if (error) {
-                        console.log("Erro ao atualizar o perfil do usuário:", error);
+                        console.log("Erro ao atualizar o perfil do utilizador:", error);
                         return res.status(500).send({
-                            message: error.message || "Ocorreu um erro ao tentar atualizar o perfil do usuário."
+                            message: error.message || "Ocorreu um erro ao tentar atualizar o perfil do utilizador."
                         });
                     }
                     return res.status(200).json({ message: 'Perfil editado com sucesso!' });
@@ -248,7 +247,7 @@ exports.update3 = async (req, res) => {
                 return res.status(400).send({ message: "A password atual não corresponde à password do utilizador." });
             }
 
-            // Verifique se a nova senha tem pelo menos 6 caracteres
+            // Verifique se a nova password tem pelo menos 6 caracteres
             if (req.body.New.length < 6) {
                 return res.status(400).send({ message: "A sua password tem de ter no mínimo 6 caracteres." });
             }
@@ -259,17 +258,17 @@ exports.update3 = async (req, res) => {
             // Atualize a password do utilizador
             UtilizadorModel.update3({ ...req.body, New: hashedPassword }, (error, dados) => {
                 if (error) {
-                    console.log("Erro ao atualizar a senha do utilizador:", error);
+                    console.log("Erro ao atualizar a password do utilizador:", error);
                     return res.status(500).send({
                         message: error.message || "Ocorreu um erro ao tentar atualizar os dados do utilizador"
                     });
                 }
-                console.log("Senha do utilizador alterada com sucesso!");
+                console.log("Password do utilizador alterada com sucesso!");
                 return res.status(200).json({ message: 'Perfil editado com sucesso!' });
             });
         } catch (error) {
-            console.log("Erro ao comparar senhas:", error);
-            return res.status(500).send({ message: "Ocorreu um erro ao comparar senhas." });
+            console.log("Erro ao comparar passwords:", error);
+            return res.status(500).send({ message: "Ocorreu um erro ao comparar passwords." });
         }
     });
 };

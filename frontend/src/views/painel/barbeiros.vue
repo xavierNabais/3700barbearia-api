@@ -20,8 +20,11 @@
             <input type="text" id="username" v-model="editedUser.Especializacao">
           </div>
           <div class="input-group">
-            <label for="email">Ativo:</label>
-            <input type="text" id="email" v-model="editedUser.Ativo" placeholder="Email">
+            <label for="ativo">Estado:</label>
+            <select id="ativo" v-model="editedUser.Ativo" name="ativo">
+              <option value="0">Não-Ativo</option>
+              <option value="1">Ativo</option>
+            </select>
           </div>
           <button class="savePanel">Guardar</button>
         </div>
@@ -48,9 +51,12 @@
           <input type="text" id="especializacao" name="especializacao">
         </div>
         <div class="input-group">
-          <label for="admin">Ativo:</label>
-          <input type="text" id="ativo" name="ativo">
-        </div>
+            <label for="ativo">Estado:</label>
+            <select id="ativo" v-model="editedUser.Ativo" name="ativo">
+              <option value="0">Não-Ativo</option>
+              <option value="1">Ativo</option>
+            </select>
+          </div>
         <button class="savePanel">Criar</button>
       </div>
 </form>
@@ -263,3 +269,14 @@
         },
       }
       </script>
+
+
+
+<style>
+
+.input-group select{
+  width: 200px;
+    padding: 5px;
+    height: 48px;
+}
+</style>

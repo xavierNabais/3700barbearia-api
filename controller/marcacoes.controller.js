@@ -67,7 +67,6 @@ exports.findAll = (req, res) => {
         // Aguarde todas as promessas serem resolvidas antes de enviar a resposta
         Promise.all(promessas)
             .then(() => {
-                console.log(dados);
                 res.json(dados);
             })
             .catch(erro => {

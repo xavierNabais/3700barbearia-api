@@ -24,8 +24,11 @@
             <input type="text" id="email" v-model="editedUser.Duracao">
           </div>
           <div class="input-group">
-            <label for="admin">Ativo:</label>
-            <input type="text" id="admin" v-model="editedUser.Ativo">
+            <label for="ativo">Estado:</label>
+            <select id="ativo" v-model="editedUser.Ativo" name="ativo">
+              <option value="0">Não-Ativo</option>
+              <option value="1">Ativo</option>
+            </select>
           </div>
           <button class="savePanel">Guardar</button>
         </div>
@@ -44,21 +47,24 @@
           <input type="text" id="nome" name="nome">
         </div>
         <div class="input-group">
-          <label for="apelido">Descrição:</label>
+          <label for="descricao">Descrição:</label>
           <input type="text" id="descricao" name="descricao">
         </div>
         <div class="input-group">
-          <label for="username">Preço:</label>
-          <input type="text" id="preco" name="preco">
+          <label for="preco">Preço:</label>
+          <input type="number" id="preco" name="preco">
         </div>
         <div class="input-group">
-          <label for="email">Duracao:</label>
-          <input type="text" id="duracao" name="duracao">
+          <label for="duracao">Duracao:</label>
+          <input type="number" id="duracao" name="duracao">
         </div>
         <div class="input-group">
-          <label for="admin">Ativo:</label>
-          <input type="text" id="ativo" name="ativo">
-        </div>
+            <label for="ativo">Estado:</label>
+            <select id="ativo" v-model="editedUser.Ativo" name="ativo">
+              <option value="0">Não-Ativo</option>
+              <option value="1">Ativo</option>
+            </select>
+          </div>
         <button class="savePanel">Criar</button>
       </div>
 </form>
@@ -268,3 +274,13 @@
         },
     }
       </script>
+
+<style>
+
+    .input-group select{
+      width: 200px;
+      padding: 5px;
+      height: 48px;
+    }
+
+</style>

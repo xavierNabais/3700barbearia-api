@@ -7,16 +7,22 @@
           <h2>Criar marcação</h2>
           <!-- Campos de edição com títulos -->
           <div class="input-group">
-            <label for="nome">Barbeiro:</label>
-            <input type="text" id="id_barbeiro" name="id_barbeiro">
+            <label for="barbeiro">Barbeiro:</label>
+            <select id="id_barbeiro" name="id_barbeiro">
+              <option v-for="barbeiro in barbeiros" :key="barbeiro.Id" :value="barbeiro.Id">{{ barbeiro.Nome }}</option>
+            </select>
           </div>
           <div class="input-group">
-            <label for="apelido">Utilizador:</label>
-            <input type="text" id="id_utilizador" name="id_utilizador">
+            <label for="utilizador">Utilizador:</label>
+            <select id="id_utilizador" name="id_utilizador">
+              <option v-for="utilizador in utilizadores" :key="utilizador.Id" :value="utilizador.Id">{{ utilizador.Nome }}</option>
+            </select>
           </div>
           <div class="input-group">
-            <label for="username">Serviço:</label>
-            <input type="text" id="id_servico" name="id_servico">
+            <label for="servico">Serviço:</label>
+            <select id="id_servico" name="id_servico">
+              <option v-for="servico in servicos" :key="servico.Id" :value="servico.Id">{{ servico.Nome }}</option>
+            </select>
           </div>
           <div class="input-group">
             <label for="email">Data:</label>
@@ -34,30 +40,36 @@
 
 
 <div v-if="showEditPopup" class="popup">
-  <form @submit="submitEdit" style="display:contents">
+  <form @submit="submitEdit" style="display:contents" name="submit">
         <div class="popup-content">
           <span class="close" @click="closeEditPopup">&times;</span>
           <h2>Editar Utilizador</h2>
           <!-- Campos de edição com títulos -->
           <div class="input-group">
-            <label for="nome">Barbeiro:</label>
-            <input type="text" id="nome" v-model="editedUser.Id_barbeiro">
+            <label for="barbeiro">Barbeiro:</label>
+            <select id="Id_barbeiro" name="Id_barbeiro" v-model="editedUser.Id_barbeiro" form="submit">
+              <option v-for="barbeiro in barbeiros" :key="barbeiro.Id" :value="barbeiro.Id">{{ barbeiro.Nome }}</option>
+            </select>
           </div>
           <div class="input-group">
-            <label for="apelido">Utilizador:</label>
-            <input type="text" id="apelido" v-model="editedUser.Id_utilizador">
+            <label for="utilizador">Utilizador:</label>
+            <select id="Id_utilizador" name="Id_utilizador" v-model="editedUser.Id_utilizador" form="submit">
+              <option v-for="utilizador in utilizadores" :key="utilizador.Id" :value="utilizador.Id">{{ utilizador.Nome }}</option>
+            </select>
           </div>
           <div class="input-group">
-            <label for="username">Serviço:</label>
-            <input type="text" id="username" v-model="editedUser.Id_servico">
+            <label for="servico">Serviço:</label>
+            <select id="Id_servico" name="Id_servico" v-model="editedUser.Id_servico" form="submit">
+              <option v-for="servico in servicos" :key="servico.Id" :value="servico.Id">{{ servico.Nome }}</option>
+            </select>
           </div>
           <div class="input-group">
-            <label for="email">Data:</label>
-            <input type="text" id="email" v-model="editedUser.Data">
+            <label for="Data">Data:</label>
+            <input type="text" id="Data" v-model="editedUser.Data">
           </div>
           <div class="input-group">
-            <label for="admin">Notas:</label>
-            <input type="text" id="admin" v-model="editedUser.Notas">
+            <label for="Notas">Notas:</label>
+            <input type="text" id="Notas" v-model="editedUser.Notas">
           </div>
           <button class="savePanel">Guardar</button>
         </div>
@@ -135,6 +147,9 @@
         data() {
           return {
             marcacoes: [], // Propriedade para armazenar os dados dos Marcaçãos
+            utilizadores: [],
+            barbeiros: [],
+            servicos: [],
             showEditModal: false,
             showDeleteModal: false,
             userIdToEdit: null,
@@ -151,6 +166,33 @@
               const response = await fetch('http://localhost:5000/painel/marcacoes');
               const data = await response.json();
               this.marcacoes = data;
+            } catch (error) {
+              console.error('Erro ao buscar os dados dos Marcaçãos:', error);
+            }
+          },
+          async fetchUtilizadores() {
+            try {
+              const response = await fetch('http://localhost:5000/painel/utilizadores');
+              const data = await response.json();
+              this.utilizadores = data;
+            } catch (error) {
+              console.error('Erro ao buscar os dados dos Marcaçãos:', error);
+            }
+          },
+          async fetchBarbeiros() {
+            try {
+              const response = await fetch('http://localhost:5000/painel/barbeiros');
+              const data = await response.json();
+              this.barbeiros = data;
+            } catch (error) {
+              console.error('Erro ao buscar os dados dos Marcaçãos:', error);
+            }
+          },
+          async fetchServicos() {
+            try {
+              const response = await fetch('http://localhost:5000/painel/servicos');
+              const data = await response.json();
+              this.servicos = data;
             } catch (error) {
               console.error('Erro ao buscar os dados dos Marcaçãos:', error);
             }
@@ -194,19 +236,25 @@
           });
 
           if (response.ok) {
-            console.log('Marcação excluído com sucesso!');
+            console.log('Marcação excluída com sucesso!');
             this.hideDeleteModal();
             this.fetchMarcacoes();
           } else {
-            console.error('Erro ao excluir o Marcação:', response.statusText);
+            console.error('Erro ao excluir a marcação:', response.statusText);
           }
         } catch (error) {
-          console.error('Erro ao excluir o Marcação:', error);
+          console.error('Erro ao excluir a marcação:', error);
         }
         },
         async submitEdit() {
           try {
-            console.log(this.editedUser);
+          this.editedUser.Id = this.userIdToEdit;
+          this.editedUser.Id_barbeiro = document.getElementById('Id_barbeiro').value;
+          this.editedUser.Id_utilizador = document.getElementById('Id_utilizador').value;
+          this.editedUser.Id_servico = document.getElementById('Id_servico').value;
+          this.editedUser.Data = document.getElementById('Data').value;
+          this.editedUser.Notas = document.getElementById('Notas').value;
+
             const response = await fetch(`http://localhost:5000/painel/marcacoes/${this.userIdToEdit}`, {
               method: 'PUT',
               headers: {
@@ -216,27 +264,45 @@
             });
 
             if (response.ok) {
-              console.log('Marcação atualizado com sucesso!');
+              console.log('Marcação atualizada com sucesso!');
               this.closeEditPopup();
               this.fetchMarcacoes();
             } else {
-              console.error('Erro ao editar o Marcação:', response.statusText);
+              console.error('Erro ao editar a Marcação:', response.statusText);
             }
           } catch (error) {
-            console.error('Erro ao editar o Marcação:', error);
+            console.error('Erro ao editar a Marcação:', error);
           }
         },
-        showEditConfirmation(userId) {
-        this.showEditModal = true;
-        this.editedUser = Object.assign({}, this.fetchMarcacoes(userId));
-        },
-
         openEditPopup() {
-          this.showEditModal = false;
-          this.showEditPopup = true;
-          // Carregar os dados do utilizador a ser editado
-          this.editedUser = this.marcacoes.find(user => user.id === this.userId);
-        },
+        // Ocultar o modal de edição e exibir o popup de edição
+        this.showEditModal = false;
+        this.showEditPopup = true;
+
+        // Encontrar a marcação a ser editada
+        const marcacao = this.marcacoes.find(marcacao => marcacao.Id === this.userIdToEdit);
+
+        // Definir os dados do utilizador editado com base na marcação encontrada
+        this.editedUser = {
+          Id_barbeiro: marcacao.Id_barbeiro,
+          Id_utilizador: marcacao.Id_utilizador,
+          Id_servico: marcacao.Id_servico,
+          Data: marcacao.Data,
+          Notas: marcacao.Notas
+        };
+      },
+
+      showEditConfirmation(userId) {
+        // Definir o ID do utilizador a ser editado
+        this.userIdToEdit = userId;
+
+        // Exibir o modal de edição
+        this.showEditModal = true;
+
+        // Carregar os dados do utilizador a ser editado
+        this.editedUser = this.marcacoes.find(marcacao => marcacao.Id === userId);
+      },
+
         closeEditPopup() {
           this.showEditPopup = false;
         },
@@ -271,6 +337,9 @@
       
         mounted() {
           this.fetchMarcacoes();    
+          this.fetchUtilizadores();
+          this.fetchBarbeiros();
+          this.fetchServicos();
         },
         name:'painelMarcacoes',
         components: {
