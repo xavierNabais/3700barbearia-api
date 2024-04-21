@@ -1,4 +1,38 @@
 <template>
+
+<div v-if="showCreatePopup" class="popup">
+  <form @submit="createMarcacao" style="display:contents">
+        <div class="popup-content">
+          <span class="close" @click="hideCreateModal">&times;</span>
+          <h2>Criar marcação</h2>
+          <!-- Campos de edição com títulos -->
+          <div class="input-group">
+            <label for="nome">Barbeiro:</label>
+            <input type="text" id="id_barbeiro" name="id_barbeiro">
+          </div>
+          <div class="input-group">
+            <label for="apelido">Utilizador:</label>
+            <input type="text" id="id_utilizador" name="id_utilizador">
+          </div>
+          <div class="input-group">
+            <label for="username">Serviço:</label>
+            <input type="text" id="id_servico" name="id_servico">
+          </div>
+          <div class="input-group">
+            <label for="email">Data:</label>
+            <input type="text" id="data" name="data">
+          </div>
+          <div class="input-group">
+            <label for="admin">Notas:</label>
+            <input type="text" id="notas" name="notas">
+          </div>
+          <button class="savePanel">Criar</button>
+        </div>
+    </form>
+</div>
+
+
+
 <div v-if="showEditPopup" class="popup">
   <form @submit="submitEdit" style="display:contents">
         <div class="popup-content">
@@ -29,7 +63,15 @@
         </div>
       </form>
       </div>
-<form style="margin:5%;">
+
+
+
+
+      <button class="save-button" style="margin: 0% 5%;width:auto" @click="showCreateConfirmation()">+ Nova marcação</button>
+
+
+
+<form style="margin:1% 5%;">
   <table class="user-table">
     <thead>
       <tr>
@@ -46,9 +88,9 @@
       <!-- Aqui você pode iterar sobre os dados dos usuários e criar linhas para cada usuário -->
       <tr v-for="dados in marcacoes" :key="dados.id" class="ag-courses_item">
         <td>{{ dados.Id }}</td>
-        <td>{{ dados.Id_barbeiro }}</td>
-        <td>{{ dados.Id_utilizador }}</td>
-        <td>{{ dados.Id_servico }}</td>
+        <td>{{ dados.nomeBarbeiro }}</td>
+        <td>{{ dados.nomeUtilizador }}</td>
+        <td>{{ dados.nomeServico }}</td>
         <td>{{ dados.Data }}</td>
         <td>{{ dados.Notas }}</td>
         <!-- Coluna de ações -->
@@ -61,6 +103,13 @@
     </tbody>
   </table>
 </form>
+
+<ConfirmationModal
+      :showModal="showCreateModal"
+      :message="'Tem a certeza que quer criar uma marcação?'"
+      :onConfirm="openCreatePopup"
+      :onCancel="hideCreatePopup"
+    />
 
 <ConfirmationModal
       :showModal="showEditModal"
@@ -92,6 +141,8 @@
             userIdToDelete: null,
             editedUser: {},
             showEditPopup: false,
+            showCreateModal: false,
+            showCreatePopup: false,
             };
         },
         methods: {
@@ -104,6 +155,38 @@
               console.error('Erro ao buscar os dados dos Marcaçãos:', error);
             }
           },
+          async createMarcacao() {
+          const id_utilizador = document.getElementById('id_utilizador').value;
+          const id_barbeiro = document.getElementById('id_barbeiro').value;
+          const id_servico = document.getElementById('id_servico').value;
+          const data = document.getElementById('data').value;
+          const notas = document.getElementById('notas').value;
+          try {
+            const response = await fetch(`http://localhost:5000/painel/marcacoes`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                id_utilizador,
+                id_barbeiro,
+                id_servico,
+                data,
+                notas
+                })
+              });
+              if (response.ok) {
+                console.log('Marcação criada com sucesso!');
+                this.hideBarbeiroModal();
+                this.fetchBarbeiros();
+              } else {
+                console.error('Erro ao criar a marcação:', response.statusText);
+              }
+            } catch (error) {
+              console.error('Erro ao criar a marcação:', error);
+            }
+            },
+
         async excluirMarcacao(userIdToDelete) {
         try {
           const response = await fetch(`http://localhost:5000/painel/marcacoes/${userIdToDelete}`, {
@@ -171,6 +254,19 @@
         hideDeleteModal() {
           this.showDeleteModal = false;
         },  
+        showCreateConfirmation() {
+          this.showCreateModal = true;
+          },  
+          openCreatePopup() {
+            this.showCreateModal = false;
+            this.showCreatePopup = true;
+          },
+          hideCreatePopup(){
+            this.showCreateModal = false;
+          },
+          hideCreateModal() {
+            this.showCreatePopup = false;
+          },
       },
       
         mounted() {

@@ -5,16 +5,77 @@ const servicoModel = require("../model/servico.model.js");
 
 var path = require('path');
 
-//Controller Procurar Marcações
-exports.findAll = (req, res) => {
-    marcacoesModel.getAll((error, dados) => {
-        if (error)
-        res.status(500).send({
-            message:
-            error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
-        });
-        else res.json(dados);   
 
+// Controller Procurar Marcações
+exports.findAll = (req, res) => {
+    marcacoesModel.getAll((erro, dados) => {
+        if (erro) {
+            res.status(500).send({
+                mensagem: erro.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+            });
+            return;
+        }
+
+        const buscarDetalhesUtilizador = (marcacao) => {
+            return new Promise((resolve, reject) => {
+                utilizadorModel.FindById(marcacao.Id_utilizador, (erro, utilizador) => {
+                    if (erro) {
+                        reject(erro);
+                        return;
+                    }
+                    marcacao.nomeUtilizador =  utilizador[0].Nome ;
+                    resolve();
+                });
+            });
+        };
+
+        const buscarDetalhesServico = (marcacao) => {
+            return new Promise((resolve, reject) => {
+                servicoModel.FindById(marcacao.Id_servico, (erro, servico) => {
+                    if (erro) {
+                        reject(erro);
+                        return;
+                    }
+                    marcacao.nomeServico = servico[0].Nome ;
+                    resolve();
+                });
+            });
+        };
+
+        const buscarDetalhesBarbeiro = (marcacao) => {
+            return new Promise((resolve, reject) => {
+                barbeiroModel.FindById(marcacao.Id_barbeiro, (erro, barbeiro) => {
+                    if (erro) {
+                        reject(erro);
+                        return;
+                    }
+                    marcacao.nomeBarbeiro = barbeiro[0].Nome ;
+                    resolve();
+                });
+            });
+        };
+
+        // Array de promessas para buscar detalhes de cada tipo
+        const promessas = dados.map(marcacao => {
+            return Promise.all([
+                buscarDetalhesUtilizador(marcacao),
+                buscarDetalhesServico(marcacao),
+                buscarDetalhesBarbeiro(marcacao)
+            ]);
+        });
+
+        // Aguarde todas as promessas serem resolvidas antes de enviar a resposta
+        Promise.all(promessas)
+            .then(() => {
+                console.log(dados);
+                res.json(dados);
+            })
+            .catch(erro => {
+                console.error("Erro ao buscar detalhes:", erro);
+                res.status(500).send({
+                    mensagem: erro.message || "Ocorreu um erro ao buscar detalhes"
+                });
+            });
     });
 };
 
@@ -254,9 +315,9 @@ exports.create = (req, res) => {
     }
 
     const marcacao = new marcacoesModel ({
-        id_barbeiro: req.body.barbeiro,
-        id_utilizador: req.body.utilizador,
-        id_servico: req.body.servico,
+        id_barbeiro: req.body.id_barbeiro,
+        id_utilizador: req.body.id_utilizador,
+        id_servico: req.body.id_servico,
         data: req.body.data,
         notas: req.body.notas,
     });
