@@ -21,6 +21,7 @@
 
 <!-- Popup -->
 <div v-if="showPopup" class="popup">
+  <span class="close" @click="closePopup">&times;</span>
   <Popup />
 </div>
 

@@ -275,12 +275,48 @@
     }
       </script>
 
-<style>
+<style scoped>
 
     .input-group select{
       width: 200px;
       padding: 5px;
       height: 48px;
     }
+    .popup {
+  position: fixed;
+  z-index: 99;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
 
+.popup-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 25px;
+  border: 1px solid #888;
+  width: 50%;
+  min-height: 600px;
+  border-radius: 15px;
+}
+
+.close {
+  color: #aaaaaa;
+  font-size: 28px;
+  font-weight: bold;
+  z-index: 99;
+  top:12%;
+  right:25%;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>
+

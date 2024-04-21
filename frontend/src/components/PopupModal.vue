@@ -1,7 +1,6 @@
 <template>
 
 
-        <span class="close" @click="closePopup">&times;</span>
 
         <div class="popup-section section-left">
         <!-- Indicador de progresso -->
@@ -38,6 +37,7 @@
                 </div>
                 </a>
             </div>
+            
             </div>
         </div>
 
