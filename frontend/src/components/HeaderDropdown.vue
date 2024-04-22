@@ -10,7 +10,8 @@
       </button>
       <div class="dropdown-content" v-show="dropdownOpen">
         <!-- Coloque aqui as opções do dropdown -->
-        <a href="/perfil">Editar Perfil</a>
+        <a v-if="type == 2" href="/perfil">Agenda</a>
+        <a href="/agenda">Editar Perfil</a>
         <a href="/perfil/marcacoes">Marcações</a>
         <a href="/perfil/recompensa">Recompensa</a>
         <a v-if="type == 1" href="/painel">Painel de controlo</a>

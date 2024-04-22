@@ -40,6 +40,7 @@ exports.create = (req, res) => {
 
     const barbeiro = new barbeiroModel ({
         nome: req.body.nome,
+        id_utilizador: req.body.id_utilizador,
         descricao: req.body.descricao,
         especializacao: req.body.especializacao,
         ativo: req.body.ativo,

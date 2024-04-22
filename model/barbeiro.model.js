@@ -4,6 +4,7 @@ const sql = require('./conexao.db');
 //definição da tabela na bd de forma abstrata
 const Barbeiro = function (data) {
     this.id = data.id,
+    this.id_utilizador = data.id_utilizador
     this.nome = data.nome,
     this.descricao = data.descricao,
     this.especializacao = data.especializacao,
@@ -70,7 +71,7 @@ Barbeiro.create = (novoBarbeiro, result) => {
 
 //Model Atualizar Barbeiro
 Barbeiro.update = (dados, result) => {
-    sql.query('UPDATE barbeiros SET nome=?, descricao=?, especializacao=?, ativo=? WHERE id=?', [dados.Nome, dados.Descricao, dados.Especializacao, dados.Ativo, dados.Id], (error,res) => {
+    sql.query('UPDATE barbeiros SET nome=?, id_utilizador=?, descricao=?, especializacao=?, ativo=? WHERE id=?', [dados.Nome,dados.Id_utilizador, dados.Descricao, dados.Especializacao, dados.Ativo, dados.Id], (error,res) => {
         if (error) {
             console.log("error: ", error);
             result(null, error);

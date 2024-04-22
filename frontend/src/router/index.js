@@ -28,6 +28,11 @@ const routes = [
     component: loginPage
   },
   {
+    path: '/agenda',
+    name: 'editarPerfil',
+    component: editarPerfil
+  },
+  {
     path: '/perfil',
     name: 'editarPerfil',
     component: editarPerfil

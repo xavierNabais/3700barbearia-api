@@ -26,7 +26,17 @@ Utilizador.getAll = result => {
         result(null,res);
     });
 };
-
+//Model Procurar Utilizadores Funcionários
+Utilizador.getWorkers = result => {
+    sql.query('SELECT * FROM utilizadores WHERE cargo=2', (error,res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(null, error);
+            return;
+        }
+        result(null,res);
+    });
+};
 //Model Procurar Utilizadores Com Username Específico
 Utilizador.FindUsername = (dados, result) => {
     sql.query('SELECT * FROM utilizadores WHERE Username=?',dados, (error,res) => {

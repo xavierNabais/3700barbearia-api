@@ -2,7 +2,7 @@
 
 
 <div v-if="showEditPopup" class="popup">
-  <form @submit="submitEdit" style="display:contents">
+  <form @submit="submitEdit" style="display:contents" id="editBarber">
         <div class="popup-content">
           <span class="close" @click="closeEditPopup">&times;</span>
           <h2>Editar Utilizador</h2>
@@ -10,6 +10,12 @@
           <div class="input-group">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" v-model="editedUser.Nome" placeholder="Nome">
+          </div>
+          <div class="input-group">
+            <label for="utilizador">Utilizador:</label>
+            <select id="id_utilizador" name="id_utilizador" form="editBarber">
+              <option v-for="utilizador in utilizadores" :key="utilizador.Id" :value="utilizador.Id">{{ utilizador.Nome }}</option>
+            </select>
           </div>
           <div class="input-group">
             <label for="apelido">Descrição:</label>
@@ -41,6 +47,12 @@
         <div class="input-group">
           <label for="nome">Nome:</label>
           <input type="text" id="nome" name="nome">
+        </div>
+        <div class="input-group">
+            <label for="utilizador">Utilizador:</label>
+            <select id="id_utilizador" name="id_utilizador" form="editBarber">
+              <option v-for="utilizador in utilizadores" :key="utilizador.Id" :value="utilizador.Id">{{ utilizador.Nome }}</option>
+            </select>
         </div>
         <div class="input-group">
           <label for="apelido">Descrição:</label>
@@ -129,6 +141,7 @@
       export default {
         data() {
           return {
+            utilizadores: [],
             barbeiros: [], // Propriedade para armazenar os dados dos barbeiros
             showEditModal: false,
             showDeleteModal: false,
@@ -141,6 +154,15 @@
             };
         },
         methods: {
+          async fetchUtilizadores() {
+            try {
+              const response = await fetch('http://localhost:5000/painel/funcionarios');
+              const data = await response.json();
+              this.utilizadores = data;
+            } catch (error) {
+              console.error('Erro ao buscar os dados dos Marcaçãos:', error);
+            }
+          },
           async fetchBarbeiros() {
             try {
               const response = await fetch('http://localhost:5000/painel/barbeiros');
@@ -152,6 +174,7 @@
           },
           async createBarbeiro() {
           const nome = document.getElementById('nome').value;
+          const id_utilizador = document.getElementById('id_utilizador').value;
           const descricao = document.getElementById('descricao').value;
           const especializacao = document.getElementById('especializacao').value;
           const ativo = document.getElementById('ativo').value;
@@ -163,6 +186,7 @@
                 },
                 body: JSON.stringify({
                 nome,
+                id_utilizador,
                 descricao,
                 especializacao,
                 ativo
@@ -198,6 +222,8 @@
           },
           async submitEdit() {
           try {
+            const id_utilizador = document.getElementById('id_utilizador').value;
+            this.editedUser.Id_utilizador = id_utilizador;
             const response = await fetch(`http://localhost:5000/painel/barbeiros/${this.userIdToEdit}`, {
               method: 'PUT',
               headers: {
@@ -260,7 +286,8 @@
 
         },
         mounted() {
-          this.fetchBarbeiros();    
+          this.fetchBarbeiros();  
+          this.fetchUtilizadores();  
         },
 
         name:'painelBarbeiros',

@@ -16,6 +16,18 @@ exports.findAll = (req, res) => {
     });
 };
 
+//Controller Procurar Utilizadores
+exports.findWorkers = (req, res) => {
+    UtilizadorModel.getWorkers((error, dados) => {
+        if (error)
+        res.status(500).send({
+            message:
+            error.message || "Ocorreu um erro ao tentar aceder aos dados dos utilizadores"
+        });
+        else res.json(dados);
+
+    });
+};
 //Controller Procurar ID Utilizador
 exports.findById = (req, res) => {
     const userId = req.params.id;
