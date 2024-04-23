@@ -62,22 +62,25 @@
 
             <div class="tab" v-show="currentTab === 2">
               <h2 class="popup-title">Selecione o horário</h2>
-              <div class="service-info">
-                <p style="color:black;">Abril 2024</p>
-                <div class="pagination-wrapper">
-                  <button class="pagination-button" @click.prevent="prevPage">&lt;</button>
-                  <div class="day-pagination">
-                    <button v-for="day in daysInMonth" :key="day" @click.prevent="selectDay(day)">{{ day }}</button>
-                  </div>
-                  <button class="pagination-button" @click.prevent="nextPage">&gt;</button>
+                <div class="service-info">
+                  <div class="date-container">
+                    <p style="color:black;">{{ monthYear }}</p>
+                    <p style="color:black; margin-left: auto;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
                 </div>
-                <div class="available-times">
-                  <div class="hour-row">
-                    <button v-for="hour in availableHours" :key="hour" class="hour-button" @click.prevent="selectHour(hour)">
-                      {{ hour }}
-                    </button>
+                  <div class="pagination-wrapper">
+                    <button class="pagination-button" @click.prevent="prevPage">&lt;</button>
+                    <div class="day-pagination">
+                      <button v-for="day in daysInMonth" :key="day" @click.prevent="selectDay(day)">{{ day.day }}</button>
+                    </div>
+                    <button class="pagination-button" @click.prevent="nextPage">&gt;</button>
                   </div>
-                </div>
+                  <div class="available-times">
+                    <div class="hour-row">
+                      <button v-for="hour in availableHours" :key="hour" class="hour-button" @click.prevent="selectHour(hour)">
+                        {{ hour }}
+                      </button>
+                    </div>
+                  </div>
               </div>
             </div>
 
@@ -119,11 +122,21 @@ export default {
       currentPage: 1,
       currentMonth: new Date().getMonth() + 1,
       currentYear: new Date().getFullYear(),
+      months: [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ],
       daysInMonth: [],
       availableHours: ["09h00", "09h30", "10h00", "10h30", "11h00", "11h30", "12h00", "12h30", "13h30", "14h00", "14h30", "15h00", "15h30", "16h00", "16h30", "17h00", "17h30", "18h00", "18h30", "19h00"],
       selectedTime: "",
-      totalPages: 0
+      totalPages: 0,
+      nextMonthYear: null
     };
+  },
+    computed: {
+    monthYear() {
+      return `${this.months[this.currentMonth - 1]} ${this.currentYear}`;
+    },
   },
   methods: {
     async fetchServicos() {
@@ -163,24 +176,86 @@ export default {
       this.updateDaysInMonth();
     },
     updateDaysInMonth() {
-      const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
-      const startDay = (this.currentPage - 1) * 7 + 1;
-      const endDay = Math.min(this.currentPage * 7, daysInMonth);
-      this.daysInMonth = Array.from({ length: endDay - startDay + 1 }, (_, i) => i + startDay);
-      this.totalPages = Math.ceil(daysInMonth / 7);
-    },
+    const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
+    const startDay = (this.currentPage - 1) * 7 + 1;
+    const endDay = Math.min(this.currentPage * 7, daysInMonth);
+    const days = [];
+
+    // Adiciona dias do mês anterior, se necessário
+    const prevMonthDays = new Date(this.currentYear, this.currentMonth - 1, 0).getDate();
+    for (let i = startDay; i <= Math.min(endDay, prevMonthDays); i++) {
+      days.push({ day: i, month: this.currentMonth - 1 });
+    }
+
+    // Adiciona dias do mês atual
+    for (let i = Math.max(startDay, prevMonthDays + 1); i <= endDay; i++) {
+      days.push({ day: i, month: this.currentMonth });
+    }
+
+    // Adiciona dias do próximo mês, se necessário
+    const nextMonthDays = 7 - days.length % 7;
+    if (nextMonthDays < 7) {
+      for (let i = 1; i <= nextMonthDays; i++) {
+        days.push({ day: i, month: this.currentMonth + 1 });
+      }
+      // Define o próximo mês e ano
+      this.nextMonthYear = this.currentYear + (this.currentMonth === 12 ? 1 : 0);
+      this.nextMonth = this.currentMonth === 12 ? 1 : this.currentMonth + 1;
+    } else {
+      // Se não houver dias do próximo mês, limpa os valores
+      this.nextMonthYear = null;
+      this.nextMonth = null;
+    }
+
+    this.daysInMonth = days;
+    this.totalPages = Math.ceil(daysInMonth / 7);
+  },
+
+
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
-        this.updateDaysInMonth();
+      } else {
+        this.currentPage = 1;
+        if (this.currentMonth === 12) {
+          this.currentMonth = 1;
+          this.currentYear++;
+        } else {
+          this.currentMonth++;
+        }
       }
+      this.updateDaysInMonth();
     },
+
     prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-        this.updateDaysInMonth();
-      }
-    },
+  if (this.currentPage > 1) {
+    this.currentPage--;
+    this.updateDaysInMonth();
+  } else {
+    if (this.currentMonth === 1) {
+      this.currentMonth = 12;
+      this.currentYear--;
+    } else {
+      this.currentMonth--;
+    }
+    // Atualiza a página inicial para exibir os dias do mês anterior
+    const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
+    this.currentPage = Math.ceil(daysInMonth / 7);
+    this.updateDaysInMonth();
+  }
+},
+
+
+
+
+
+
+
+
+
+
+
+
     selectDay() {
       // Implemente a lógica para selecionar o dia, se necessário
     },
@@ -308,4 +383,12 @@ export default {
   .hour-button:hover {
     background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
   }
+
+
+  .date-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+
 </style>
