@@ -8,6 +8,7 @@
     </div>
     <div style="width: 100%; height: 1200px; background-color: white; padding-bottom: 10%;">
       <vue-cal :events="eventList" :config="calConfig" :disable-views="['years', 'year']" hide-weekends :locale="ptPTLocale" :time-from="7 * 60" :time-to="22 * 60" class="vuecal--blue-theme" />
+    
     </div>
     <Footer />
   </div>
