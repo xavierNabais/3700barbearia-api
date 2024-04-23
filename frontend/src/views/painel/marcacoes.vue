@@ -25,8 +25,8 @@
             </select>
           </div>
           <div class="input-group">
-            <label for="email">Data:</label>
-            <input type="date" id="data" name="data">
+            <label for="data">Data e Hora:</label>
+            <input type="datetime-local" id="data" name="data">
           </div>
           <div class="input-group">
             <label for="admin">Notas:</label>
@@ -64,8 +64,8 @@
             </select>
           </div>
           <div class="input-group">
-            <label for="Data">Data:</label>
-            <input type="date" id="Data" v-model="editedUser.Data">
+            <label for="data">Data e Hora:</label>
+            <input type="datetime-local" id="data" name="data">
           </div>
           <div class="input-group">
             <label for="Notas">Notas:</label>
@@ -248,12 +248,13 @@
         },
         async submitEdit() {
           try {
-          this.editedUser.Id = this.userIdToEdit;
-          this.editedUser.Id_barbeiro = document.getElementById('Id_barbeiro').value;
-          this.editedUser.Id_utilizador = document.getElementById('Id_utilizador').value;
-          this.editedUser.Id_servico = document.getElementById('Id_servico').value;
-          this.editedUser.Data = document.getElementById('Data').value;
-          this.editedUser.Notas = document.getElementById('Notas').value;
+
+            this.editedUser.Id = this.userIdToEdit;
+            this.editedUser.Id_barbeiro = document.getElementById('Id_barbeiro').value;
+            this.editedUser.Id_utilizador = document.getElementById('Id_utilizador').value;
+            this.editedUser.Id_servico = document.getElementById('Id_servico').value;
+            this.editedUser.Data = document.getElementById('data').value;
+            this.editedUser.Notas = document.getElementById('Notas').value;
 
             const response = await fetch(`http://localhost:5000/painel/marcacoes/${this.userIdToEdit}`, {
               method: 'PUT',

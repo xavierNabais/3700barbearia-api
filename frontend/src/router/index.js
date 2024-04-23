@@ -5,6 +5,7 @@ import Servicos from '../views/painel/servicos.vue';
 import Barbeiros from '../views/painel/barbeiros.vue';
 import Marcacoes from '../views/painel/marcacoes.vue';
 import loginPage from '../views/auth/login.vue';
+import agendaFuncionario from '../views/painel/funcionario/agendaFuncionario.vue';
 import editarPerfil from '../views/perfil/edit.vue';
 import perfilMarcacoes from '../views/perfil/marcacoes.vue';
 import perfilRecompensa from '../views/perfil/recompensa.vue';
@@ -29,8 +30,8 @@ const routes = [
   },
   {
     path: '/agenda',
-    name: 'editarPerfil',
-    component: editarPerfil
+    name: 'agendaFuncionario',
+    component: agendaFuncionario
   },
   {
     path: '/perfil',

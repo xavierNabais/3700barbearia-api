@@ -321,39 +321,46 @@ exports.getActive = (req, res) => {
 
 
 
-//Controller Criar Marcação
+// Controller Criar Marcação
 exports.create = (req, res) => {
-    if(!req.body){
+    if (!req.body) {
         res.status(400).send({
             message: "O conteúdo não pode estar vazio!"
         });
+        return;
     }
 
-    const marcacao = new marcacoesModel ({
+    // Formatando a data antes de inserir no banco de dados
+    const dataFormatada = new Date(req.body.data).toISOString().slice(0, 19).replace('T', ' ');
+
+    const marcacao = new marcacoesModel({
         id_barbeiro: req.body.id_barbeiro,
         id_utilizador: req.body.id_utilizador,
         id_servico: req.body.id_servico,
-        data: req.body.data,
+        data: dataFormatada,
         notas: req.body.notas,
     });
 
     marcacoesModel.create(marcacao, (error, data) => {
-        if (error)
-        res.status(500).send({
-            message:
-            error.message || "Ocorreu um erro ao tentar criar uma marcação."
-        });
-        else
-        marcacoesModel.getAll((error, dados) => {
-            if (error)
+        if (error) {
             res.status(500).send({
-                message:
-                error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+                message: error.message || "Ocorreu um erro ao tentar criar uma marcação."
             });
-            else res.render(path.resolve('views/pages/administrador/marcacoes/index.ejs'), { dados });   
+            return;
+        }
+
+        marcacoesModel.getAll((error, dados) => {
+            if (error) {
+                res.status(500).send({
+                    message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+                });
+                return;
+            }
+            res.render(path.resolve('views/pages/administrador/marcacoes/index.ejs'), { dados });
         });
     });
 };
+
 
 
 //Controller Atualizar Marcação

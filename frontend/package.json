@@ -11,6 +11,7 @@
     "axios": "^1.6.8",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
+    "vue-cal": "^4.8.1",
     "vue-flatpickr-component": "^11.0.5",
     "vue-router": "^4.3.0"
   },
