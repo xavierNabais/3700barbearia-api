@@ -7,7 +7,7 @@
       </div>
     </div>
     <div style="width: 100%; height: 1200px; background-color: white; padding-bottom: 10%;">
-      <vue-cal :events="eventList" :config="calConfig"  />
+      <vue-cal :events="eventList" :config="calConfig" :disable-views="['years', 'year']" hide-weekends :locale="ptPTLocale" :time-from="7 * 60" :time-to="22 * 60" class="vuecal--blue-theme" />
     </div>
     <Footer />
   </div>
@@ -18,7 +18,16 @@ import Header from '../../../components/Header.vue';
 import Footer from '../../../components/Footer.vue';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
+const ptPTLocale = {
+  week: 'Semana',
+  month: 'Mês',
+  day: 'Dia',
+  "weekDays": ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
+  "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
 
+
+
+};
 export default {
 data() {
   return {
@@ -28,6 +37,7 @@ data() {
       displayMode: 'week', // Modo de exibição da semana
       editable: false, // Não permitir edição dos eventos
     },
+    ptPTLocale: ptPTLocale,
   };
 },
 methods: {
@@ -51,7 +61,7 @@ methods: {
         return {
           start: dataFormatadaInicial, // Data com a hora definida
           end: dataFormatadaFinal, // Data de término nula (opcional)
-          title: `Marcação com ${marcacao.Id_barbeiro}`, // Incluindo a hora no título
+          title: `Marcação com ${marcacao.nomeUtilizador}`,
         };
       });
     } else {
@@ -75,11 +85,6 @@ name: 'agendaFuncionario',
 </script>
 
 <style scoped>
-
-.vuecal__event {
-  height: 54px!important;
-}
-
 
 
 </style>
