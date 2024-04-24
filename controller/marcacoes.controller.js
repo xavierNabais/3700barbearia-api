@@ -8,6 +8,19 @@ var path = require('path');
 
 // Controller Procurar Marcações
 exports.findAll = (req, res) => {
+
+    if (req.query && req.query.data) {
+        const data = req.query.data;
+        marcacoesModel.getByDate(data, (erro, dados) => {
+            if (erro) {
+                res.status(500).send({
+                    mensagem: erro.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+                });
+            }
+            res.json(dados);
+        });
+    }
+    else {
     marcacoesModel.getAll((erro, dados) => {
         if (erro) {
             res.status(500).send({
@@ -92,6 +105,7 @@ exports.findAll = (req, res) => {
                 });
             });
         });
+    }
 };
 
 
