@@ -295,7 +295,7 @@ exports.findById = (req, res) => {
                                         message: error.message || "Ocorreu um erro ao tentar aceder aos dados dos utilizadores"
                                     });
                                 } else {
-                                    res.render(path.resolve('views/pages/administrador/marcacoes/update.ejs'), { utilizador, barbeiro, servico, dados});  
+                                    res.json(utilizador, barbeiro, servico, dados);  
                                 }
                             }); 
                         }
@@ -323,7 +323,7 @@ exports.getActive = (req, res) => {
                                 message: error.message || "Ocorreu um erro ao tentar aceder aos dados dos serviços ativos"
                             });
                         } else {
-                            res.render(path.resolve('views/pages/administrador/marcacoes/create.ejs'), { utilizador, barbeiro, servico });  
+                            res.json(utilizador, barbeiro, servico);  
                         }
                     });
                 }
@@ -369,7 +369,7 @@ exports.create = (req, res) => {
                     });
                     return;
                 }
-                res.render(path.resolve('views/pages/administrador/marcacoes/index.ejs'), { dados });
+                res.json(dados);
             });
         });
     }else {
@@ -396,7 +396,7 @@ exports.create = (req, res) => {
                     });
                     return;
                 }
-                res.render(path.resolve('views/pages/administrador/marcacoes/index.ejs'), { dados });
+                res.json(dados);
             });
         });
     }
