@@ -31,9 +31,8 @@
 
       <div v-for="dados in servicos" :key="dados.id" class="ag-courses_item" @click="selectService(dados)" :class="{ 'selected': selectedService === dados }">
           <a href="#" class="ag-courses-item_link">
-          <div class="ag-courses-item_bg"></div>
           <div class="ag-courses-item_title">
-              {{ dados.Nome }} <span style="float: right;font-size: 14px;">A partir de: <span>{{ dados.Preco }}€</span></span>
+              {{ dados.Nome }} <span style="float: right;font-size: 12px;text-align:center">A partir de:<br> <span>{{ dados.Preco }}€</span></span>
           </div>
           </a>
       </div>
@@ -48,12 +47,9 @@
           <div class="service-info">
             <div v-for="dados in barbeiros" :key="dados.id" class="ag-courses_item" @click="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados }">
                   <a href="#" class="ag-courses-item_link">
-                  <div class="ag-courses-item_bg"></div>
-                      <div class="ag-courses-item_title" style="text-align: center;">
-                          <img src="../assets/images/main.jpg" style="width: 100%;">
-                          <br>
-                          {{ dados.Nome }}
-                      </div>
+                      <div class="ag-courses-item_title">
+                         {{ dados.Nome }} <span style="float: right;font-size: 14px;">Especialização: <span>{{ dados.Especializacao }}</span></span>
+                    </div>
                   </a>
               </div>
           </div>
@@ -103,9 +99,10 @@
 
 
 <div class="button-container">
-  <button type="button" id="prevBtn" @click="prevStep">Previous</button>
-  <button class="next-button" @click.prevent="nextStep(1)">Próximo -></button>
+  <button type="button" id="prevBtn" class="button left" @click="prevStep">- Anterior</button>
+  <button class="button right" @click.prevent="nextStep(1)">Próximo -></button>
 </div>
+
 
 
   </form>
@@ -114,9 +111,15 @@
   <div class="popup-section section-right">
   <div class="vertical-rectangle"></div>
   <h2 class="popup-title third">RESUMO</h2>
-  <div class="summary-info">
-      <p>Serviço: Corte</p>
-  </div>
+  <div class="summary-info" v-if="summary.selectedService">
+        <p >Serviço: {{ summary.selectedService }}</p>
+   </div>
+   <div class="summary-info" v-if="summary.selectedBarber">
+    <p >Barbeiro: {{ summary.selectedBarber }}</p>
+   </div>
+   <div class="summary-info" v-if="summary.selectedDateTime">
+    <p >Data e hora: {{ summary.selectedDateTime }}</p>
+   </div>
   </div>
 </template>
 
@@ -154,7 +157,11 @@ availableTimes: [
 selectedService: null,
 selectedBarber: null,
 selectedDateTime: null,
-
+summary: {
+        selectedService: '',
+        selectedBarber: '',
+        selectedDateTime: ''
+      }
 
 };
 },
@@ -336,10 +343,12 @@ if (this.currentTab > 0) {
 
 selectService(service) {
     this.selectedService = service;
+    this.summary.selectedService = service.Nome;
   },
 
   selectBarber(barber) {
     this.selectedBarber = barber;
+    this.summary.selectedBarber = barber.Nome;
   },
 
   selectDateTime(time) {
@@ -354,6 +363,8 @@ selectService(service) {
         // Se nenhum dia foi selecionado, exibe uma mensagem de erro
         console.error('Por favor, selecione um dia antes de selecionar a hora.');
     }
+    this.summary.selectedDateTime = this.selectedDay+'/'+this.selectedMonth+'/'+this.selectedYear+'-'+time;
+
 },
 
   async submitBooking() {
@@ -499,11 +510,7 @@ width: calc(25% - 10px); /* Calcula a largura para quatro horas por linha com es
 text-align: center;
 }
 
-.button-container {
-position: fixed;
-bottom: 20px; /* distância do fundo */
-right: 18vw; /* distância da direita */
-}
+
 
 .hour-row {
 display: flex;
@@ -519,12 +526,14 @@ text-align: center;
 padding: 10px;
 border: 1px solid #ccc; /* Borda sólida */
 border-radius: 10px; /* Borda arredondada */
-background-color: #f0f0f0; /* Cor de fundo */
+background-color: white; /* Cor de fundo */
 cursor: pointer; /* Cursor do mouse */
 }
 
 .hour-button:hover {
-background-color: #F4B604; /* Cor de fundo ao passar o mouse */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color:#FCD666;
+  transition: 0.5s;
 }
 
 .date-container {
@@ -535,12 +544,37 @@ justify-content: space-between;
 .blocked{
 cursor: not-allowed; 
 pointer-events: none; 
-background-color: #e0e0e0;
+background-color: #8d8d8d;
 
 }
 
 .selected {
     background-color: #F2B709!important;
+    border:1px solid black;
 }
+
+.button-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20vw;
+}
+
+.button {
+  background-color: #fff;
+  color: #000;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+  margin-left:40px;
+  border:none;
+}
+
+.button:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color:#FCD666;
+  transition: 0.5s;
+}
+
+
 
 </style>

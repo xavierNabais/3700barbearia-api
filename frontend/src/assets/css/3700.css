@@ -434,6 +434,12 @@ a {
   z-index: 2;
   position: relative;
 }
+.ag-courses_item:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color:#FCD666;
+  transition: 0.5s;
+
+}
 .ag-courses-item_date-box {
   font-size: 16px;
   color: #FFF;
