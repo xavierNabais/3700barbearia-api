@@ -408,7 +408,6 @@ a {
 }
 .ag-courses-item_link {
   display: block;
-  background-color: white;
   padding:20px;
   width:250px;
   overflow: hidden;
@@ -1285,7 +1284,6 @@ a {
 
   .ag-courses-item_link-marcacoes {
     display: block;
-    background-color: white;
     padding:20px;
     overflow: hidden;
     z-index:1;

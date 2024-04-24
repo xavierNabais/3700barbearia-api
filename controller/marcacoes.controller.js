@@ -344,35 +344,62 @@ exports.create = (req, res) => {
         return;
     }
 
-    // Formatando a data antes de inserir no banco de dados
-    const dataFormatada = new Date(req.body.data).toISOString().slice(0, 19).replace('T', ' ');
 
-    const marcacao = new marcacoesModel({
-        id_barbeiro: req.body.id_barbeiro,
-        id_utilizador: req.body.id_utilizador,
-        id_servico: req.body.id_servico,
-        data: dataFormatada,
-        notas: req.body.notas,
-    });
 
-    marcacoesModel.create(marcacao, (error, data) => {
-        if (error) {
-            res.status(500).send({
-                message: error.message || "Ocorreu um erro ao tentar criar uma marcação."
-            });
-            return;
-        }
-
-        marcacoesModel.getAll((error, dados) => {
+    if (req.body.service && req.body.barber && req.body.dateTime) {
+        const marcacao = new marcacoesModel({
+            id_barbeiro: req.body.barber.Id,
+            id_utilizador: req.body.utilizador,
+            id_servico: req.body.service.Id,
+            data: req.body.dateTime,
+            notas:'asdasdasd', // Não está claro de onde vem esse campo 'notas' no objeto enviado
+        });
+        marcacoesModel.create(marcacao, (error, data) => {
             if (error) {
                 res.status(500).send({
-                    message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+                    message: error.message || "Ocorreu um erro ao tentar criar uma marcação."
                 });
                 return;
             }
-            res.render(path.resolve('views/pages/administrador/marcacoes/index.ejs'), { dados });
+    
+            marcacoesModel.getAll((error, dados) => {
+                if (error) {
+                    res.status(500).send({
+                        message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+                    });
+                    return;
+                }
+                res.render(path.resolve('views/pages/administrador/marcacoes/index.ejs'), { dados });
+            });
         });
-    });
+    }else {
+        const dataFormatada = new Date(req.body.data).toISOString().slice(0, 19).replace('T', ' ');
+        const marcacao = new marcacoesModel({
+            id_barbeiro: req.body.id_barbeiro,
+            id_utilizador: req.body.id_utilizador,
+            id_servico: req.body.id_servico,
+            data: dataFormatada,
+            notas: req.body.notas,
+        });
+        marcacoesModel.create(marcacao, (error, data) => {
+            if (error) {
+                res.status(500).send({
+                    message: error.message || "Ocorreu um erro ao tentar criar uma marcação."
+                });
+                return;
+            }
+    
+            marcacoesModel.getAll((error, dados) => {
+                if (error) {
+                    res.status(500).send({
+                        message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+                    });
+                    return;
+                }
+                res.render(path.resolve('views/pages/administrador/marcacoes/index.ejs'), { dados });
+            });
+        });
+    }
 };
 
 

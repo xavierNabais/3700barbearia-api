@@ -29,7 +29,7 @@
       <div class="service-info">
       <button class="highlight-button">Destaque</button>
 
-      <div v-for="dados in servicos" :key="dados.id" class="ag-courses_item">
+      <div v-for="dados in servicos" :key="dados.id" class="ag-courses_item" @click="selectService(dados)" :class="{ 'selected': selectedService === dados }">
           <a href="#" class="ag-courses-item_link">
           <div class="ag-courses-item_bg"></div>
           <div class="ag-courses-item_title">
@@ -46,7 +46,7 @@
 
       <h2 class="popup-title">Selecione o profissional</h2>
           <div class="service-info">
-              <div v-for="dados in barbeiros" :key="dados.id" class="ag-courses_item">
+            <div v-for="dados in barbeiros" :key="dados.id" class="ag-courses_item" @click="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados }">
                   <a href="#" class="ag-courses-item_link">
                   <div class="ag-courses-item_bg"></div>
                       <div class="ag-courses-item_title" style="text-align: center;">
@@ -80,12 +80,25 @@
   <!-- Exibe as horas disponíveis para o dia selecionado -->
   <div class="available-times">
     <div class="hour-row">
-      <button v-for="time in availableTimes" :key="time.time" class="hour-button" :class="{ 'blocked': time.blocked }">{{ time.time }}</button>
+      <button v-for="time in availableTimes" :key="time.time" class="hour-button" 
+        :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
+        @click.prevent="selectDateTime(time.time)">
+    {{ time.time }}
+</button>
     </div>
   </div>
 </div>
 </div>
 
+<div class="tab" v-show="currentTab === 3">
+    <h2 class="popup-title">Resumo da reserva</h2>
+    <div class="service-info" style="color:black;">
+        <p>Serviço selecionado: {{ selectedService ? selectedService.Nome : 'Nenhum serviço selecionado' }}</p>
+        <p>Barbeiro selecionado: {{ selectedBarber ? selectedBarber.Nome : 'Nenhum barbeiro selecionado' }}</p>
+        <p>Data e hora selecionadas:<br> {{ selectedDay ? selectedDay + '/' + selectedMonth + '/' + selectedYear + ' ' + this.selectedTime : 'Nenhuma data e hora selecionadas' }}</p>
+    </div>
+    <button class="next-button" @click.prevent="submitBooking">Enviar Reserva</button>
+</div>
 
 
 
@@ -138,6 +151,9 @@ availableTimes: [
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
   "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
   "17:30", "18:00", "18:30", "19:00" ],
+selectedService: null,
+selectedBarber: null,
+selectedDateTime: null,
 
 
 };
@@ -238,10 +254,10 @@ async selectDay(day) {
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
   "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
   "17:30", "18:00", "18:30", "19:00" ];
-  console.log(day.month+1);
-  // Atualiza o dia selecionado
-  this.selectedDay = day;
-  // Consulta a base de dados para obter as marcações para a data selecionada
+  this.selectedDay = day.day;
+  this.selectedMonth = day.month+1;
+  this.selectedYear = this.currentYear;  
+
   try {
     const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month+1}-${day.day}`);
     const data = await response.json();
@@ -278,6 +294,7 @@ if (this.currentPage < this.totalPages) {
 }
 this.updateDaysInMonth();
 },
+
 prevPage() {
 if (this.currentPage > 1) {
   this.currentPage--;
@@ -305,7 +322,7 @@ document.body.classList.remove('no-scroll');
 this.currentTab = 0;
 },
 nextStep() {
-if (this.currentTab < 3) {
+if (this.currentTab < 4) {
   this.currentTab++;
 }
 },
@@ -314,6 +331,94 @@ if (this.currentTab > 0) {
   this.currentTab--;
 }
 },
+
+
+
+selectService(service) {
+    this.selectedService = service;
+  },
+
+  selectBarber(barber) {
+    this.selectedBarber = barber;
+  },
+
+  selectDateTime(time) {
+    this.selectedTime = time;
+    // Verifica se um dia foi selecionado anteriormente
+    if (this.selectedDay !== null && this.selectedMonth !== null && this.selectedYear !== null) {
+        // Concatena a hora selecionada ao dia, mês e ano selecionados
+        const selectedDateTime = `${this.selectedYear}-${this.selectedMonth}-${this.selectedDay} ${time}`;
+        // Define o valor completo da data e hora selecionadas
+        this.selectedDateTime = selectedDateTime;
+    } else {
+        // Se nenhum dia foi selecionado, exibe uma mensagem de erro
+        console.error('Por favor, selecione um dia antes de selecionar a hora.');
+    }
+},
+
+  async submitBooking() {
+    // Verifica se todas as seleções foram feitas
+    if (this.selectedService && this.selectedBarber && this.selectedDateTime) {
+      try {
+        // Constrói o objeto de dados a ser enviado
+        const dataToSend = {
+          service: this.selectedService,
+          barber: this.selectedBarber,
+          dateTime: this.selectedDateTime,
+          utilizador: localStorage.getItem('userId')
+        };
+
+        // Envia os dados para o servidor usando o método PUT
+        const response = await fetch('http://localhost:5000/painel/marcacoes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        });
+
+        // Verifica se a requisição foi bem-sucedida
+        if (response.ok) {
+          // Limpa as seleções do usuário
+          this.selectedService = null;
+          this.selectedBarber = null;
+          this.selectedDateTime = null;
+
+          // Exibe uma mensagem de sucesso para o usuário
+          alert('Sua reserva foi enviada com sucesso!');
+        } else {
+          // Exibe uma mensagem de erro se a requisição falhar
+          alert('Houve um erro ao enviar sua reserva. Por favor, tente novamente mais tarde.');
+        }
+      } catch (error) {
+        console.error('Erro ao enviar reserva:', error);
+        // Exibe uma mensagem de erro se ocorrer um erro inesperado
+        alert('Houve um erro ao enviar sua reserva. Por favor, tente novamente mais tarde.');
+      }
+    } else {
+      // Se alguma seleção estiver faltando, exibe uma mensagem para o usuário
+      alert('Por favor, selecione um serviço, um barbeiro e um horário antes de enviar sua reserva.');
+    }
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 },
 mounted() {
 this.fetchMarcacoes();
@@ -434,6 +539,8 @@ background-color: #e0e0e0;
 
 }
 
-
+.selected {
+    background-color: #F2B709!important;
+}
 
 </style>
