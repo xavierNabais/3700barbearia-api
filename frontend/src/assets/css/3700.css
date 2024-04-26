@@ -708,8 +708,8 @@ a {
 .highlight-button {
   display: inline-block; /* Garante que os botões fiquem lado a lado */
   margin-right: 10px; /* Adiciona espaço entre os botões */
-  background-color:rgb(230, 230, 230);
-  border:none;
+  background-color:white;
+  border: 0.1px solid #FCD666;
   cursor: pointer; /* Alterar cursor ao passar por cima do botão */
   padding:10px;
   border-radius: 10px;
@@ -722,6 +722,7 @@ a {
 
 .filterActive{
   background-color:#F2B709;
+  border:1px solid #F2B709;
 }
 
 

@@ -594,16 +594,19 @@ background-color: #2626264d;
   box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1); /* Sombra para separar dos elementos abaixo */
   z-index: 2; /* Garante que os botões fiquem na parte superior */
   text-align:center;
+  gap:10%;
 }
 
 .button {
-  background-color: white;
   color: #000000; /* Cor do texto */
   padding: 10px 20px;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* Adicionando a transição para a propriedade transform */
   border: none;
-  box-shadow: 0 0 0 transparent; /* Define a sombra inicial como transparente */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Sombra para separar dos elementos abaixo */
+  background-color:white;
+  border:1px solid #FCD666;
+  margin: 0 50px; /* Margem horizontal de 10 pixels */
 }
 
 .button:hover {
