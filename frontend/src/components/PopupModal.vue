@@ -359,11 +359,11 @@ if (this.currentPage > 1) {
 },
 openPopup() {
 this.showPopup = true;
-document.body.classList.add('no-scroll');
+document.documentElement.classList.add('no-scroll');
 },
 closePopup() {
 this.showPopup = false;
-document.body.classList.remove('no-scroll');
+document.html.classList.remove('no-scroll');
 this.currentTab = 0;
 },
 nextStep() {

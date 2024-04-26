@@ -928,7 +928,7 @@ a {
   position: fixed;
   bottom: 150px; /* Distância do fundo da página */
   right: -10%; /* Distância da borda direita da página */
-  z-index: 999; /* Z-index para garantir que o botão esteja sempre acima de outros elementos */
+  z-index: 99; /* Z-index para garantir que o botão esteja sempre acima de outros elementos */
   transition: right 0.3s ease; /* Adiciona uma transição suave */
 
 }
