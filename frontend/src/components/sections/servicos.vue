@@ -47,13 +47,17 @@
     },
     methods: {
         async fetchServicos() {
-        try {
-            const response = await fetch('http://localhost:5000/painel/servicos');
-            const data = await response.json();
-            this.servicos = data.slice(0, 4); // Limita para os primeiros 4 registros
-        } catch (error) {
-            console.error('Erro ao buscar os dados dos serviços:', error);
-        }
+            try {
+                const response = await fetch('http://localhost:5000/painel/servicos');
+                const data = await response.json();
+                // Filtra os serviços com os nomes desejados
+                this.servicos = data.filter(servico => {
+                    const nome = servico.Nome.toLowerCase(); // Convertendo para minúsculas para evitar problemas de caixa
+                    return nome === 'corte' || nome === 'sobrancelhas' || nome === 'acabamento' || nome === 'penteado';
+                });
+            } catch (error) {
+                console.error('Erro ao buscar os dados dos serviços:', error);
+            }
         }
     },
     mounted() {
