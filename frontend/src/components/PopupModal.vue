@@ -2,7 +2,7 @@
 
 
 
-  <div class="popup-section section-left">
+  <div class="popup-section section-left" style="padding:20px">
   <!-- Indicador de progresso -->
   <div class="progress-indicator">
       <div class="progress-ball filled step"></div>
@@ -20,95 +20,120 @@
   </div>
 
   <div class="popup-section section-middle">
-  <form>
+
+    <div class="service-selection">
+          <h2 v-if="currentTab == 0" class="popup-title" style="color:black;">Selecione o serviço</h2>
+          <h2 v-if="currentTab == 1" class="popup-title" style="color:black;">Selecione o barbeiro</h2>
+          <h2 v-if="currentTab == 2" class="popup-title" style="color:black;">Selecione o horário</h2>
+          <h2 v-if="currentTab == 3" class="popup-title" style="color:black;">Concluir Marcação</h2>
 
 
-  <div class="tab" v-show="currentTab === 0">
+          <div class="button-scroll-container" v-if="currentTab == 0">
+            <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Em destaque' }" @click="filterServicosPorCategoria('Em destaque')">Em destaque</button>
+            <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Adicionais' }" @click="filterServicosPorCategoria('Adicionais')">Adicionais</button>
+            <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Trabalhos técnicos' }" @click="filterServicosPorCategoria('Trabalhos técnicos')">Trabalhos técnicos</button>
+            <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Combo' }" @click="filterServicosPorCategoria('Combo')">Combo</button>
+          </div>
+    </div>
 
-      <h2 class="popup-title">Selecione o serviço</h2>
+
+
+    <div class="padding-container">
+    <form>
+
+
+    <div class="tab" v-show="currentTab === 0">
+
       <div class="service-info">
-      <button class="highlight-button">Destaque</button>
 
-      <div v-for="dados in servicos" :key="dados.id" class="ag-courses_item" @click="selectService(dados)" :class="{ 'selected': selectedService === dados }">
-          <a href="#" class="ag-courses-item_link">
-          <div class="ag-courses-item_title">
-              {{ dados.Nome }} <span style="float: right;font-size: 12px;text-align:center">A partir de:<br> <span>{{ dados.Preco }}€</span></span>
-          </div>
-          </a>
-      </div>
-      
-      </div>
-  </div>
-
-
-      <div class="tab" v-show="currentTab === 1">
-
-      <h2 class="popup-title">Selecione o profissional</h2>
-          <div class="service-info">
-            <div v-for="dados in barbeiros" :key="dados.id" class="ag-courses_item" @click="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados }">
-                  <a href="#" class="ag-courses-item_link">
-                      <div class="ag-courses-item_title">
-                         {{ dados.Nome }} <span style="float: right;font-size: 14px;">Especialização: <span>{{ dados.Especializacao }}</span></span>
-                    </div>
-                  </a>
-              </div>
-          </div>
-      </div>
-
-
-      <div class="tab" v-show="currentTab === 2">
-<h2 class="popup-title">Selecione o horário</h2>
-<div class="service-info">
-  <div class="date-container">
-    <!-- Exibe o mês e o ano -->
-    <p style="color:black;">{{ monthYear }}</p>
-    <p style="color:black; margin-left: auto;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
-  </div>
-  <div class="pagination-wrapper">
-    <!-- Botões de navegação do calendário -->
-    <button class="pagination-button" @click.prevent="prevPage">&lt;</button>
-    <div class="day-pagination">
-      <!-- Botões para seleção de dias -->
-      <button v-for="day in daysInMonth" :key="day" @click.prevent="selectDay(day)">{{ day.day }}</button>
+        <div v-for="dados in servicos" :key="dados.id" @click="selectService(dados)" :class="{ 'selected': selectedService === dados }">
+            <a href="#">
+            <div class="btn">
+                {{ dados.Nome }} <span style="float: right;font-size: 12px;text-align:center">A partir de:<br> <span>{{ dados.Preco }}€</span></span>
+            </div>
+            </a>
+        </div>
+        
+        </div>
     </div>
-    <button class="pagination-button" @click.prevent="nextPage">&gt;</button>
-  </div>
-  <!-- Exibe as horas disponíveis para o dia selecionado -->
-  <div class="available-times">
-    <div class="hour-row">
-      <button v-for="time in availableTimes" :key="time.time" class="hour-button" 
-        :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
-        @click.prevent="selectDateTime(time.time)">
-    {{ time.time }}
-</button>
+
+
+        <div class="tab" v-show="currentTab === 1">
+
+        <h2 class="popup-title">Selecione o profissional</h2>
+            <div class="service-info">
+              <div v-for="dados in barbeiros" :key="dados.id"  @click="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados }">
+                    <a href="#">
+                        <div class="btn">
+                          {{ dados.Nome }} <span style="float: right;font-size: 14px;">Especialização: <span>{{ dados.Especializacao }}</span></span>
+                      </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="tab" v-show="currentTab === 2">
+  <h2 class="popup-title">Selecione o horário</h2>
+  <div class="service-info">
+    <div class="date-container">
+      <!-- Exibe o mês e o ano -->
+      <p style="color:black;">{{ monthYear }}</p>
+      <p style="color:black; margin-left: auto;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
+    </div>
+    <div class="pagination-wrapper">
+      <!-- Botões de navegação do calendário -->
+      <button class="pagination-button prevB" @click.prevent="prevPage">&lt;</button>
+      <div class="day-pagination">
+        <!-- Botões para seleção de dias -->
+        <button v-for="day in daysInMonth" :key="day.day" @click.prevent="selectDay(day)"
+        :class="{ 'dayActive': selectedDay === day.day }">{{ day.day }}</button>
+      </div>
+      <button class="pagination-button nextB" @click.prevent="nextPage">&gt;</button>
+    </div>
+    <!-- Exibe as horas disponíveis para o dia selecionado -->
+    <div class="available-times">
+      <div class="hour-row">
+        <button v-for="time in availableTimes" :key="time.time" class="hour-button btn" 
+          :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
+          @click.prevent="selectDateTime(time.time)">
+      {{ time.time }}
+  </button>
+      </div>
     </div>
   </div>
-</div>
-</div>
-
-<div class="tab" v-show="currentTab === 3">
-    <h2 class="popup-title">Resumo da reserva</h2>
-    <div class="service-info" style="color:black;">
-        <p>Serviço selecionado: {{ selectedService ? selectedService.Nome : 'Nenhum serviço selecionado' }}</p>
-        <p>Barbeiro selecionado: {{ selectedBarber ? selectedBarber.Nome : 'Nenhum barbeiro selecionado' }}</p>
-        <p>Data e hora selecionadas:<br> {{ selectedDay ? selectedDay + '/' + selectedMonth + '/' + selectedYear + ' ' + this.selectedTime : 'Nenhuma data e hora selecionadas' }}</p>
-    </div>
-    <button class="next-button" @click.prevent="submitBooking">Enviar Reserva</button>
-</div>
-
-
-
-<div class="button-container">
-  <button type="button" id="prevBtn" class="button left" @click="prevStep">- Anterior</button>
-  <button class="button right" @click.prevent="nextStep(1)">Próximo -></button>
-</div>
-
-
-
-  </form>
   </div>
 
-  <div class="popup-section section-right">
+  <div class="tab" v-show="currentTab === 3" style="padding:10px">
+      <h2 class="popup-title" style="color:black;">BARBEARIA 3700</h2>
+      <div class="service-info concluir">
+          <img src="../assets/images/about_logo.jpg" style="width:40%;">
+          <p style="color:Black;">5.0 ★ ★ ★ ★ ★ (17)</p>
+          <p style="color:Black;">R. Gago Coutinho 9 R/C, 3700-261 São João da Madeira</p>
+          <br>
+          <p style="color:Black;">FORMA DE PAGAMENTO</p>
+          <button class="pay">PAGAR NO ESTABELECIMENTO</button>
+          <br>
+          <p style="color:Black;">Observações sobre a marcação</p>
+            <textarea style="width:20vw;height:5vh"></textarea>
+
+      </div>
+        <button class="submitAgenda" @click.prevent="submitBooking">Enviar Reserva</button>
+  </div>
+
+
+
+
+
+    </form>
+  </div>
+  <div class="button-container" style="margin-top:auto">
+    <button class="button left " @click="prevStep">- Anterior</button>
+    <button class="button right " @click.prevent="nextStep(1)">Próximo -></button>
+  </div>
+  </div>
+
+  <div class="popup-section section-right" style="padding:20px">
   <div class="vertical-rectangle"></div>
   <h2 class="popup-title third">RESUMO</h2>
   <div class="summary-info" v-if="summary.selectedService">
@@ -161,7 +186,9 @@ summary: {
         selectedService: '',
         selectedBarber: '',
         selectedDateTime: ''
-      }
+      },
+categoriaAtiva: ''
+
 
 };
 },
@@ -188,6 +215,17 @@ try {
   console.error('Erro ao buscar os dados dos serviços:', error);
 }
 },
+filterServicosPorCategoria(categoria) {
+  // Restaura a lista completa de serviços
+  this.servicos = [];
+  // Busca novamente todos os serviços
+  this.fetchServicos().then(() => {
+    // Aplica o filtro com base na categoria selecionada
+    this.servicos = this.servicos.filter(servico => servico.Categoria === categoria);
+    this.categoriaAtiva = categoria; // Atualiza a categoria ativa
+  });
+},
+
 async fetchBarbeiros() {
 try {
   const response = await fetch('http://localhost:5000/painel/barbeiros');
@@ -446,8 +484,7 @@ this.updateDaysInMonth();
 <style>
 .pagination-wrapper {
 display: flex;
-align-items: center;
-width: 18vw;
+justify-content: center;
 }
 
 .pagination-button {
@@ -465,10 +502,7 @@ transition: all 0.3s ease;
 outline: none;
 }
 
-.pagination-button:hover {
-background-color: #f0f0f0;
-border-color: #ccc;
-}
+
 
 .day-pagination {
 display: flex;
@@ -493,8 +527,10 @@ border-color: #ccc;
 }
 
 .day-pagination button:hover {
-background-color: #F2B709;
+background-color: #FCD666;
 border-color: #ccc;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+transform: translateY(-5px); /* Move o botão 5 pixels para cima */
 }
 
 
@@ -526,15 +562,10 @@ text-align: center;
 padding: 10px;
 border: 1px solid #ccc; /* Borda sólida */
 border-radius: 10px; /* Borda arredondada */
-background-color: white; /* Cor de fundo */
 cursor: pointer; /* Cursor do mouse */
 }
 
-.hour-button:hover {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  background-color:#FCD666;
-  transition: 0.5s;
-}
+
 
 .date-container {
 display: flex;
@@ -544,36 +575,84 @@ justify-content: space-between;
 .blocked{
 cursor: not-allowed; 
 pointer-events: none; 
-background-color: #8d8d8d;
+background-color: #2626264d;
+    color: #747272;
 
 }
-
 .selected {
-    background-color: #F2B709!important;
-    border:1px solid black;
+    background-color: #ffc506!important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border-radius:10px;
 }
 
 .button-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20vw;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  background-color: #ffffff; /* Cor de fundo dos botões */
+  padding: 10px 0; /* Espaçamento interno */
+  box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1); /* Sombra para separar dos elementos abaixo */
+  z-index: 2; /* Garante que os botões fiquem na parte superior */
+  text-align:center;
 }
 
 .button {
-  background-color: #fff;
-  color: #000;
+  background-color: white;
+  color: #000000; /* Cor do texto */
   padding: 10px 20px;
   cursor: pointer;
-  transition: box-shadow 0.3s ease;
-  margin-left:40px;
-  border:none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Adicionando a transição para a propriedade transform */
+  border: none;
+  box-shadow: 0 0 0 transparent; /* Define a sombra inicial como transparente */
 }
 
 .button:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  background-color:#FCD666;
-  transition: 0.5s;
+  background-color: #FCD666;
 }
+
+
+.pay{
+  background-color:white;
+  border:1px solid black;
+  border-radius:10px;
+  padding:20px 50px;
+  cursor: none;
+  pointer-events: none;
+}
+
+.submitAgenda{
+  cursor:pointer;
+  background-color: #F2B709;
+  border:1px solid black;
+  border-radius:10px;
+  padding:10px 100px;
+  margin-top:5%;
+}
+.prevB:hover {
+transform: translateX(-5px); /* Move o botão 5 pixels para cima */
+}
+.nextB:hover {
+transform: translateX(5px); /* Move o botão 5 pixels para cima */
+}
+.left:hover {
+transform: translateX(-5px); /* Move o botão 5 pixels para cima */
+}
+.right:hover {
+transform: translateX(5px); /* Move o botão 5 pixels para cima */
+}
+.dayActive{
+  transform: translateY(-5px); /* Move o botão 5 pixels para cima */
+  background-color:#F2B709!important;
+}
+
+
+
+
+.concluir p{
+  font-size:14px;
+}
+
 
 
 

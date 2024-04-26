@@ -185,7 +185,7 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1000px;
+  width: 70vw;
   height: 800px;
   background-color: #ffffff;
   border-radius: 20px;
@@ -197,27 +197,30 @@ a {
 }
 
 .popup-section {
-  width: calc(100% / 3);
-  padding: 20px; /* Adiciona padding apenas nas seções */
   border-right: 1px solid #00000010;
 }
 
 .section-left {
+  width:25%;
   background-color: #1E1E1E;
 }
 
 .section-middle {
-  background-color: #ffffff;
+  flex:1;
+  width:45%;
+  max-height: 100%; /* Defina a altura máxima que deseja para a seção */
 }
 
 .section-right {
-  background-color: #ffffff;
+  width:30%;
+  background-color: #1E1E1E;
 }
 
 .popup-title {
   margin-bottom: 10px;
   font-size: 16px;
-  color: black;
+  color: white;
+  text-transform:uppercase ;
 }
 
 .popup-title-left {
@@ -239,7 +242,7 @@ a {
   right: 10px;
   font-size: 24px;
   cursor: pointer;
-  color: #000000; /* Cor preta */
+  color: white; /* Cor preta */
 }
 
 /* Estilos para desativar o scroll vertical */
@@ -281,10 +284,10 @@ a {
 
 
 .summary-info {
-  margin-top: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #f0f0f0; /* Cinza quase branco */
-  color: black;
+  padding-top: 45px;
+  padding-bottom: 45px;
+  border-bottom: 1px solid #f0f0f033;; /* Cinza quase branco */
+  color: white;
 }
 
 .summary-info p {
@@ -300,7 +303,7 @@ a {
 }
 
 .third:before {
-  background: black;
+  background: #F4B604;
 }
 
 
@@ -387,16 +390,6 @@ a {
 
 
 
-
-
-
-
-.highlight-button{
-  margin-bottom: 5%;
-}
-
-
-
 .ag-courses_item {
   -ms-flex-preferred-size: calc(33.33333% - 30px);
   flex-basis: calc(33.33333% - 30px);
@@ -409,7 +402,6 @@ a {
 .ag-courses-item_link {
   display: block;
   padding:20px;
-  width:250px;
   overflow: hidden;
   position: relative;
 }
@@ -635,17 +627,102 @@ a {
 
 
 
+.btn {
+  font-size: 17px;
+  background: transparent;
+  border-bottom: 1px solid rgb(216, 216, 216);
+  padding: 1em 1.5em;
+  color:black;
+  position: relative;
+  transition: 0.5s ease;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.btn::before {
+  content: "";
+  border-radius: 10px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #ffc506;
+  transition: 0.4s ease;
+}
+
+.btn:hover {
+  color: #1e1e2b;
+  transition-delay: 0.4s;
+}
+
+.btn:hover::before {
+  width: 100%;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  width: 100%;
+  background-color: #ffc506;
+  transition: 0.3s ease;
+  border-radius: 10px;
+  z-index: -1;
+}
+
+.btn:hover::after {
+  height: 100%;
+  transition-delay: 0.3s;
+  border-radius: 10px;
+  color: aliceblue;
+}
+
+
+.padding-container {
+  overflow-y: auto; /* Permite rolagem vertical apenas dentro desta seção */
+  padding: 20px; /* Adiciona o padding apenas a esta div */
+}
+
+.service-selection {
+  background-color: #ffffff;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+  padding:20px;
+  
+}
+
+.tab {
+  position: relative; /* Adiciona posição relativa para a tab */
+}
+
+
+.service-info{
+  overflow-y: auto; /* Permite rolagem vertical apenas dentro desta seção */
+}
 
 
 
 
+.highlight-button {
+  display: inline-block; /* Garante que os botões fiquem lado a lado */
+  margin-right: 10px; /* Adiciona espaço entre os botões */
+  background-color:rgb(230, 230, 230);
+  border:none;
+  cursor: pointer; /* Alterar cursor ao passar por cima do botão */
+  padding:10px;
+  border-radius: 10px;
+}
+
+.highlight-button:hover{
+  background-color:#FCD666;
+}
 
 
-
-
-
-
-
+.filterActive{
+  background-color:#F2B709;
+}
 
 
 .servico-bloco{

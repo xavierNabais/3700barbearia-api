@@ -74,26 +74,32 @@ import Footer from '../../components/Footer.vue';
 export default {
   data() {
     return {
-      utilizador: {}, // Propriedade para armazenar os dados do utilizador
-      isButtonDisabled: true, // Inicialmente o botão não está desativado
+      userId: '', // ID do usuário logado
+      utilizador: {}, // Dados do usuário
+      isButtonDisabled: true, // Inicialmente o botão está desativado
     };
   },
   methods: {
     async fetchUtilizador() {
       try {
-        const response = await fetch('http://localhost:5000/painel/utilizadores');
+        // Faça uma requisição para obter os dados do usuário com base no ID
+        const response = await fetch(`http://localhost:5000/painel/utilizadores/${this.userId}`);
         const data = await response.json();
         this.utilizador = data;
+        // Verifica se o usuário tem pontos suficientes para a marcação gratuita
+        if (this.utilizador.Pontos < 10) {
+          this.isButtonDisabled = true; // Desativa o botão se o usuário não tiver pontos suficientes
+        } else {
+          this.isButtonDisabled = false; // Ativa o botão se o usuário tiver pontos suficientes
+        }
       } catch (error) {
         console.error('Erro ao buscar os dados do utilizador:', error);
       }
     },
   },
   mounted() {
+    this.userId = localStorage.getItem('userId');
     this.fetchUtilizador();
-    if (this.utilizador && this.utilizador.length > 0 && this.utilizador[0].Pontos < 10) {
-      this.isButtonDisabled = true;
-    }  
   },
   components: {
     Header,
@@ -101,6 +107,7 @@ export default {
   },
   name: 'recompensaPerfil',
 }
+
 </script>
 
 <style scoped>

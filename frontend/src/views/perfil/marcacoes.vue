@@ -41,10 +41,9 @@
             <button class="marcacoesButtons" :class="{ 'active': isAnterioresActive }" @click="buscarAnteriores">ANTERIORES</button>
             <button class="marcacoesButtons" :class="{ 'active': !isAnterioresActive }" @click="buscarProximas" style="margin-left:5%">PRÓXIMAS</button>
           </div>
-
+        <div  style="overflow-y:auto;height:700px;">
           <div class="ag-courses_item" v-for="(dados) in marcacoes" :key="dados.id">
             <a href="#" class="ag-courses-item_link-marcacoes">
-                <div class="ag-courses-item_bg"></div>
                 <div class="marcacao-divider">
                     <div class="marcacao-img" style="flex:1;margin-right: 5%;">
                         <img src="../../assets/images/about_logo.jpg" style="width: 100%;">
@@ -66,6 +65,7 @@
                 </div>
             </a>
           </div>
+        </div>
       </div>
     </div>
   </div>
