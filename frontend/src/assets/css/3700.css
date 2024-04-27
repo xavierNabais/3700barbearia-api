@@ -563,9 +563,10 @@ a {
 
 .barbearia {
   text-align: center;
-  padding-top: 5%;
-  background-color:#1E1E1E;
+  padding-top: 10%;
+  background-color: #1E1E1E;
   padding-bottom:10%;
+  height:600px;
 }
 
 .separador {
@@ -586,7 +587,9 @@ a {
 .conteudo {
   display: flex;
   align-items: center;
-  margin-top: 5%;
+  width: 62%;
+  margin: auto;
+  margin-top:5%;
 }
 
 .conteudo-imagem {
@@ -599,7 +602,7 @@ a {
 
 .conteudo-texto {
   flex: 1;
-  text-align: left;
+  text-align: center;
   padding-right: 5%;
 }
 
