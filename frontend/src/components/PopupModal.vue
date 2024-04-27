@@ -74,21 +74,33 @@
 
 
         <div class="tab" v-show="currentTab === 2">
-  <h2 class="popup-title">Selecione o horário</h2>
+  <h2 class="popup-title" style="color:black;">Selecione dia e a hora</h2>
+  <div class="loading-container" v-if="loadingGif">
+    <Loading />
+  </div>
   <div class="service-info">
     <div class="date-container">
       <!-- Exibe o mês e o ano -->
-      <p style="color:black;">{{ monthYear }}</p>
-      <p style="color:black; margin-left: auto;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
+      <p style="color:black; border-bottom:1px solid #F2B709;">{{ monthYear }}</p>
+      <p style="color:black; margin-left: auto;border-bottom:1px solid #F2B709;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
     </div>
     <div class="pagination-wrapper">
       <!-- Botões de navegação do calendário -->
       <button class="pagination-button prevB" @click.prevent="prevPage">&lt;</button>
       <div class="day-pagination">
-        <!-- Botões para seleção de dias -->
-        <button v-for="day in daysInMonth" :key="day.day" @click.prevent="selectDay(day)"
-        :class="{ 'dayActive': selectedDay === day.day }">{{ day.day }}</button>
+        <div class="day-buttons">
+          <button v-for="day in daysInMonth" :key="day.day" @click.prevent="selectDay(day)"
+            :class="{ 'dayActive': selectedDay === day.day }">
+            {{ day.day }}
+          </button>
+        </div>
+        <div class="day-of-week">
+          <span v-for="(day, index) in daysInMonth" :key="index" class="day-of-week-item">{{ getDayOfWeek(day.month, day.day) }}</span>
+        </div>
       </div>
+
+
+
       <button class="pagination-button nextB" @click.prevent="nextPage">&gt;</button>
     </div>
     <!-- Exibe as horas disponíveis para o dia selecionado -->
@@ -97,7 +109,7 @@
         <button v-for="time in availableTimes" :key="time.time" class="hour-button btn" 
           :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
           @click.prevent="selectDateTime(time.time)">
-      {{ time.time }}
+         {{ time.time }}
   </button>
       </div>
     </div>
@@ -107,7 +119,7 @@
   <div class="tab" v-show="currentTab === 3" style="padding:10px">
       <h2 class="popup-title" style="color:black;">BARBEARIA 3700</h2>
       <div class="service-info concluir">
-          <img src="../assets/images/about_logo.jpg" style="width:40%;">
+          <img src="../assets/images/about_logo.jpg" style="width:60%;">
           <p style="color:Black;">5.0 ★ ★ ★ ★ ★ (17)</p>
           <p style="color:Black;">R. Gago Coutinho 9 R/C, 3700-261 São João da Madeira</p>
           <br>
@@ -118,7 +130,7 @@
             <textarea style="width:20vw;height:5vh"></textarea>
 
       </div>
-        <button class="submitAgenda" @click.prevent="submitBooking">Enviar Reserva</button>
+        <button class="submitAgenda" @click.prevent="submitBooking">ENVIAR RESERVA</button>
   </div>
 
 
@@ -154,10 +166,16 @@
 
 
 <script>
+import Loading from '../components/loading.vue';
+
 export default {
 name: 'PopupModal',
+components: {
+    Loading,
+  },
 data() {
 return {
+loadingGif: false, // Variável para controlar a exibição do GIF
 showPopup: false,
 currentTab: 0,
 marcacoes: [],
@@ -215,6 +233,12 @@ try {
   console.error('Erro ao buscar os dados dos serviços:', error);
 }
 },
+getDayOfWeek(month, day) {
+  const date = new Date(this.currentYear, month, day);
+  const dayOfWeek = date.toLocaleDateString('pt-PT', { weekday: 'short' }).slice(0, 3); // Abreviar para três letras
+  return dayOfWeek;
+},
+
 filterServicosPorCategoria(categoria) {
   // Restaura a lista completa de serviços
   this.servicos = [];
@@ -254,6 +278,10 @@ if (this.currentMonth === 1) {
 this.updateDaysInMonth();
 },
 updateDaysInMonth() {
+  if (!this.currentMonth || !this.currentYear) {
+    this.currentMonth = new Date().getMonth() + 1;
+    this.currentYear = new Date().getFullYear();
+  }
   const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
   const startDay = (this.currentPage - 1) * 7 + 1;
   const endDay = Math.min(this.currentPage * 7, daysInMonth);
@@ -289,12 +317,21 @@ updateDaysInMonth() {
   this.daysInMonth = days;
   this.totalPages = Math.ceil(daysInMonth / 7);
 
+  // Chama a função selectDay com o dia atual
+  const today = new Date();
+  const currentDay = today.getDate();
+  this.selectDay({ day: currentDay, month: this.currentMonth-1, year: this.currentYear });
 },
 
 
 
 
+
 async selectDay(day) {
+  this.selectedTime = "",
+  this.loadingGif = true;
+  await new Promise(resolve => setTimeout(resolve, 500));
+  this.loadingGif = false;
   this.availableTimes = [
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
   "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
@@ -302,7 +339,6 @@ async selectDay(day) {
   this.selectedDay = day.day;
   this.selectedMonth = day.month+1;
   this.selectedYear = this.currentYear;  
-
   try {
     const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month+1}-${day.day}`);
     const data = await response.json();
@@ -475,6 +511,13 @@ this.fetchServicos();
 this.fetchBarbeiros();
 this.updateDaysInMonth();
 
+const today = new Date();
+    const currentDay = today.getDate();
+
+    // Definir o dia atual como selecionado
+    this.selectedDay = currentDay;
+
+
 }
 };
 
@@ -505,33 +548,52 @@ outline: none;
 
 
 .day-pagination {
-display: flex;
-flex-wrap: wrap;
-gap: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.day-pagination button {
-border: 2px solid transparent;
-border-radius: 50%;
-background-color: transparent;
-width: 30px;
-height: 30px;
-display: flex;
-justify-content: center;
-align-items: center;
-font-size: 16px;
-cursor: pointer;
-transition: all 0.3s ease;
-outline: none;
-border-color: #ccc;
+.day-buttons {
+  display: flex;
+  gap: 20px;
 }
 
-.day-pagination button:hover {
-background-color: #FCD666;
-border-color: #ccc;
-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-transform: translateY(-5px); /* Move o botão 5 pixels para cima */
+.day-buttons button {
+  border: 1px solid rgba(255, 255, 255, 0.418);
+  border-radius: 50%;
+  background-color: transparent;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  border-color: #ccc;
 }
+
+.day-buttons button:hover {
+  background-color: #FCD666;
+  border-color: #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+}
+
+.day-of-week {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+  width: 100%;
+  gap:20px;
+}
+
+.day-of-week span {
+  font-size: 14px;
+  color: #555;
+}
+
 
 
 .hour-row {
@@ -553,7 +615,7 @@ display: flex;
 flex-wrap: wrap;
 justify-content: space-between;
 gap: 10px; /* Espaço entre as horas */
-margin-top:35%;
+margin-top:10%;
 }
 
 .hour-button {
@@ -570,6 +632,7 @@ cursor: pointer; /* Cursor do mouse */
 .date-container {
 display: flex;
 justify-content: space-between;
+margin-top:10%;
 }
 
 .blocked{
@@ -619,19 +682,26 @@ background-color: #2626264d;
   background-color:white;
   border:1px solid black;
   border-radius:10px;
-  padding:20px 50px;
+  padding:20px 100px;
   cursor: none;
   pointer-events: none;
 }
 
 .submitAgenda{
   cursor:pointer;
-  background-color: #F2B709;
-  border:1px solid black;
+  background-color: #FCD666;
+  border:none;
   border-radius:10px;
-  padding:10px 100px;
+  padding:10px 150px;
   margin-top:5%;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); 
+  font-weight: bold;
 }
+.submitAgenda:hover{
+  transform: translatey(-5px);
+  transition:0.2s;
+}
+
 .prevB:hover {
 transform: translateX(-5px); /* Move o botão 5 pixels para cima */
 }
@@ -654,6 +724,23 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 
 .concluir p{
   font-size:14px;
+}
+
+
+
+
+
+.loading-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999; /* Garante que o GIF de carregamento esteja acima de outros elementos */
+}
+
+.loading-container img {
+  width: 50px; /* Ajuste o tamanho conforme necessário */
+  height: 50px; /* Ajuste o tamanho conforme necessário */
 }
 
 

@@ -73,7 +73,7 @@
   import Testemunhos from '../components/sections/testemunhos.vue';
   import Servicos from '../components/sections/servicos.vue';
   import Certificados from '../components/sections/certificados.vue';
-  import Loader from '../components/loading.vue';
+  import Loader from '../components/loader.vue';
 
   export default {
     data() {
