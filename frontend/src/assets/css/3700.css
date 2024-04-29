@@ -566,8 +566,8 @@ a {
   padding-top: 8%;
   background: rgba(20, 19, 19, 0.2) url('../images/back-texture.png');
   background-attachment: fixed;
-  padding-bottom:15%;
-  height:700px;
+  padding-bottom:5%;
+  height:auto;
 }
 
 .separador {

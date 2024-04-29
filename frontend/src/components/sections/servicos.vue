@@ -17,7 +17,7 @@
             <div v-for="dados in servicos" :key="dados.id" class="bloco-servico">
                 <div style="margin-left:10%">
                     <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">{{ dados.Nome }}</h3>
-                    <p style="font-size:14px;line-height: 170%">{{ dados.Descricao }}</p>
+                    <p style="font-size:16px;line-height: 190%">{{ dados.Descricao }}</p>
                     <div style="margin-left:50%; width: 150px;"><img src="../../assets/images/tesoura.png" alt="Tesoura" style="width: 45%;"></div>
                 </div>
             </div>
