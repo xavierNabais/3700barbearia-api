@@ -325,6 +325,7 @@ a {
 .section {
   position: relative;
   background:linear-gradient(0deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('../images/fundo.png');
+  background-attachment: fixed;
   background-size: cover;
   background-position: center;
   width: 100vw;
@@ -1135,6 +1136,7 @@ a {
 
 .footer {
     background: rgba(20, 19, 19, 0.2) url('../images/back-texture.png');
+    background-attachment: fixed;
     color: white;
     text-align: center;
     padding: 20px;

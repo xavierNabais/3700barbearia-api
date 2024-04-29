@@ -85,7 +85,7 @@
   .item i{
     color:#F4B604;
     margin: 0px 10px;
-    font-size:30px;
+    font-size:26px;
   }
 
   /* Animação de rolagem */
