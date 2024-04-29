@@ -116,6 +116,3 @@
   </script>
   
   
-  <style scoped>
-  </style>
-  

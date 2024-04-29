@@ -564,7 +564,8 @@ a {
 .barbearia {
   text-align: center;
   padding-top: 8%;
-  background-color: #050505;
+  background: rgba(20, 19, 19, 0.2) url('../images/back-texture.png');
+  background-attachment: fixed;
   padding-bottom:15%;
   height:700px;
 }
@@ -731,6 +732,7 @@ a {
 
 .servico-bloco{
   background:linear-gradient(0deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('../images/servico.png');
+  background-attachment: fixed;
   background-size: cover;
   background-position: center;
   padding-top:5%;
@@ -878,8 +880,9 @@ a {
 .portfolio-block {
   text-align: center;
   padding-top: 10%;
-  background-color:#1E1E1E;
+  background: rgba(20, 19, 19, 0.2) url('../images/back-texture.png');
   padding-bottom:10%;
+  background-attachment: fixed;
 }
 
 
@@ -997,6 +1000,7 @@ a {
   color: white;
   margin:1%;
   padding-left:2%;
+  background-image: url(http://localhost:8080/img/textura.1f719671.png);
 }
 
 
@@ -1037,6 +1041,7 @@ a {
   text-align: center;
   padding-top: 5%;
   background:linear-gradient(0deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('../images/contactos.png');
+  background-attachment: fixed;
   padding-bottom:10%;
 }
 
@@ -1129,7 +1134,7 @@ a {
 }
 
 .footer {
-    background-color: #1E1E1E;
+    background: rgba(20, 19, 19, 0.2) url('../images/back-texture.png');
     color: white;
     text-align: center;
     padding: 20px;

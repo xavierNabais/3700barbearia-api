@@ -40,5 +40,6 @@ name: 'SectionBarbearia',
     transition:0.2s;
     border: 1px solid white;
 }
+  
 
 </style>
