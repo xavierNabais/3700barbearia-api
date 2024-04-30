@@ -103,7 +103,7 @@
 </div>
 </div>
 
-<div class="tab" v-show="currentTab === 3" style="padding:10px">
+<div class="tab" v-show="currentTab === 3" style="padding:10px;text-align: center;">
   <h2 class="popup-title" style="color:black;">BARBEARIA 3700</h2>
   <div class="service-info concluir">
       <img src="../../assets/images/about_logo.jpg" style="width:60%;">
@@ -114,7 +114,7 @@
       <button class="pay">PAGAR NO ESTABELECIMENTO</button>
       <br>
       <p style="color:Black;">Observações sobre a marcação</p>
-        <textarea style="width:20vw;height:5vh" v-model="notas"></textarea>
+        <textarea style="width:20vw;height:5vh" v-model="selectedNotas"></textarea>
 
   </div>
     <button class="submitAgenda" @click.prevent="updateBooking">ATUALIZAR MARCAÇÃO</button>
@@ -150,6 +150,8 @@ currentTab: 0,
 marcacoes: [],
 selectedService: null,
 selectedBarber: null,
+selectedNotas: null,
+selectedDateTime: null,
 servicos: [],
 barbeiros: [],
 currentPage: 1,
@@ -429,7 +431,7 @@ selectService(service) {
           barber: this.selectedBarber,
           dateTime: this.selectedDateTime,
           utilizador: localStorage.getItem('userId'),
-          notas: this.notas,
+          notas: this.selectedNotas,
         };
         const marcacaoId = this.serviceDefault.Id;
         // Envia os dados para o servidor usando o método PUT
@@ -484,9 +486,27 @@ mounted() {
   this.fetchServicos();
   this.fetchBarbeiros();
 
+  // Extrai informações da data do serviço padrão
+  const dateParts = this.serviceDefault.Data.split(",")[1].trim().split(" ")[0].split("/");
+  const timeParts = this.serviceDefault.Data.split("às")[1].trim().split(":");
+  const serviceDay = parseInt(dateParts[0], 10);
+  const serviceMonth = parseInt(dateParts[1], 10);
+  const serviceYear = parseInt(dateParts[2], 10);
+  const serviceHour = parseInt(timeParts[0].trim(), 10); // Remove espaços em branco em torno da hora
+  const serviceMinute = parseInt(timeParts[1].trim().split(" ")[0], 10); // Remove espaços em branco e "às" dos minutos
+
+
+  this.selectedHour = serviceHour;
+  this.selectedMinute = parseInt(serviceMinute) < 10 ? '0' + parseInt(serviceMinute) : serviceMinute;
+
+  this.selectedTime = `${this.selectedHour}:${this.selectedMinute}`;
+
+  const selectedDateTime = `${serviceYear}-${serviceMonth}-${serviceDay} ${this.selectedTime}`;
+
   this.selectedService = this.serviceDefault.Id_servico;
   this.selectedBarber = this.serviceDefault.Id_barbeiro;
-  this.selectedDateTime = this.serviceDefault.Data;
+  this.selectedNotas = this.serviceDefault.Notas;
+  this.selectedDateTime = selectedDateTime;
 
   const today = new Date();
   const currentDay = today.getDate();

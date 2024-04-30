@@ -133,7 +133,7 @@
           <button class="pay">PAGAR NO ESTABELECIMENTO</button>
           <br>
           <p style="color:Black;">Observações sobre a marcação</p>
-            <textarea style="width:20vw;height:5vh"></textarea>
+            <textarea style="width:20vw;height:5vh" v-model="selectedNotas"></textarea>
 
       </div>
         <button class="submitAgenda" @click.prevent="submitBooking">ENVIAR RESERVA</button>
@@ -631,7 +631,8 @@ selectService(service) {
           service: this.selectedService,
           barber: this.selectedBarber,
           dateTime: this.selectedDateTime,
-          utilizador: localStorage.getItem('userId')
+          utilizador: localStorage.getItem('userId'),
+          notas: this.selectedNotas,
         };
 
         // Envia os dados para o servidor usando o método PUT

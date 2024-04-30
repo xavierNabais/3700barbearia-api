@@ -352,6 +352,7 @@ exports.create = (req, res) => {
         const idUtilizador = req.body.utilizador;
         const idServico = req.body.service.Id;
         const dataMarcacao = req.body.dateTime;
+        const notas = req.body.notas;
         // Consulta ao banco de dados para verificar se já existe uma marcação na mesma data para o mesmo barbeiro e serviço
         marcacoesModel.getByDateAndBarber(dataMarcacao,idBarbeiro, (error, marcacaoExistente) => {
             if (error) {
@@ -372,7 +373,7 @@ exports.create = (req, res) => {
                 id_utilizador: idUtilizador,
                 id_servico: idServico,
                 data: dataMarcacao,
-                notas: 'asdasdasd' // Não está claro de onde vem esse campo 'notas' no objeto enviado
+                notas: notas,
             });
     
             marcacoesModel.create(novaMarcacao, (error, data) => {
