@@ -1,270 +1,155 @@
 <template>
 
 
+<div class="popup-section section-middle">
 
-  <div class="popup-section section-left" style="padding:20px">
-  <!-- Indicador de progresso -->
-  <div class="progress-indicator">
-      <div class="progress-ball filled step"></div>
-      <div class="progress-ball step"></div>
-      <div class="progress-ball step"></div>
-      <div class="progress-ball step"></div>
-  </div>
-
-  <!-- Título e descrição -->
-  <div class="section-content">
-      <h2 class="popup-title-left">SERVIÇO</h2>
-      <p class="popup-description">Nesta seção, os clientes podem escolher o serviço específico que desejam agendar na barbearia.</p>
-  </div>
-  <!-- Conteúdo da Seção 1 -->
-  </div>
-
-  <div class="popup-section section-middle">
-
-    <div class="service-selection">
-          <h2 v-if="currentTab == 0" class="popup-title" style="color:black;">Selecione o serviço</h2>
-          <h2 v-if="currentTab == 1" class="popup-title" style="color:black;">Selecione o barbeiro</h2>
-          <h2 v-if="currentTab == 2" class="popup-title" style="color:black;">Selecione o horário</h2>
-          <h2 v-if="currentTab == 3" class="popup-title" style="color:black;">Concluir Marcação</h2>
-          <h2 v-if="currentTab == 4" class="popup-title" style="color:black;">Autenticação</h2>
+<div class="service-selection">
+      <h2 v-if="currentTab == 0" class="popup-title" style="color:black;">Selecione o serviço</h2>
+      <h2 v-if="currentTab == 1" class="popup-title" style="color:black;">Selecione o barbeiro</h2>
+      <h2 v-if="currentTab == 2" class="popup-title" style="color:black;">Selecione o horário</h2>
+      <h2 v-if="currentTab == 3" class="popup-title" style="color:black;">Concluir Atualização</h2>
 
 
-          <div class="button-scroll-container" v-if="currentTab == 0">
-            <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Em destaque' }" @click="filterServicosPorCategoria('Em destaque')">Em destaque</button>
-            <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Adicionais' }" @click="filterServicosPorCategoria('Adicionais')">Adicionais</button>
-            <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Trabalhos técnicos' }" @click="filterServicosPorCategoria('Trabalhos técnicos')">Trabalhos técnicos</button>
-            <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Combo' }" @click="filterServicosPorCategoria('Combo')">Combo</button>
-          </div>
+      <div class="button-scroll-container" v-if="currentTab == 0">
+        <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Em destaque' }" @click="filterServicosPorCategoria('Em destaque')">Em destaque</button>
+        <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Adicionais' }" @click="filterServicosPorCategoria('Adicionais')">Adicionais</button>
+        <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Trabalhos técnicos' }" @click="filterServicosPorCategoria('Trabalhos técnicos')">Trabalhos técnicos</button>
+        <button class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Combo' }" @click="filterServicosPorCategoria('Combo')">Combo</button>
+      </div>
+</div>
+
+
+
+<div class="padding-container">
+<form>
+
+
+<div class="tab" v-show="currentTab === 0">
+
+  <div class="service-info">
+
+    <div v-for="dados in servicos" :key="dados.id" @click.prevent="selectService(dados)" :class="{ 'selected': selectedService === dados.Id }">
+        <a href="#">
+        <div class="btn">
+            {{ dados.Nome }} <span style="float: right;font-size: 12px;text-align:center">A partir de:<br> <span>{{ dados.Preco }}€</span></span>
+        </div>
+        </a>
     </div>
+    
+    </div>
+</div>
 
 
+    <div class="tab" v-show="currentTab === 1">
 
-    <div class="padding-container">
-    <form>
+    <h2 class="popup-title">Selecione o profissional</h2>
+        <div class="service-info">
 
-
-    <div class="tab" v-show="currentTab === 0">
-
-      <div class="service-info">
-
-        <div v-for="dados in servicos" :key="dados.id" @click="selectService(dados)" :class="{ 'selected': selectedService === dados }">
+          <div v-for="dados in barbeiros" :key="dados.id" @click.prevent="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados.Id }">
             <a href="#">
-            <div class="btn">
-                {{ dados.Nome }} <span style="float: right;font-size: 12px;text-align:center">A partir de:<br> <span>{{ dados.Preco }}€</span></span>
-            </div>
+                <div class="btn" style="display: flex; align-items: center;">
+                    <img src="../../assets/images/about_logo.jpg" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;" />
+                    <span style="font-size: 18px;">{{ dados.Nome }}</span>
+                    <span style="font-size: 12px;flex:2;text-align:right">Especialização: <span>{{ dados.Especializacao }}</span></span>
+                </div>
             </a>
         </div>
-        
+
+
         </div>
     </div>
 
 
-        <div class="tab" v-show="currentTab === 1">
-
-        <h2 class="popup-title">Selecione o profissional</h2>
-            <div class="service-info">
-
-              <div v-for="dados in barbeiros" :key="dados.id" @click="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados }">
-                <a href="#">
-                    <div class="btn" style="display: flex; align-items: center;">
-                        <img src="../assets/images/about_logo.jpg" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;" />
-                        <span style="font-size: 18px;">{{ dados.Nome }}</span>
-                        <span style="font-size: 12px;flex:2;text-align:right">Especialização: <span>{{ dados.Especializacao }}</span></span>
-                    </div>
-                </a>
-            </div>
-
-
-            </div>
-        </div>
-
-
-        <div class="tab" v-show="currentTab === 2">
-  <h2 class="popup-title" style="color:black;">Selecione dia e a hora</h2>
-  <div class="loading-container" v-if="loadingGif">
-    <Loading />
-  </div>
-  <div class="service-info">
-    <div class="date-container">
-      <!-- Exibe o mês e o ano -->
-      <p style="color:black; border-bottom:1px solid #F2B709;">{{ monthYear }}</p>
-      <p style="color:black; margin-left: auto;border-bottom:1px solid #F2B709;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
+    <div class="tab" v-show="currentTab === 2">
+<h2 class="popup-title" style="color:black;">Selecione dia e a hora</h2>
+<div class="loading-container" v-if="loadingGif">
+<Loading />
+</div>
+<div class="service-info">
+<div class="date-container">
+  <!-- Exibe o mês e o ano -->
+  <p style="color:black; border-bottom:1px solid #F2B709;">{{ monthYear }}</p>
+  <p style="color:black; margin-left: auto;border-bottom:1px solid #F2B709;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
+</div>
+<div class="pagination-wrapper">
+  <!-- Botões de navegação do calendário -->
+  <button class="pagination-button prevB" @click.prevent="prevPage">&lt;</button>
+  <div class="day-pagination">
+    <div class="day-buttons">
+      <button v-for="day in daysInMonth" :key="day.day" @click.prevent="selectDay(day)"
+        :class="{ 'dayActive': selectedDay === day.day }">
+        {{ day.day }}
+      </button>
     </div>
-    <div class="pagination-wrapper">
-      <!-- Botões de navegação do calendário -->
-      <button class="pagination-button prevB" @click.prevent="prevPage">&lt;</button>
-      <div class="day-pagination">
-        <div class="day-buttons">
-          <button v-for="day in daysInMonth" :key="day.day" @click.prevent="selectDay(day)"
-            :class="{ 'dayActive': selectedDay === day.day }">
-            {{ day.day }}
-          </button>
-        </div>
-        <div class="day-of-week">
-          <span v-for="(day, index) in daysInMonth" :key="index" class="day-of-week-item">{{ getDayOfWeek(day.month, day.day) }}</span>
-        </div>
-      </div>
-
-
-
-      <button class="pagination-button nextB" @click.prevent="nextPage">&gt;</button>
-    </div>
-    <!-- Exibe as horas disponíveis para o dia selecionado -->
-    <div class="available-times">
-      <div class="hour-row">
-        <button v-for="time in availableTimes" :key="time.time" class="hour-button btn" 
-          :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
-          @click.prevent="selectDateTime(time.time)">
-         {{ time.time }}
-  </button>
-      </div>
+    <div class="day-of-week">
+      <span v-for="(day, index) in daysInMonth" :key="index" class="day-of-week-item">{{ getDayOfWeek(day.month, day.day) }}</span>
     </div>
   </div>
-  </div>
-
-  <div class="tab" v-show="currentTab === 3" style="padding:10px">
-      <h2 class="popup-title" style="color:black;">BARBEARIA 3700</h2>
-      <div class="service-info concluir">
-          <img src="../assets/images/about_logo.jpg" style="width:60%;">
-          <p style="color:Black;">5.0 ★ ★ ★ ★ ★ (17)</p>
-          <p style="color:Black;">R. Gago Coutinho 9 R/C, 3700-261 São João da Madeira</p>
-          <br>
-          <p style="color:Black;">FORMA DE PAGAMENTO</p>
-          <button class="pay">PAGAR NO ESTABELECIMENTO</button>
-          <br>
-          <p style="color:Black;">Observações sobre a marcação</p>
-            <textarea style="width:20vw;height:5vh"></textarea>
-
-      </div>
-        <button class="submitAgenda" @click.prevent="submitBooking">ENVIAR RESERVA</button>
-  </div>
-
-  <div class="tab" v-show="currentTab === 4" style="padding:10px;color:black;">
 
 
-    <h2 class="popup-title" style="color:black;font-size:16px;  ">Entre ou registe-se</h2>
-    <p style="font-size:14px">Entre ou cadastre-se para concluir a sua reserva</p>
 
-<div v-show="!showRegistrationForm">    
-    <!-- Botões de login social -->
-    <button class="social-login">
-      <i class="fab fa-facebook" style="color:#1D1D1D;font-size:24px;float:left;"></i> <span style="vertical-align: sub;font-size:16px">Continuar com Facebook</span>
+  <button class="pagination-button nextB" @click.prevent="nextPage">&gt;</button>
+</div>
+<!-- Exibe as horas disponíveis para o dia selecionado -->
+<div class="available-times">
+  <div class="hour-row">
+    <button v-for="time in availableTimes" :key="time.time" class="hour-button btn" 
+      :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
+      @click.prevent="selectDateTime(time.time)">
+     {{ time.time }}
     </button>
-    <button class="social-login">
-      <i class="fab fa-google" style="color:#1D1D1D;font-size:24px;float:left;"></i><span style="vertical-align: sub;font-size:16px">Continuar com Google</span>
-    </button>
-
-    <div class="horizontal-line-container">
-    <hr>
+  </div>
 </div>
-OU
-<div class="horizontal-line-container">
-    <hr>
+</div>
 </div>
 
+<div class="tab" v-show="currentTab === 3" style="padding:10px">
+  <h2 class="popup-title" style="color:black;">BARBEARIA 3700</h2>
+  <div class="service-info concluir">
+      <img src="../../assets/images/about_logo.jpg" style="width:60%;">
+      <p style="color:Black;">5.0 ★ ★ ★ ★ ★ (17)</p>
+      <p style="color:Black;">R. Gago Coutinho 9 R/C, 3700-261 São João da Madeira</p>
+      <br>
+      <p style="color:Black;">FORMA DE PAGAMENTO</p>
+      <button class="pay">PAGAR NO ESTABELECIMENTO</button>
+      <br>
+      <p style="color:Black;">Observações sobre a marcação</p>
+        <textarea style="width:20vw;height:5vh" v-model="notas"></textarea>
 
-    <!-- Formulário de login -->
-    <form @submit.prevent="login()">
-      <input type="email" placeholder="Nome de utilizador ou email" v-model="email" id="email" style="border: 1px solid black;width:100%;padding: 0px 10px">
-      <br>
-      <input type="password" placeholder="Password" v-model="password" id="password" style="border: 1px solid black;width:100%;padding: 0px 10px">
-      <br>
-      <button type="submit" class="submitAgenda" style="width:100%;">CONTINUAR</button>
-      <p style="text-align:center">Não tem conta? <a href="#" style="color: #F4B604;" @click="showRegistrationForm = true">Registe-se</a></p>
-    </form>
-
-</div>
-
-<div v-show="showRegistrationForm">
-  <form @submit.prevent="registo()">
-      <input type="email" placeholder="Email" v-model="r_email" id="email" style="border: 1px solid black;width:100%;padding: 0px 10px">
-      <br>
-      <input type="password" placeholder="Password" v-model="r_password" id="password" style="border: 1px solid black;width:100%;padding: 0px 10px">
-      <br>
-      <button type="submit" class="submitAgenda" style="width:100%;">REGISTAR</button>
-      <p style="text-align:center">Já tem uma conta? <a href="#" style="color: #F4B604;" @click="showRegistrationForm = false">Faça login</a></p>
-    </form>
+  </div>
+    <button class="submitAgenda" @click.prevent="updateBooking">ATUALIZAR MARCAÇÃO</button>
 </div>
 
 
-  </div>
-
-    </form>
-  </div>
-  <div class="button-container" style="margin-top:auto">
-    <button class="button left " @click="prevStep">- Anterior</button>
-    <button class="button right " @click.prevent="nextStep(1)" :disabled="disabledNext">Próximo -></button>
-  </div>
-  </div>
-
-  <div class="popup-section section-right" style="padding:20px">
-  <div class="vertical-rectangle"></div>
-  <h2 class="popup-title third">
-    RESUMO
-  </h2>
-  <div class="summary-info" v-if="summary.selectedService">
+</form>
+</div>
+<div class="button-container" style="margin-top:auto">
+<button class="button left " @click="prevStep">- Anterior</button>
+<button class="button right " @click.prevent="nextStep(1)">Próximo -></button>
+</div>
+</div>
 
 
 
-        <h2 style="font-size:16px; color:#F2B709">
-          SERVIÇO
-          <a href="#" @click="gotoStep(0)">
-            <i class="fas fa-redo" style="margin: 0px 5px;color:grey;font-size: 10px"></i>
-          </a>
-        </h2>
-      {{ summary.selectedService }}
-
-
-
-
-   </div>
-   <div class="summary-info" v-if="summary.selectedBarber">
-    <h2 style="font-size:16px; color:#F2B709">
-          BARBEIRO
-          <a href="#" @click="gotoStep(1)">
-            <i class="fas fa-redo" style="margin: 0px 5px;color:grey;font-size: 10px"></i>
-          </a>
-    </h2>
-
-    {{ summary.selectedBarber }}
-   </div>
-   <div class="summary-info" v-if="summary.selectedDateTime">
-    <h2 style="font-size:16px; color:#F2B709">
-          DATA
-          <a href="#" @click="gotoStep(2)">
-            <i class="fas fa-redo" style="margin: 0px 5px;color:grey;font-size: 10px"></i>
-          </a>
-    </h2>
-    {{ summary.selectedDateTime }}
-   </div>
-  </div>
-</template>
-
-
-
-
+  </template>
 
 
 <script>
-import Loading from '../components/loading.vue';
+import Loading from '../../components/loading.vue';
 
 export default {
-name: 'PopupModal',
+name: 'InfoMarcacao',
 components: {
     Loading,
   },
 data() {
 return {
-disabledNext: false,
-email: '',
-password: '',
-r_email: '',
-r_password: '',
-showRegistrationForm: false,
 loadingGif: false, // Variável para controlar a exibição do GIF
 showPopup: false,
 currentTab: 0,
 marcacoes: [],
+selectedService: null,
+selectedBarber: null,
 servicos: [],
 barbeiros: [],
 currentPage: 1,
@@ -283,14 +168,6 @@ availableTimes: [
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
   "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
   "17:30", "18:00", "18:30", "19:00" ],
-selectedService: null,
-selectedBarber: null,
-selectedDateTime: null,
-summary: {
-        selectedService: '',
-        selectedBarber: '',
-        selectedDateTime: ''
-      },
 categoriaAtiva: ''
 
 
@@ -345,61 +222,6 @@ try {
   console.error('Erro ao buscar os dados dos barbeiros:', error);
 }
 },
-
-async login() {
-  try {
-    const dataToSend = {
-          email: this.email,
-          password: this.password,
-
-        };
-    const response = await fetch('http://localhost:5000/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dataToSend),
-        });
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
-      localStorage.setItem('userName', data.userName);
-      localStorage.setItem('type', data.type);
-      this.currentTab = 3;
-    } else {
-      console.error('Erro ao buscar os dados dos barbeiros:', response.status);
-    }
-  } catch (error) {
-    console.error('Erro ao buscar os dados dos barbeiros:', error);
-  }
-},
-async registo() {
-            try {
-              const response = await fetch('http://localhost:5000/registo', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  email: this.r_email,
-                  password: this.r_password
-                })
-              });
-              const data = await response.json();
-              
-              // Verifique se o login foi bem-sucedido
-              if (response.ok) {
-                localStorage.setItem('userId', data[0].Id); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
-                localStorage.setItem('type', 0);
-                this.currentTab = 3;
-              } else {
-                this.registo_error = true;
-                console.log(data); // Se o login não foi bem-sucedido, imprima os dados do erro no console
-              }
-            } catch (error) {
-              console.error('Erro ao efetuar login:', error);
-            }
-},
 nextMonth() {
 if (this.currentMonth === 12) {
   this.currentMonth = 1;
@@ -427,6 +249,15 @@ updateDaysInMonth() {
   const startDay = (this.currentPage - 1) * 7 + 1;
   const endDay = Math.min(this.currentPage * 7, daysInMonth);
   const days = [];
+
+  // Extrai informações da data do serviço padrão
+  const dateParts = this.serviceDefault.Data.split(",")[1].trim().split(" ")[0].split("/");
+  const timeParts = this.serviceDefault.Data.split("às")[1].trim().split(":");
+  const serviceDay = parseInt(dateParts[0], 10);
+  const serviceMonth = parseInt(dateParts[1], 10);
+  const serviceYear = parseInt(dateParts[2], 10);
+  const serviceHour = parseInt(timeParts[0].trim(), 10); // Remove espaços em branco em torno da hora
+  const serviceMinute = parseInt(timeParts[1].trim().split(" ")[0], 10); // Remove espaços em branco e "às" dos minutos
 
   // Adiciona dias do mês anterior, se necessário
   const prevMonthDays = new Date(this.currentYear, this.currentMonth - 1, 0).getDate();
@@ -458,11 +289,16 @@ updateDaysInMonth() {
   this.daysInMonth = days;
   this.totalPages = Math.ceil(daysInMonth / 7);
 
-  // Chama a função selectDay com o dia atual
-  const today = new Date();
-  const currentDay = today.getDate();
-  this.selectDay({ day: currentDay, month: this.currentMonth-1, year: this.currentYear });
+  // Seleciona o dia, mês e ano do serviço padrão
+  this.selectDay({ day: serviceDay, month: serviceMonth, year: serviceYear });
+
+  this.selectedHour = serviceHour;
+  this.selectedMinute = parseInt(serviceMinute) < 10 ? '0' + parseInt(serviceMinute) : serviceMinute;
+
+  this.selectedTime = `${this.selectedHour}:${this.selectedMinute}`;
+
 },
+
 
 
 
@@ -547,66 +383,29 @@ document.html.classList.remove('no-scroll');
 this.currentTab = 0;
 },
 nextStep() {
-  if (this.currentTab < 4) {
+  if (this.currentTab < 3) {
     // Incrementa o currentTab
     this.currentTab++;
-
-    // Verifica se está no terceiro passo
-    if (this.currentTab === 3) {
-      // Verifica se há um userId no localStorage
-      if (localStorage.getItem('userId')) {
-        // Se houver userId, permanece no popup 3 e desativa o botão "Próximo"
-        this.disabledNext = true;
-      } else {
-        // Se não houver userId, avança para o popup 4 e habilita o botão "Próximo"
-        this.currentTab = 4;
-        this.disabledNext = false;
-      }
-    } else {
-      // Em outros passos que não sejam o terceiro, o botão "Próximo" deve estar habilitado
-      this.disabledNext = false;
-    }
-  }
-
-  // Verifica se está na última aba e se há um userId
-  if (this.currentTab === 4 && localStorage.getItem('userId')) {
-    // Se estiver na última aba e houver um userId, ajusta o currentTab para evitar voltar para a página de login
-    this.currentTab = 3;
-    // Desabilita o botão "Próximo" para evitar que o usuário avance além da última aba
-    this.disabledNext = true;
   }
 },
 prevStep() {
-  this.disabledNext = false;
   if (this.currentTab > 0) {
-    if (this.currentTab === 3) {
-      // Se estiver no popup 3 e voltar para trás, volta para o popup 2
-      this.currentTab = 2;
-    } else if (this.currentTab === 4) {
-      // Se estiver no popup 4 e voltar para trás, volta para o popup 2
-      this.currentTab = 2;
-    } else {
       // Em outros casos, apenas decrementa o currentTab
       this.currentTab--;
-    }
   }
 },
 
 
 
 selectService(service) {
-    this.selectedService = service;
-    this.summary.selectedService = service.Nome;
+    this.selectedService = service.Id;
   },
 
   selectBarber(barber) {
-    this.barbeiro = barber.Id;
-    this.selectedBarber = barber;
-    this.summary.selectedBarber = barber.Nome;
+    this.selectedBarber = barber.Id;
   },
 
   selectDateTime(time) {
-    console.log(time);
     this.selectedTime = time;
     // Verifica se um dia foi selecionado anteriormente
     if (this.selectedDay !== null && this.selectedMonth !== null && this.selectedYear !== null) {
@@ -618,11 +417,9 @@ selectService(service) {
         // Se nenhum dia foi selecionado, exibe uma mensagem de erro
         console.error('Por favor, selecione um dia antes de selecionar a hora.');
     }
-    this.summary.selectedDateTime = this.selectedDay+'/'+this.selectedMonth+'/'+this.selectedYear+'-'+time;
-
 },
 
-  async submitBooking() {
+  async updateBooking() {
     // Verifica se todas as seleções foram feitas
     if (this.selectedService && this.selectedBarber && this.selectedDateTime) {
       try {
@@ -631,12 +428,13 @@ selectService(service) {
           service: this.selectedService,
           barber: this.selectedBarber,
           dateTime: this.selectedDateTime,
-          utilizador: localStorage.getItem('userId')
+          utilizador: localStorage.getItem('userId'),
+          notas: this.notas,
         };
-
+        const marcacaoId = this.serviceDefault.Id;
         // Envia os dados para o servidor usando o método PUT
-        const response = await fetch('http://localhost:5000/painel/marcacoes', {
-          method: 'POST',
+        const response = await fetch(`http://localhost:5000/painel/marcacoes/${marcacaoId}`, {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -666,10 +464,29 @@ selectService(service) {
     }
   },
 },
+props: {
+    // Definindo as propriedades esperadas
+    serviceDefault: {
+      type: String,
+      required: true
+    },
+    barber: {
+      type: String,
+      required: true
+    },
+    dateTime: {
+      type: String,
+      required: true
+    }
+  },
 mounted() {
   this.fetchMarcacoes();
   this.fetchServicos();
   this.fetchBarbeiros();
+
+  this.selectedService = this.serviceDefault.Id_servico;
+  this.selectedBarber = this.serviceDefault.Id_barbeiro;
+  this.selectedDateTime = this.serviceDefault.Data;
 
   const today = new Date();
   const currentDay = today.getDate();
@@ -688,6 +505,7 @@ mounted() {
 };
 
 </script>
+
 
 
 <style>
@@ -941,6 +759,13 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
     display: inline-block;
     margin: 0 10px; /* Ajuste a margem conforme necessário */
     width: 10vw;
+}
+
+
+
+
+.section-middle{
+  width:100%;
 }
 
 </style>

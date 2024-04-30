@@ -42,29 +42,37 @@
             <button class="marcacoesButtons" :class="{ 'active': !isAnterioresActive }" @click="buscarProximas" style="margin-left:5%">PRÓXIMAS</button>
           </div>
         <div  style="overflow-y:auto;height:700px;">
-          <div class="ag-courses_item" v-for="(dados) in marcacoes" :key="dados.id">
-            <a href="#" class="ag-courses-item_link-marcacoes">
-                <div class="marcacao-divider">
-                    <div class="marcacao-img" style="flex:1;margin-right: 5%;">
-                        <img src="../../assets/images/about_logo.jpg" style="width: 100%;">
-                    </div>
-                    <div class="marcacao-details" style="flex:4">
-                        <div class="marcacao-title">
-                            {{ dados.nomeServico }}
-                        </div>
-                        <div class="marcacao-desc">
-                            Barbeiro: <span style="font-weight: bold;">{{dados.nomeBarbeiro}}</span>
-                        </div>
-                        <div class="marcacao-time">
-                             {{ dados.Data }}
-                        </div>
-                        <div class="marcacao-price">
-                            {{  dados.precoServico }}€
-                        </div>
-                    </div>
+          <div class="ag-courses_item" v-for="(dados, index) in marcacoes" :key="index" :class="{ 'no-hover': infoAberto === index }">
+            <a @click.prevent="toggleInfo(index)" href="#" class="ag-courses-item_link-marcacoes">
+              <div class="marcacao-divider">
+                <div class="marcacao-img" style="flex:1;margin-right: 5%;">
+                  <img src="../../assets/images/about_logo.jpg" style="width: 100%;">
                 </div>
+                <div class="marcacao-details" style="flex:4">
+                  <div class="marcacao-title">
+                    {{ dados.nomeServico }}
+                  </div>
+                  <div class="marcacao-desc">
+                    Barbeiro: <span style="font-weight: bold;">{{dados.nomeBarbeiro}}</span>
+                  </div>
+                  <div class="marcacao-time">
+                    {{ dados.Data }}
+                  </div>
+                  <div class="marcacao-price">
+                    {{  dados.precoServico }}€
+                  </div>
+                </div>
+                <div class="icon-container">
+                  <i class="fas fa-info-circle" @click.prevent="toggleInfo(index)"></i>
+                </div>
+              </div>
             </a>
+            <div v-if="dados.mostrarInfo" class="additional-info">
+              <Info :serviceDefault="dados"/>
+            </div>
+
           </div>
+
         </div>
       </div>
     </div>
@@ -77,6 +85,7 @@
 <script>
 import Header from '../../components/Header.vue';
 import Footer from '../../components/Footer.vue';
+import Info from '../../views/perfil/Info.vue';
 
 export default {
 data() {
@@ -106,6 +115,13 @@ methods: {
     await this.fetchMarcacoes(`http://localhost:5000/perfil/marcacoes/proximas/${userId}`);
     this.isAnterioresActive = false;
   },
+  toggleInfo(index) {
+    this.infoAberto = this.infoAberto === index ? null : index;
+    this.marcacoes[index].mostrarInfo = !this.marcacoes[index].mostrarInfo;
+  },
+  openPopup() {
+    this.$refs.Info.openPopup(); // Chame o método openPopup do componente PopupModal
+  },
 },
 
 mounted() {
@@ -113,8 +129,17 @@ mounted() {
 },
 components: {
   Header,
-  Footer
+  Footer,
+  Info
 },
 name: 'perfilMarcacoes',
 }
 </script>
+
+
+<style scoped>
+
+.no-hover:hover {
+  background-color:transparent;
+}
+</style>

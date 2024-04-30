@@ -430,7 +430,6 @@ a {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   background-color:#FCD666;
   transition: 0.5s;
-
 }
 .ag-courses-item_date-box {
   font-size: 16px;
@@ -1153,7 +1152,8 @@ a {
     position: relative;
     background:linear-gradient(0deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('../images/fundo.png');
     background-size: cover;
-    background-position: bottom;
+    background-position: center;
+    background-attachment: fixed;
     width: 100vw;
     height: 350px;
     display: flex;

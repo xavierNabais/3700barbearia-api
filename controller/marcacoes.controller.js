@@ -427,7 +427,7 @@ exports.create = (req, res) => {
 
 //Controller Atualizar Marcação
 exports.update = (req, res) => {
-    marcacoesModel.update(req.body, (error, dados) => {
+    marcacoesModel.update(req, (error, dados) => {
         if (error)
         res.status(500).send({
             message:
