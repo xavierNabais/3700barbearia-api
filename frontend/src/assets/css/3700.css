@@ -284,8 +284,7 @@ a {
 
 
 .summary-info {
-  padding-top: 45px;
-  padding-bottom: 45px;
+  padding: 20px 10px;
   border-bottom: 1px solid #f0f0f033;; /* Cinza quase branco */
   color: white;
 }

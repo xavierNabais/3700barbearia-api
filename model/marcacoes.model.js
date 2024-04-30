@@ -22,8 +22,21 @@ Marcacoes.getAll = result => {
         result(null,res);
     });
 };
+Marcacoes.getByDateAndBarber = (data, idBarbeiro, result) => {
+    let consulta = 'SELECT * FROM marcacoes WHERE Data = ? AND id_barbeiro = ?';
+    sql.query(consulta, [data, idBarbeiro], (error, res) => {
+        if (error) {
+            console.log("Erro: ", error);
+            result(null, error);
+            return;
+        }
+        result(null, res);
+    });
+}
 
-Marcacoes.getByDate = (data, result) => {
+Marcacoes.getByDate = (data,barbeiro, result) => {
+
+
             // Quebrando a data em ano, mês e dia
             const partesData = data.split('-');
             let ano = partesData[0];
@@ -38,21 +51,19 @@ Marcacoes.getByDate = (data, result) => {
             // Adicionando zeros à esquerda ao dia, se necessário
             if (dia < 10) {
                 dia = '0' + dia; // Adiciona zero à esquerda se o dia for menor que 10
-            }
-
+            }  
             // Formatando a nova data
             let Data = `${ano}-${mes}-${dia}`;
-            let consulta = 'SELECT * FROM marcacoes WHERE DATE(Data) = ?';
-            sql.query(consulta, [Data], (error, res) => {
+            let consulta = 'SELECT * FROM marcacoes WHERE DATE(Data) = ? AND id_barbeiro = ?';
+            sql.query(consulta, [Data, barbeiro], (error, res) => {
                 if (error) {
                     console.log("Erro: ", error);
                     result(null, error);
                     return;
                 }
-                console.log(res);
                 result(null, res);
             });
-        }
+}
 
 //Model Procurar Marcações de Utilizador Específico
 Marcacoes.getSpecificNew = (id, result) => {

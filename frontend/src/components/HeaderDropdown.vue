@@ -36,16 +36,23 @@
         localStorage.removeItem('userName'); 
         localStorage.removeItem('userId');
         localStorage.removeItem('type');
+        this.updateUserData();
         },
       toggleDropdown() {
         this.dropdownOpen = !this.dropdownOpen;
+      },
+      updateUserData() {
+      // Atualiza os dados do usuário a partir do localStorage
+      this.userId = localStorage.getItem('userId');
+      this.userName = localStorage.getItem('userName');
+      this.type = localStorage.getItem('type');
       }
     },
     mounted() {
-      // Recupera o userName do localStorage
       this.userId = localStorage.getItem('userId')
       this.userName = localStorage.getItem('userName');
       this.type = localStorage.getItem('type');
+      this.updateUserData();
     }
   }
   </script>

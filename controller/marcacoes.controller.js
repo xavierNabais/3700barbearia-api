@@ -11,7 +11,8 @@ exports.findAll = (req, res) => {
 
     if (req.query && req.query.data) {
         const data = req.query.data;
-        marcacoesModel.getByDate(data, (erro, dados) => {
+        const barbeiro = req.query.barbeiro;
+        marcacoesModel.getByDate(data,barbeiro, (erro, dados) => {
             if (erro) {
                 res.status(500).send({
                     mensagem: erro.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
@@ -347,29 +348,49 @@ exports.create = (req, res) => {
 
 
     if (req.body.service && req.body.barber && req.body.dateTime) {
-        const marcacao = new marcacoesModel({
-            id_barbeiro: req.body.barber.Id,
-            id_utilizador: req.body.utilizador,
-            id_servico: req.body.service.Id,
-            data: req.body.dateTime,
-            notas:'asdasdasd', // Não está claro de onde vem esse campo 'notas' no objeto enviado
-        });
-        marcacoesModel.create(marcacao, (error, data) => {
+        const idBarbeiro = req.body.barber.Id;
+        const idUtilizador = req.body.utilizador;
+        const idServico = req.body.service.Id;
+        const dataMarcacao = req.body.dateTime;
+        // Consulta ao banco de dados para verificar se já existe uma marcação na mesma data para o mesmo barbeiro e serviço
+        marcacoesModel.getByDateAndBarber(dataMarcacao,idBarbeiro, (error, marcacaoExistente) => {
             if (error) {
-                res.status(500).send({
-                    message: error.message || "Ocorreu um erro ao tentar criar uma marcação."
+                return res.status(500).send({
+                    message: error.message || "Ocorreu um erro ao verificar a existência de marcações."
                 });
-                return;
             }
+            // Se já existe uma marcação na mesma data, retornar uma mensagem indicando isso
+            if (marcacaoExistente.length > 0) {
+                return res.status(400).send({
+                    message: "Já existe uma marcação para este barbeiro e serviço nesta data."
+                });
+                
+            }
+            // Se não existe uma marcação na mesma data, criar a nova marcação
+            const novaMarcacao = new marcacoesModel({
+                id_barbeiro: idBarbeiro,
+                id_utilizador: idUtilizador,
+                id_servico: idServico,
+                data: dataMarcacao,
+                notas: 'asdasdasd' // Não está claro de onde vem esse campo 'notas' no objeto enviado
+            });
     
-            marcacoesModel.getAll((error, dados) => {
+            marcacoesModel.create(novaMarcacao, (error, data) => {
                 if (error) {
-                    res.status(500).send({
-                        message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+                    return res.status(500).send({
+                        message: error.message || "Ocorreu um erro ao tentar criar uma marcação."
                     });
-                    return;
                 }
-                res.json(dados);
+    
+                // Se a marcação for criada com sucesso, retornar os dados das marcações atualizados
+                marcacoesModel.getAll((error, dados) => {
+                    if (error) {
+                        return res.status(500).send({
+                            message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações."
+                        });
+                    }
+                    res.json(dados);
+                });
             });
         });
     }else {

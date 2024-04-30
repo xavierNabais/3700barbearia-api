@@ -26,6 +26,7 @@
           <h2 v-if="currentTab == 1" class="popup-title" style="color:black;">Selecione o barbeiro</h2>
           <h2 v-if="currentTab == 2" class="popup-title" style="color:black;">Selecione o horário</h2>
           <h2 v-if="currentTab == 3" class="popup-title" style="color:black;">Concluir Marcação</h2>
+          <h2 v-if="currentTab == 4" class="popup-title" style="color:black;">Autenticação</h2>
 
 
           <div class="button-scroll-container" v-if="currentTab == 0">
@@ -62,13 +63,18 @@
 
         <h2 class="popup-title">Selecione o profissional</h2>
             <div class="service-info">
-              <div v-for="dados in barbeiros" :key="dados.id"  @click="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados }">
-                    <a href="#">
-                        <div class="btn">
-                          {{ dados.Nome }} <span style="float: right;font-size: 14px;">Especialização: <span>{{ dados.Especializacao }}</span></span>
-                      </div>
-                    </a>
-                </div>
+
+              <div v-for="dados in barbeiros" :key="dados.id" @click="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados }">
+                <a href="#">
+                    <div class="btn" style="display: flex; align-items: center;">
+                        <img src="../assets/images/about_logo.jpg" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;" />
+                        <span style="font-size: 18px;">{{ dados.Nome }}</span>
+                        <span style="font-size: 12px;flex:2;text-align:right">Especialização: <span>{{ dados.Especializacao }}</span></span>
+                    </div>
+                </a>
+            </div>
+
+
             </div>
         </div>
 
@@ -133,29 +139,103 @@
         <button class="submitAgenda" @click.prevent="submitBooking">ENVIAR RESERVA</button>
   </div>
 
+  <div class="tab" v-show="currentTab === 4" style="padding:10px;color:black;">
 
 
+    <h2 class="popup-title" style="color:black;font-size:16px;  ">Entre ou registe-se</h2>
+    <p style="font-size:14px">Entre ou cadastre-se para concluir a sua reserva</p>
 
+<div v-show="!showRegistrationForm">    
+    <!-- Botões de login social -->
+    <button class="social-login">
+      <i class="fab fa-facebook" style="color:#1D1D1D;font-size:24px;float:left;"></i> <span style="vertical-align: sub;font-size:16px">Continuar com Facebook</span>
+    </button>
+    <button class="social-login">
+      <i class="fab fa-google" style="color:#1D1D1D;font-size:24px;float:left;"></i><span style="vertical-align: sub;font-size:16px">Continuar com Google</span>
+    </button>
+
+    <div class="horizontal-line-container">
+    <hr>
+</div>
+OU
+<div class="horizontal-line-container">
+    <hr>
+</div>
+
+
+    <!-- Formulário de login -->
+    <form @submit.prevent="login()">
+      <input type="email" placeholder="Nome de utilizador ou email" v-model="email" id="email" style="border: 1px solid black;width:100%;padding: 0px 10px">
+      <br>
+      <input type="password" placeholder="Password" v-model="password" id="password" style="border: 1px solid black;width:100%;padding: 0px 10px">
+      <br>
+      <button type="submit" class="submitAgenda" style="width:100%;">CONTINUAR</button>
+      <p style="text-align:center">Não tem conta? <a href="#" style="color: #F4B604;" @click="showRegistrationForm = true">Registe-se</a></p>
+    </form>
+
+</div>
+
+<div v-show="showRegistrationForm">
+  <form @submit.prevent="registo()">
+      <input type="email" placeholder="Email" v-model="r_email" id="email" style="border: 1px solid black;width:100%;padding: 0px 10px">
+      <br>
+      <input type="password" placeholder="Password" v-model="r_password" id="password" style="border: 1px solid black;width:100%;padding: 0px 10px">
+      <br>
+      <button type="submit" class="submitAgenda" style="width:100%;">REGISTAR</button>
+      <p style="text-align:center">Já tem uma conta? <a href="#" style="color: #F4B604;" @click="showRegistrationForm = false">Faça login</a></p>
+    </form>
+</div>
+
+
+  </div>
 
     </form>
   </div>
   <div class="button-container" style="margin-top:auto">
     <button class="button left " @click="prevStep">- Anterior</button>
-    <button class="button right " @click.prevent="nextStep(1)">Próximo -></button>
+    <button class="button right " @click.prevent="nextStep(1)" :disabled="disabledNext">Próximo -></button>
   </div>
   </div>
 
   <div class="popup-section section-right" style="padding:20px">
   <div class="vertical-rectangle"></div>
-  <h2 class="popup-title third">RESUMO</h2>
+  <h2 class="popup-title third">
+    RESUMO
+  </h2>
   <div class="summary-info" v-if="summary.selectedService">
-        <p >Serviço: {{ summary.selectedService }}</p>
+
+
+
+        <h2 style="font-size:16px; color:#F2B709">
+          SERVIÇO
+          <a href="#" @click="gotoStep(0)">
+            <i class="fas fa-redo" style="margin: 0px 5px;color:grey;font-size: 10px"></i>
+          </a>
+        </h2>
+      {{ summary.selectedService }}
+
+
+
+
    </div>
    <div class="summary-info" v-if="summary.selectedBarber">
-    <p >Barbeiro: {{ summary.selectedBarber }}</p>
+    <h2 style="font-size:16px; color:#F2B709">
+          BARBEIRO
+          <a href="#" @click="gotoStep(1)">
+            <i class="fas fa-redo" style="margin: 0px 5px;color:grey;font-size: 10px"></i>
+          </a>
+    </h2>
+
+    {{ summary.selectedBarber }}
    </div>
    <div class="summary-info" v-if="summary.selectedDateTime">
-    <p >Data e hora: {{ summary.selectedDateTime }}</p>
+    <h2 style="font-size:16px; color:#F2B709">
+          DATA
+          <a href="#" @click="gotoStep(2)">
+            <i class="fas fa-redo" style="margin: 0px 5px;color:grey;font-size: 10px"></i>
+          </a>
+    </h2>
+    {{ summary.selectedDateTime }}
    </div>
   </div>
 </template>
@@ -175,6 +255,12 @@ components: {
   },
 data() {
 return {
+disabledNext: false,
+email: '',
+password: '',
+r_email: '',
+r_password: '',
+showRegistrationForm: false,
 loadingGif: false, // Variável para controlar a exibição do GIF
 showPopup: false,
 currentTab: 0,
@@ -224,15 +310,15 @@ try {
   console.error('Erro ao buscar as marcações:', error);
 }
 },
-async fetchServicos() {
-try {
-  const response = await fetch('http://localhost:5000/painel/servicos');
-  const data = await response.json();
-  this.servicos = data;
-} catch (error) {
-  console.error('Erro ao buscar os dados dos serviços:', error);
-}
-},
+  async fetchServicos() {
+  try {
+    const response = await fetch('http://localhost:5000/painel/servicos');
+    const data = await response.json();
+    this.servicos = data;
+  } catch (error) {
+    console.error('Erro ao buscar os dados dos serviços:', error);
+  }
+  },
 getDayOfWeek(month, day) {
   const date = new Date(this.currentYear, month, day);
   const dayOfWeek = date.toLocaleDateString('pt-PT', { weekday: 'short' }).slice(0, 3); // Abreviar para três letras
@@ -258,6 +344,61 @@ try {
 } catch (error) {
   console.error('Erro ao buscar os dados dos barbeiros:', error);
 }
+},
+
+async login() {
+  try {
+    const dataToSend = {
+          email: this.email,
+          password: this.password,
+
+        };
+    const response = await fetch('http://localhost:5000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        });
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+      localStorage.setItem('userName', data.userName);
+      localStorage.setItem('type', data.type);
+      this.currentTab = 3;
+    } else {
+      console.error('Erro ao buscar os dados dos barbeiros:', response.status);
+    }
+  } catch (error) {
+    console.error('Erro ao buscar os dados dos barbeiros:', error);
+  }
+},
+async registo() {
+            try {
+              const response = await fetch('http://localhost:5000/registo', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  email: this.r_email,
+                  password: this.r_password
+                })
+              });
+              const data = await response.json();
+              
+              // Verifique se o login foi bem-sucedido
+              if (response.ok) {
+                localStorage.setItem('userId', data[0].Id); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('type', 0);
+                this.currentTab = 3;
+              } else {
+                this.registo_error = true;
+                console.log(data); // Se o login não foi bem-sucedido, imprima os dados do erro no console
+              }
+            } catch (error) {
+              console.error('Erro ao efetuar login:', error);
+            }
 },
 nextMonth() {
 if (this.currentMonth === 12) {
@@ -338,9 +479,9 @@ async selectDay(day) {
   "17:30", "18:00", "18:30", "19:00" ];
   this.selectedDay = day.day;
   this.selectedMonth = day.month+1;
-  this.selectedYear = this.currentYear;  
+  this.selectedYear = this.currentYear; 
   try {
-    const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month+1}-${day.day}`);
+    const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month+1}-${day.day}&barbeiro=${this.barbeiro}`);
     const data = await response.json();
     // Extrai os horários das marcações e formata-os para corresponder ao formato dos botões de horas
     const blockedTimes = data.map(marcacao => {
@@ -393,6 +534,9 @@ if (this.currentPage > 1) {
   this.updateDaysInMonth();
 }
 },
+gotoStep(step) {
+  this.currentTab = step;
+},
 openPopup() {
 this.showPopup = true;
 document.documentElement.classList.add('no-scroll');
@@ -403,14 +547,49 @@ document.html.classList.remove('no-scroll');
 this.currentTab = 0;
 },
 nextStep() {
-if (this.currentTab < 4) {
-  this.currentTab++;
-}
+  if (this.currentTab < 4) {
+    // Incrementa o currentTab
+    this.currentTab++;
+
+    // Verifica se está no terceiro passo
+    if (this.currentTab === 3) {
+      // Verifica se há um userId no localStorage
+      if (localStorage.getItem('userId')) {
+        // Se houver userId, permanece no popup 3 e desativa o botão "Próximo"
+        this.disabledNext = true;
+      } else {
+        // Se não houver userId, avança para o popup 4 e habilita o botão "Próximo"
+        this.currentTab = 4;
+        this.disabledNext = false;
+      }
+    } else {
+      // Em outros passos que não sejam o terceiro, o botão "Próximo" deve estar habilitado
+      this.disabledNext = false;
+    }
+  }
+
+  // Verifica se está na última aba e se há um userId
+  if (this.currentTab === 4 && localStorage.getItem('userId')) {
+    // Se estiver na última aba e houver um userId, ajusta o currentTab para evitar voltar para a página de login
+    this.currentTab = 3;
+    // Desabilita o botão "Próximo" para evitar que o usuário avance além da última aba
+    this.disabledNext = true;
+  }
 },
 prevStep() {
-if (this.currentTab > 0) {
-  this.currentTab--;
-}
+  this.disabledNext = false;
+  if (this.currentTab > 0) {
+    if (this.currentTab === 3) {
+      // Se estiver no popup 3 e voltar para trás, volta para o popup 2
+      this.currentTab = 2;
+    } else if (this.currentTab === 4) {
+      // Se estiver no popup 4 e voltar para trás, volta para o popup 2
+      this.currentTab = 2;
+    } else {
+      // Em outros casos, apenas decrementa o currentTab
+      this.currentTab--;
+    }
+  }
 },
 
 
@@ -421,6 +600,7 @@ selectService(service) {
   },
 
   selectBarber(barber) {
+    this.barbeiro = barber.Id;
     this.selectedBarber = barber;
     this.summary.selectedBarber = barber.Nome;
   },
@@ -468,17 +648,16 @@ selectService(service) {
           this.selectedService = null;
           this.selectedBarber = null;
           this.selectedDateTime = null;
-
           // Exibe uma mensagem de sucesso para o usuário
-          alert('Sua reserva foi enviada com sucesso!');
+          alert('A sua reserva foi enviada com sucesso!');
         } else {
           // Exibe uma mensagem de erro se a requisição falhar
-          alert('Houve um erro ao enviar sua reserva. Por favor, tente novamente mais tarde.');
+          alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
         }
       } catch (error) {
         console.error('Erro ao enviar reserva:', error);
         // Exibe uma mensagem de erro se ocorrer um erro inesperado
-        alert('Houve um erro ao enviar sua reserva. Por favor, tente novamente mais tarde.');
+        alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
       }
     } else {
       // Se alguma seleção estiver faltando, exibe uma mensagem para o usuário
@@ -506,19 +685,24 @@ selectService(service) {
 
 },
 mounted() {
-this.fetchMarcacoes();
-this.fetchServicos();
-this.fetchBarbeiros();
-this.updateDaysInMonth();
+  this.fetchMarcacoes();
+  this.fetchServicos();
+  this.fetchBarbeiros();
 
-const today = new Date();
-    const currentDay = today.getDate();
+  const today = new Date();
+  const currentDay = today.getDate();
 
-    // Definir o dia atual como selecionado
-    this.selectedDay = currentDay;
+  // Definir o dia atual como selecionado
+  this.selectedDay = currentDay;
 
+  // Calcular a página que contém o dia atual
+  const dayPosition = currentDay % 7 === 0 ? 7 : currentDay % 7; // Posição do dia na semana
+  this.currentPage = Math.ceil((currentDay + (7 - dayPosition)) / 7);
 
+  // Atualizar os dias do mês para a página que contém o dia atual
+  this.updateDaysInMonth();
 }
+
 };
 
 </script>
@@ -744,6 +928,37 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 }
 
 
+.social-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.social-login, .input-container, .button-container {
+  width: 100%;
+  margin-bottom: 10px;
+  font-family: "Inter", sans-serif; /* Altere para o font-family desejado */
+}
+
+.social-login {
+  padding: 10px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  background-color:white;
+  color:black;
+}
+
+.social-login img {
+  width: 20px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.horizontal-line-container {
+    display: inline-block;
+    margin: 0 10px; /* Ajuste a margem conforme necessário */
+    width: 10vw;
+}
 
 </style>
