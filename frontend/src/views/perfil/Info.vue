@@ -2,7 +2,7 @@
 
 
 <div class="popup-section section-middle">
-
+  <button @click.prevent="deleteMarcacao(this.serviceDefault.Id)" class="marcacoesButtons" style="margin: 0px 20px;width:250px;font-size:14px"><i class="fas fa-close" style="margin: 0px 10px"></i>CANCELAR MARCAÇÃO</button>
 <div class="service-selection">
       <h2 v-if="currentTab == 0" class="popup-title" style="color:black;">Selecione o serviço</h2>
       <h2 v-if="currentTab == 1" class="popup-title" style="color:black;">Selecione o barbeiro</h2>
@@ -181,6 +181,29 @@ return `${this.months[this.currentMonth - 1]} ${this.currentYear}`;
 },
 },
 methods: {
+  async deleteMarcacao(id) {
+      try {
+        // Envia os dados para o servidor usando o método PUT
+        const response = await fetch(`http://localhost:5000/painel/marcacoes/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // Verifica se a requisição foi bem-sucedida
+        if (response.ok) {
+          alert('A sua reserva foi eliminada com sucesso!');
+        } else {
+          // Exibe uma mensagem de erro se a requisição falhar
+          alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
+        }
+      } catch (error) {
+        console.error('Erro ao eliminar reserva:', error);
+        // Exibe uma mensagem de erro se ocorrer um erro inesperado
+        alert('Houve um erro ao eliminar a sua reserva. Por favor, tente novamente mais tarde.');
+      }
+  },
 async fetchMarcacoes() {
 try {
   const response = await fetch('http://localhost:5000/painel/marcacoes');
@@ -465,6 +488,7 @@ selectService(service) {
       alert('Por favor, selecione um serviço, um barbeiro e um horário antes de enviar sua reserva.');
     }
   },
+
 },
 props: {
     // Definindo as propriedades esperadas
