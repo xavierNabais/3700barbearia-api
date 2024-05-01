@@ -2,8 +2,24 @@
 
 
 <div class="popup-section section-middle">
-  <button @click.prevent="deleteMarcacao(this.serviceDefault.Id)" class="marcacoesButtons" style="margin: 0px 20px;width:250px;font-size:14px"><i class="fas fa-close" style="margin: 0px 10px"></i>CANCELAR MARCAÇÃO</button>
-<div class="service-selection">
+  <button @click.prevent="deleteConfirmation()" class="marcacoesButtons" style="margin: 0px 20px;width:250px;font-size:14px"><i class="fas fa-close" style="margin: 0px 10px"></i>CANCELAR MARCAÇÃO</button>
+  
+  
+  <transition name="fade" appear>
+      <p v-if="showConfirmationMessage" class="confirmation-message">
+        Tem a certeza que quer cancelar a marcação?
+        <br>
+        <button class="save-button" @click.prevent="deleteMarcacao(serviceDefault.Id)" style="margin-top:2%;">
+          Sim
+        </button>
+        <button class="save-button" @click.prevent="deleteConfirmation()" style="margin-top:2%;margin-left:20px">
+          Não
+        </button>
+      </p>
+    </transition>
+
+
+  <div class="service-selection">
       <h2 v-if="currentTab == 0" class="popup-title" style="color:black;">Selecione o serviço</h2>
       <h2 v-if="currentTab == 1" class="popup-title" style="color:black;">Selecione o barbeiro</h2>
       <h2 v-if="currentTab == 2" class="popup-title" style="color:black;">Selecione o horário</h2>
@@ -144,8 +160,7 @@ components: {
   },
 data() {
 return {
-loadingGif: false, // Variável para controlar a exibição do GIF
-showPopup: false,
+showConfirmationMessage: false,
 currentTab: 0,
 marcacoes: [],
 selectedService: null,
@@ -166,6 +181,7 @@ selectedTime: "",
 totalPages: 0,
 nextMonthYear: null,
 selectedDay: null,
+showConfirmationPopup: false,
 availableTimes: [
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
   "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
@@ -204,6 +220,13 @@ methods: {
         alert('Houve um erro ao eliminar a sua reserva. Por favor, tente novamente mais tarde.');
       }
   },
+
+  deleteConfirmation() {
+    this.showConfirmationMessage = !this.showConfirmationMessage;
+  },
+
+
+
 async fetchMarcacoes() {
 try {
   const response = await fetch('http://localhost:5000/painel/marcacoes');
@@ -811,5 +834,26 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 .section-middle{
   width:100%;
 }
+
+
+
+
+
+
+
+
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.confirmation-message {
+  margin-left: 20px;
+}
+
 
 </style>

@@ -68,7 +68,19 @@
                 <br>
                 <input type="text" id="username" name="username" v-model="utilizador.Username" style="text-indent: 10px; color:grey">
               </div>
-              <button class="save-button">Guardar</button>
+              <button class="save-button" @click.prevent="saveConfirmation()">Guardar</button>
+              <transition name="fade" appear style="margin:15px 0px;">
+                <p v-if="showConfirmationMessage" class="confirmation-message">
+                  Tem a certeza que quer editar o perfil?
+                  <br>
+                  <button type="submit" class="save-button" style="margin-top:2%;">
+                    Sim
+                  </button>
+                  <button class="save-button" @click.prevent="saveConfirmation()" style="margin-top:2%;margin-left:20px">
+                    Não
+                  </button>
+                </p>
+              </transition>
               <div class="success-message" v-if="perfilAtualizado1">
                 A atualizar perfil...
               </div>  
@@ -109,7 +121,21 @@
                                 <br>
                                 <input type="email" id="email" v-model="email.New">
                               </div>
-                              <button type="submit" class="save-button">Guardar</button>
+                              <button @click.prevent="saveMailConfirmation()" class="save-button">Guardar</button>
+
+                              <transition name="fade" appear style="margin:15px 0px;">
+                                <p v-if="showEmailConfirmationMessage" class="confirmation-message" style="width:300px">
+                                  Tem a certeza que quer alterar o email?
+                                  <br>
+                                  <button type="submit" class="save-button" style="margin-top:2%;">
+                                    Sim
+                                  </button>
+                                  <button class="save-button" @click.prevent="saveMailConfirmation()" style="margin-top:2%;margin-left:20px">
+                                    Não
+                                  </button>
+                                </p>
+                              </transition>
+
                             </div>
                               <div class="success-message" v-if="perfilAtualizado2">
                               A atualizar endereço de email...
@@ -145,7 +171,19 @@
                               <br>
                               <input type="password" id="new_password" v-model="password.New">
                             </div>
-                            <button type="submit" class="save-button">Guardar</button>
+                            <button @click.prevent="savePasswordConfirmation()" class="save-button">Guardar</button>
+                            <transition name="fade" appear style="margin:15px 0px;">
+                                <p v-if="showPasswordConfirmationMessage" class="confirmation-message" style="width:300px">
+                                  Tem a certeza que quer alterar a password?
+                                  <br>
+                                  <button type="submit" class="save-button" style="margin-top:2%;">
+                                    Sim
+                                  </button>
+                                  <button class="save-button" @click.prevent="savePasswordConfirmation()" style="margin-top:2%;margin-left:20px">
+                                    Não
+                                  </button>
+                                </p>
+                              </transition>
                             <div class="success-message" v-if="perfilAtualizado3">
                             A atualizar password...
                             </div>  
@@ -192,6 +230,9 @@
       export default {
         data() {
           return {
+            showConfirmationMessage: false,
+            showEmailConfirmationMessage: false,
+            showPasswordConfirmationMessage: false,
             utilizador: [], // Propriedade para armazenar os dados do form nome, apelido, username
             email: [], // Propriedade para armazenar os dados do form email
             password: [],
@@ -207,6 +248,15 @@
             };
         },
         methods: {
+          saveConfirmation() {
+            this.showConfirmationMessage = !this.showConfirmationMessage;
+          },
+          saveMailConfirmation() {
+            this.showEmailConfirmationMessage = !this.showEmailConfirmationMessage;
+          },
+          savePasswordConfirmation() {
+            this.showPasswordConfirmationMessage = !this.showPasswordConfirmationMessage;
+          },
                 async submitForm1() {
                   try {
                     const userId = localStorage.getItem('userId');
