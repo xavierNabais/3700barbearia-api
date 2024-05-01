@@ -14,7 +14,8 @@
     "vue": "^3.2.13",
     "vue-cal": "^4.8.1",
     "vue-flatpickr-component": "^11.0.5",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue3-google-login": "^2.0.26"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

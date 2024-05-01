@@ -26,12 +26,18 @@
               <div class="info-description">
                 Por favor, insira suas credenciais para iniciar sessão e acessar sua conta.
               </div>
+
+              <div style="margin: 30px 0px;">
+
+                <GoogleLogin :callback="googleCallback" prompt/>
+            </div>
+
             </div>
             <form id="loginForm" @submit.prevent="login">
             <div class="form-container">
             <div class="input-group">
                 <div>
-                  <label for="nome" class="login-label">Nome de utilizador ou email</label>
+                  <label for="nome" class="login-label">Endereço de Email</label>
                   <br>
                   <input type="email" id="email" name="email" v-model="email" class="login">
                 </div>
@@ -44,6 +50,7 @@
             </div>
             <a href=""><p style="font-size:15px; text-decoration:underline;color:#F2B709">Perdeu a senha?</p></a>
             <button type="submit" class="login-button">INICIAR SESSÃO</button>
+
               <div class="success-message" v-if="login_success">
                 A iniciar sessão...
               </div>
@@ -113,7 +120,8 @@
       <script>
       import Header from '../../components/Header.vue';
       import Footer from '../../components/Footer.vue';
-
+      import { decodeCredential } from 'vue3-google-login';
+      
       export default {
         components: {
           Header,
@@ -133,6 +141,42 @@
           };
         },
         methods: {
+          async googleCallback(response) {
+            // Obtém o token de acesso a partir do objeto de resposta
+            const accessData = decodeCredential(response.credential);
+
+
+              try {
+              const response = await fetch('http://localhost:5000/login/google', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  accessData
+                })
+              });
+              const data = await response.json();
+              
+              // Verifique se o login foi bem-sucedido
+              if (response.ok) {
+                console.log(data);
+                localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('userName', data.userName);
+                localStorage.setItem('type', data.type);
+                this.login_error = false;
+                this.login_success = true;
+                setTimeout(() => {
+                    this.login_error = false;
+                    window.location.href= '/';
+                }, 1500);
+              } else {
+                this.login_error = true;
+              }
+            } catch (error) {
+              console.error('Erro ao efetuar login:', error);
+            }
+          },
           async login() {
             try {
               const response = await fetch('http://localhost:5000/login', {

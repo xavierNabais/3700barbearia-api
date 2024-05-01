@@ -36,3 +36,29 @@ exports.getUser = (req, res) => {
         
     });
 };
+
+//Controller Verificação Login Google
+exports.getUserGoogle = (req, res) => {
+    LoginModel.findUserGoogle(req, (error, dados) => {
+        if (error) {
+                res.status(500).send({
+                    message: error.message || "Ocorreu um erro ao tentar aceder aos dados do utilizador"
+                });
+        }   else {
+            if (dados && dados.length > 0) {
+                req.session.userId = dados[0].Id;
+                res.status(200).send({
+                    message: "Credenciais válidas",
+                    userId: dados[0].Id,
+                    userName: dados[0].Nome,
+                    type: dados[0].Cargo
+                });
+            } else {
+                res.status(401).send({
+                    message: "Credenciais inválidas"
+                });
+            }
+        }
+        
+    });
+};
