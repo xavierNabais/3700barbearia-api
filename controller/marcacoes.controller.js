@@ -426,18 +426,40 @@ exports.create = (req, res) => {
 
 
 
-//Controller Atualizar Marcação
 exports.update = (req, res) => {
-    marcacoesModel.update(req, (error, dados) => {
-        if (error)
-        res.status(500).send({
-            message:
-            error.message || "Ocorreu um erro ao tentar atualizar os dados da marcação"
-        });
-        else res.status(200).json({ message: 'Marcação atualizda com sucesso!' });
+    const idMarcacao = req.params.id;
+    const newData = req.body.dateTime; // Supondo que a nova data esteja no corpo da requisição
+    const idBarbeiro = req.body.barber; // Supondo que o ID do barbeiro esteja no corpo da requisição
+    // Verificar se já existe uma marcação com a mesma data e hora para o mesmo barbeiro
+    marcacoesModel.getByDateAndBarber(newData, idBarbeiro, (error, marcacoes) => {
+        if (error) {
+            console.log('1');
+            return res.status(500).send({
+                message: error.message || "Ocorreu um erro ao verificar a existência de marcações."
+            });
+        }
 
+        if (marcacoes.length > 0) {
+            return res.status(400).send({
+                message: "Já existe uma marcação para este barbeiro nesta data e hora."
+            });
+        }
+
+        // Se não houver uma marcação existente para essa data e hora, proceda com o update
+        marcacoesModel.update(req, (error, dados) => {
+            if (error) {
+                console.log('3');
+                res.status(500).send({
+                    message: error.message || "Ocorreu um erro ao tentar atualizar os dados da marcação."
+                });
+            } else {
+                res.status(200).json({ message: 'Marcação atualizada com sucesso!' });
+            }
+        });
     });
 };
+
+
 
 
 //Controller Eliminar Marcação
