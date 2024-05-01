@@ -27,6 +27,7 @@
           <h2 v-if="currentTab == 2" class="popup-title" style="color:black;">Selecione o horário</h2>
           <h2 v-if="currentTab == 3" class="popup-title" style="color:black;">Concluir Marcação</h2>
           <h2 v-if="currentTab == 4" class="popup-title" style="color:black;">Autenticação</h2>
+          <h2 v-if="showSuccess" class="popup-title" style="color:black;">MARCAÇÃO CONCLUÍDA</h2>
 
 
           <div class="button-scroll-container" v-if="currentTab == 0">
@@ -109,14 +110,18 @@
 
       <button class="pagination-button nextB" @click.prevent="nextPage">&gt;</button>
     </div>
+
     <!-- Exibe as horas disponíveis para o dia selecionado -->
     <div class="available-times">
-      <div class="hour-row">
+      <div v-if="dayUnavailable">
+        <p style="color:black;margin-top:20%;text-align:center">Dia indisponível</p>
+      </div>
+      <div v-else class="hour-row">
         <button v-for="time in availableTimes" :key="time.time" class="hour-button btn" 
           :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
           @click.prevent="selectDateTime(time.time)">
          {{ time.time }}
-  </button>
+        </button>
       </div>
     </div>
   </div>
@@ -190,6 +195,26 @@ OU
   </div>
 
     </form>
+
+
+    <div class="tab" v-show="showSuccess" style="text-align:center;color:black">
+      <h2 class="popup-title">MARCAÇÃO CONCLUÍDA</h2>
+      <div class="service-info">
+        <!-- Círculo pontilhado com ícone dentro -->
+        <div class="circle">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <p style="font-weight: bold;">Sucesso!</p>
+        <p>Obrigado pela sua marcação.</p>
+        <p>Iremos enviar um email de confirmação a confirmar a sua reserva.</p>
+        <button class="btn-close" onclick="window.location.href = '/'">FECHAR</button>
+      </div>
+    </div>
+
+
+
+
+
   </div>
   <div class="button-container" style="margin-top:auto">
     <button class="button left " @click="prevStep">- Anterior</button>
@@ -255,6 +280,8 @@ components: {
   },
 data() {
 return {
+dayUnavailable: false,
+showSuccess: false,
 disabledNext: false,
 email: '',
 password: '',
@@ -469,6 +496,18 @@ updateDaysInMonth() {
 
 
 async selectDay(day) {
+  const currentDate = new Date();
+  const selectedDate = new Date(this.currentYear, day.month, day.day+1);
+
+  // Verifica se o dia selecionado é anterior ao dia atual
+  if (selectedDate < currentDate) {
+    // Esconde os botões das horas e mostra o parágrafo indicando que o dia é impossível
+    this.dayUnavailable = true;
+  }
+  else{
+    this.dayUnavailable = false;
+  }
+
   this.selectedTime = "",
   this.loadingGif = true;
   await new Promise(resolve => setTimeout(resolve, 500));
@@ -539,12 +578,9 @@ gotoStep(step) {
 },
 openPopup() {
 this.showPopup = true;
-document.documentElement.classList.add('no-scroll');
 },
 closePopup() {
 this.showPopup = false;
-document.html.classList.remove('no-scroll');
-this.currentTab = 0;
 },
 nextStep() {
   if (this.currentTab < 4) {
@@ -651,7 +687,8 @@ selectService(service) {
           this.selectedBarber = null;
           this.selectedDateTime = null;
           // Exibe uma mensagem de sucesso para o usuário
-          alert('A sua reserva foi enviada com sucesso!');
+          this.currentTab = 5;
+          this.showSuccess = true;
         } else {
           // Exibe uma mensagem de erro se a requisição falhar
           alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
@@ -943,5 +980,47 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
     margin: 0 10px; /* Ajuste a margem conforme necessário */
     width: 10vw;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.circle {
+  width: 100px; /* Defina o tamanho do círculo conforme necessário */
+  height: 100px; /* Defina o tamanho do círculo conforme necessário */
+  border: 2px dotted black; /* Estilo de borda pontilhada */
+  border-radius: 50%; /* Formato de círculo */
+  position: relative; /* Necessário para posicionamento absoluto do ícone */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin:auto;
+}
+
+.circle i {
+  position: absolute; /* Posicionamento absoluto para o ícone */
+  font-size: 40px; /* Tamanho do ícone conforme necessário */
+  color: #F4B604;
+}
+
+
+.btn-close {
+  background-color: #333; /* Cor de fundo do botão */
+  color: #fff; /* Cor do texto do botão */
+  border: none; /* Remover borda */
+  padding: 10px 20px; /* Espaçamento interno */
+  font-size: 16px; /* Tamanho da fonte */
+  cursor: pointer; /* Alterar cursor ao passar por cima */
+  border-radius: 5px; /* Formato de borda */
+}
+
 
 </style>
