@@ -152,9 +152,8 @@
 
 <div v-show="!showRegistrationForm">    
     <!-- Botões de login social -->
-    <button class="social-login">
-      <i class="fab fa-facebook" style="color:#1D1D1D;font-size:24px;float:left;"></i> <span style="vertical-align: sub;font-size:16px">Continuar com Facebook</span>
-    </button>
+    <GoogleLogin :callback="googleCallback" prompt/>
+
     <button class="social-login">
       <i class="fab fa-google" style="color:#1D1D1D;font-size:24px;float:left;"></i><span style="vertical-align: sub;font-size:16px">Continuar com Google</span>
     </button>
@@ -272,6 +271,7 @@ OU
 
 <script>
 import Loading from '../components/loading.vue';
+import { decodeCredential } from 'vue3-google-login';
 
 export default {
 name: 'PopupModal',
@@ -372,7 +372,35 @@ try {
   console.error('Erro ao buscar os dados dos barbeiros:', error);
 }
 },
+async googleCallback(response) {
+            // Obtém o token de acesso a partir do objeto de resposta
+            const accessData = decodeCredential(response.credential);
 
+
+              try {
+              const response = await fetch('http://localhost:5000/login/google', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  accessData
+                })
+              });              
+              // Verifique se o login foi bem-sucedido
+              if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('userName', data.userName);
+                localStorage.setItem('type', data.type);
+                this.currentTab = 3;
+              } else {
+                console.error('Erro ao efetuar login:', response.status);
+              }
+            } catch (error) {
+              console.error('Erro ao efetuar login:', error);
+            }
+},
 async login() {
   try {
     const dataToSend = {
@@ -613,6 +641,9 @@ nextStep() {
   }
 },
 prevStep() {
+  if (this.showSuccess === true) {
+    this.disabledNext = true;
+  }
   this.disabledNext = false;
   if (this.currentTab > 0) {
     if (this.currentTab === 3) {
