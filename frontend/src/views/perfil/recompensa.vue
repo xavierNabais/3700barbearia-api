@@ -8,7 +8,63 @@
       </div>
     </div>
 
-    <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;">
+    <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;" class="mobile">
+      
+      <div class="single-title">
+        <p>Para Agendar ou Cancelar Agendamentos, clique no botão abaixo.</p>
+        <a href="/perfil/marcacoes"><button style="cursor: pointer;">VER MARCAÇÕES</button></a>
+      </div>
+
+        <div class="profile-section-left" style="padding:10% 0%">
+          <div class="item-container">
+
+            <div class="item">
+              <a href="/perfil" style="color:Black">Editar Perfil</a>
+            </div>
+              <hr class="divider">
+            <div class="item">
+              <a href="/perfil/marcacoes" style="color:Black">Marcações</a>
+            </div>
+              <hr class="divider">
+            <div class="item bold">
+              Recompensa
+            </div>
+            <hr class="divider">
+          </div>
+
+        </div>
+
+        <div style="text-align:center">
+          <div class="personal-info">
+            <div class="info-header">
+              Recompensa de fidelização
+            </div>
+            <hr class="small-divider" style="margin:auto">
+            <div class="info-description" style="margin-top:5%">
+              Participe do nosso programa de fidelidade e seja recompensado! Após realizar 10 serviços conosco, você ganhará um serviço gratuito como forma de agradecimento pela sua lealdade. Aproveite esta oportunidade para desfrutar de um tratamento extra e valorizar ainda mais a sua preferência por nossos serviços.
+            </div>
+          </div>
+
+          <div class="form-container" style="width: 100%; margin-bottom: 5%;">
+            <!-- Primeiras imagens com borda amarela -->
+            <div class="first-five">
+              <img :src="require('@/assets/images/about_logo.jpg')"
+                  class="image-border gold-border"
+                  :style="{'margin-bottom':'5%'}"
+                  style="width:10%;">
+            </div>
+          </div>
+
+          <button class="profile-anterior" :class="{ 'disabled': utilizador && utilizador.length > 0 && utilizador[0].Pontos < 10 }">
+            <a href="" v-if="utilizador && utilizador.length > 0 && utilizador[0].Pontos < 10" style="pointer-events: none"><i class='fas fa-lock' style="margin-right:5%"></i> MARCAÇÃO GRATUITA {{ utilizador && utilizador.length > 0 ? utilizador[0].Pontos : 0 }}/10 </a>
+            <a v-if="utilizador && utilizador.length > 0 && utilizador[0].Pontos == 10"> MARCAÇÃO GRATUITA</a>
+
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;" class="desktop">
       
       <div class="single-title">
         <p>Para Agendar ou Cancelar Agendamentos, clique no botão abaixo.</p>
@@ -60,7 +116,6 @@
 
           </button>
         </div>
-      </div>
     </div>
 
     <Footer />

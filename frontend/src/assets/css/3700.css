@@ -1503,5 +1503,34 @@ button.savePanel:hover {
 }
 
 
+.mobile{
+  display:none;
+}
 
+@media (max-width: 768px) {
 
+  .desktop{
+    display:none;
+  }
+
+  .mobile{
+    display:block;
+  }
+
+  .footer{
+    display:none;
+  }
+
+  .popup {
+  width:90vw;
+  }
+
+  .service-selection{
+    padding: 0;
+  }
+
+  .close{
+    color:black;
+  }
+
+}

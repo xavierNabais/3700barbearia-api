@@ -11,7 +11,7 @@
 
 
 
-    <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;">
+    <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;" class="desktop">
       
 
 
@@ -98,11 +98,6 @@
         </div>
 
 
-
-
-
-
-
       </div>
 
 
@@ -110,7 +105,94 @@
 
     </div>
 
+    <div style="text-align:center;background-color: white; padding-bottom: 10%;" class="mobile">
+      
 
+
+
+      <div style="margin-top: 0;padding:5%">
+        <div>
+            <div class="personal-info">
+              <div class="info-header login">
+                INICIAR SESSÃO
+              </div>
+              <hr class="small-divider" style="margin:auto">
+              <div class="info-description" style="margin-top:5%">
+                Por favor, insira suas credenciais para iniciar sessão e acessar sua conta.
+              </div>
+
+              <div style="margin: 30px 0px;">
+
+                <GoogleLogin :callback="googleCallback" prompt/>
+            </div>
+
+            </div>
+            <form id="loginForm" @submit.prevent="login">
+            <div>
+            <div class="input-group">
+                <div>
+                  <label for="nome" class="login-label">Endereço de Email</label>
+                  <br>
+                  <input type="email" id="email" name="email" v-model="email" class="login">
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="username" class="login-label">Password</label>
+                <br>
+                <input type="password" id="password" name="password" v-model="password" class="login">
+              </div>
+            </div>
+            <a href=""><p style="font-size:15px; text-decoration:underline;color:#F2B709">Perdeu a senha?</p></a>
+            <button type="submit" class="login-button">INICIAR SESSÃO</button>
+
+              <div class="success-message" v-if="login_success">
+                A iniciar sessão...
+              </div>
+              <div class="success-message" v-if="login_error">
+                Email ou password incorretos.
+              </div>
+            </form>
+        </div>
+      </div>
+
+      <div style="margin-top: 0;padding:5%">
+            <div class="personal-info">
+              <div class="info-header login">
+                CRIAR NOVA CONTA
+              </div>
+              <hr class="small-divider" style="margin:auto">
+              <div class="info-description" style="margin-top:5%">
+                Para criar uma nova conta, preencha o formulário com suas informações pessoais e escolha um nome de usuário e senha únicos.
+              </div>
+            </div>
+            <form id="loginForm" @submit.prevent="registo">
+            <div>
+            <div class="input-group">
+                <div>
+                  <label for="email" class="login-label">Endereço de email</label>
+                  <br>
+                  <input type="text" id="email" class="login" v-model="r_email"> 
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="password" class="login-label">Password</label>
+                <br>
+                <input type="password" id="password" class="login" v-model="r_password">
+              </div>
+            </div>
+            <p>Os seus dados pessoais serão usados para apoiar a sua experiência no site 3700barbershop.pt
+            Serão utilizados para gerir o acesso à sua conta e outros fins descritos na nossa política de privacidade</p>
+            <button type="submit" class="login-button">REGISTAR NOVA CONTA</button>
+            <div class="success-message" v-if="registo_success">
+                A criar conta...
+            </div>
+            <div class="success-message" v-if="registo_error">
+                Endereço de email existente!
+            </div>
+          </form>
+        </div>
+
+    </div>
 
     
     <Footer />

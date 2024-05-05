@@ -1,5 +1,5 @@
 <template>
-        <section class="barbearia">
+        <section class="barbearia desktop">
             <p style="font-size: 32px; color: white; font-weight: bold;">A BARBEARIA</p>
             <div class="separador">
                 <img src="../../assets/images/bigode_line.png" alt="Bigode" style="width:10%;">
@@ -43,6 +43,72 @@
 
 
         </section>
+
+
+
+
+
+
+
+
+        <section class="barbearia mobile">
+            <p style="font-size: 32px; color: white; font-weight: bold;">A BARBEARIA</p>
+            <div class="separador">
+                <img src="../../assets/images/bigode_line.png" alt="Bigode" style="width:50%;">
+            </div>
+        <div class="conteudo" style="width:80%">
+            <div class="conteudo-texto" style="padding:0">
+            <p style="font-size: 16px;color: white;line-height: 35px;">
+                Bem-vindo à Barbearia [Nome] Localizada no coração da cidade, a Barbearia [Nome] oferece serviços de barbearia de alta qualidade para homens que procuram um corte de cabelo e barba impecáveis. Com uma equipe de barbeiros experientes e apaixonados, estamos comprometidos em proporcionar uma experiência de cuidado pessoal excepcional a cada cliente.
+            </p>
+                <div style="margin: 50px 0px 10px 0px"><img src="../../assets/images/aboutus.jpg" style="width:100%;border: 1px solid white;"></div>
+                <div style="margin: 10px 0px"><img src="../../assets/images/aboutus.jpg" style="width:100%;border: 1px solid white;"></div>
+            </div>
+        </div>
+
+        <div class="container" style="height:auto;padding:0% 10%">
+            <div class="quadrado" style="height:150px">
+            <div class="centro">
+                <img class="logotipo" src="../../assets/images/marcas/gilette.png" alt="Logotipo">
+            </div>
+            </div>
+            <div class="quadrado" style="height:150px">
+            <div class="centro">
+                <img class="logotipo" src="../../assets/images/marcas/sa.png" alt="Logotipo">
+            </div>
+            </div>
+        </div>
+        <div class="container" style="height:auto;padding:0% 10%">
+            <div class="quadrado" style="height:150px">
+            <div class="centro">
+                <img class="logotipo" src="../../assets/images/marcas/amway.png" alt="Logotipo">
+            </div>
+            </div>
+            <div class="quadrado" style="height:150px">
+            <div class="centro">
+                <img class="logotipo" src="../../assets/images/marcas/keri.png" alt="Logotipo">
+            </div>
+            </div>
+        </div>
+
+
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </template>
 
 <script>
@@ -72,8 +138,6 @@ name: 'SectionBarbearia',
   align-items: center;
   height: 430px; /* Altura da div */
   padding:5% 0;
-  background:linear-gradient(rgba(0, 0, 0, 0.85)), url('../../assets/images/contactos.png');
-  background-attachment: fixed;
 }
 
 .logotipo {

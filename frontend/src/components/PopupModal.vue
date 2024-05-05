@@ -2,7 +2,7 @@
 
 
 
-  <div class="popup-section section-left" style="padding:20px">
+  <div class="popup-section section-left desktop" style="padding:20px">
   <!-- Indicador de progresso -->
   <div class="progress-indicator">
       <div class="progress-ball filled step"></div>
@@ -19,7 +19,219 @@
   <!-- Conteúdo da Seção 1 -->
   </div>
 
-  <div class="popup-section section-middle">
+
+
+
+
+  <div class="popup-section section-middle mobile" style="overflow-x:hidden">
+
+<div class="service-selection">
+      <h2 v-if="currentTab == 0" class="popup-title" style="color:black;padding:20px">Selecione o serviço</h2>
+      <h2 v-if="currentTab == 1" class="popup-title" style="color:black;padding:20px">Selecione o barbeiro</h2>
+      <h2 v-if="currentTab == 2" class="popup-title" style="color:black;padding:20px">Selecione o horário</h2>
+      <h2 v-if="currentTab == 3" class="popup-title" style="color:black;padding:20px">Concluir Marcação</h2>
+      <h2 v-if="currentTab == 4" class="popup-title" style="color:black;padding:20px">Autenticação</h2>
+      <h2 v-if="showSuccess" class="popup-title" style="color:black;padding:20px">MARCAÇÃO CONCLUÍDA</h2>
+
+
+      <div class="button-scroll-container" style="text-align:left;padding:0% 2%" v-if="currentTab == 0">
+        <button style="margin: 2% 1%" class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Em destaque' }" @click="filterServicosPorCategoria('Em destaque')">Em destaque</button>
+        <button style="margin: 2% 1%" class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Adicionais' }" @click="filterServicosPorCategoria('Adicionais')">Adicionais</button>
+        <button style="margin: 2% 1%" class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Trabalhos técnicos' }" @click="filterServicosPorCategoria('Trabalhos técnicos')">Trabalhos técnicos</button>
+        <button style="margin: 2% 1%" class="highlight-button" :class="{ filterActive: categoriaAtiva === 'Combo' }" @click="filterServicosPorCategoria('Combo')">Combo</button>
+      </div>
+</div>
+
+
+
+<div class="padding-container">
+<form>
+
+
+<div class="tab" v-show="currentTab === 0">
+
+  <div class="service-info" style="text-align:left">
+
+    <div v-for="dados in servicos" :key="dados.id" @click="selectService(dados)" :class="{ 'selected': selectedService === dados }">
+        <a href="#">
+        <div class="btn" style="font-size:14px">
+          {{ dados.Nome }} <span style="float: right;font-size: 12px;text-align:center">A partir de:<br> <span>{{ dados.Preco }}€</span></span>
+        </div>
+        </a>
+    </div>
+    
+    </div>
+</div>
+
+
+    <div class="tab" v-show="currentTab === 1">
+
+    <h2 class="popup-title">Selecione o profissional</h2>
+        <div class="service-info">
+
+          <div v-for="dados in barbeiros" :key="dados.id" @click="selectBarber(dados)" :class="{ 'selected': selectedBarber === dados }">
+            <a href="#">
+                <div class="btn" style="display: flex; align-items: center;">
+                    <img src="../assets/images/about_logo.jpg" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;" />
+                    <span style="font-size: 18px;">{{ dados.Nome }}</span>
+                    <span style="font-size: 12px;flex:2;text-align:right">Especialização: <span>{{ dados.Especializacao }}</span></span>
+                </div>
+            </a>
+        </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="tab" v-show="currentTab === 2">
+<h2 class="popup-title" style="color:black;">Selecione dia e a hora</h2>
+<div class="loading-container" v-if="loadingGif">
+<Loading />
+</div>
+<div class="service-info" style="overflow-x:hidden">
+<div class="date-container">
+  <!-- Exibe o mês e o ano -->
+  <p style="color:black; border-bottom:1px solid #F2B709;">{{ monthYear }}</p>
+  <p style="color:black; margin-left: auto;border-bottom:1px solid #F2B709;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
+</div>
+<div class="pagination-wrapper">
+  <!-- Botões de navegação do calendário -->
+  <button class="pagination-button prevB" @click.prevent="prevPage">&lt;</button>
+  <div class="day-pagination">
+    <div class="day-buttons" style="gap:5px">
+      <button v-for="day in daysInMonth" :key="day.day" @click.prevent="selectDay(day)"
+        :class="{ 'dayActive': selectedDay === day.day }">
+        {{ day.day }}
+      </button>
+    </div>
+    <div class="day-of-week" style="gap:5px">
+      <span v-for="(day, index) in daysInMonth" :key="index" class="day-of-week-item">{{ getDayOfWeek(day.month, day.day) }}</span>
+    </div>
+  </div>
+
+
+
+  <button class="pagination-button nextB" @click.prevent="nextPage">&gt;</button>
+</div>
+
+<!-- Exibe as horas disponíveis para o dia selecionado -->
+<div class="available-times">
+  <div v-if="dayUnavailable">
+    <p style="color:black;margin-top:20%;text-align:center">Dia indisponível</p>
+  </div>
+  <div v-else class="hour-row">
+    <button v-for="time in availableTimes" :key="time.time" class="hour-button btn" 
+      :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
+      @click.prevent="selectDateTime(time.time)">
+     {{ time.time }}
+    </button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="tab" v-show="currentTab === 3">
+  <h2 class="popup-title" style="color:black;">BARBEARIA 3700</h2>
+  <div class="service-info concluir">
+      <img src="../assets/images/about_logo.jpg" style="width:60%;">
+      <p style="color:Black;">5.0 ★ ★ ★ ★ ★ (17)</p>
+      <p style="color:Black;">R. Gago Coutinho 9 R/C, 3700-261 São João da Madeira</p>
+      <br>
+      <p style="color:Black;">FORMA DE PAGAMENTO</p>
+      <button class="pay">PAGAR NO ESTABELECIMENTO</button>
+      <br>
+      <p style="color:Black;">Observações sobre a marcação</p>
+        <textarea style="width:65vw;height:5vh" v-model="selectedNotas"></textarea>
+  </div>
+  <button class="submitAgenda" @click.prevent="submitBooking">ENVIAR RESERVA</button>
+</div>
+
+<div class="tab" v-show="currentTab === 4" style="padding:10px;color:black;">
+
+
+<h2 class="popup-title" style="color:black;font-size:16px;  ">Entre ou registe-se</h2>
+<p style="font-size:14px">Entre ou cadastre-se para concluir a sua reserva</p>
+
+<div v-show="!showRegistrationForm">    
+<!-- Botões de login social -->
+<GoogleLogin :callback="googleCallback" prompt/>
+
+<button class="social-login">
+  <i class="fab fa-google" style="color:#1D1D1D;font-size:24px;float:left;"></i><span style="vertical-align: sub;font-size:16px">Continuar com Google</span>
+</button>
+
+<div class="horizontal-line-container">
+<hr>
+</div>
+OU
+<div class="horizontal-line-container">
+<hr>
+</div>
+
+
+<!-- Formulário de login -->
+<form @submit.prevent="login()">
+  <input type="email" placeholder="Nome de utilizador ou email" v-model="email" id="email" style="border: 1px solid black;width:100%;padding: 0px 10px">
+  <br>
+  <input type="password" placeholder="Password" v-model="password" id="password" style="border: 1px solid black;width:100%;padding: 0px 10px">
+  <br>
+  <button type="submit" class="submitAgenda" style="width:100%;">CONTINUAR</button>
+  <p style="text-align:center">Não tem conta? <a href="#" style="color: #F4B604;" @click="showRegistrationForm = true">Registe-se</a></p>
+</form>
+
+</div>
+
+<div v-show="showRegistrationForm">
+<form @submit.prevent="registo()">
+  <input type="email" placeholder="Email" v-model="r_email" id="email" style="border: 1px solid black;width:100%;padding: 0px 10px">
+  <br>
+  <input type="password" placeholder="Password" v-model="r_password" id="password" style="border: 1px solid black;width:100%;padding: 0px 10px">
+  <br>
+  <button type="submit" class="submitAgenda" style="width:100%;">REGISTAR</button>
+  <p style="text-align:center">Já tem uma conta? <a href="#" style="color: #F4B604;" @click="showRegistrationForm = false">Faça login</a></p>
+</form>
+</div>
+
+
+</div>
+
+</form>
+
+
+<div class="tab" v-show="showSuccess" style="text-align:center;color:black">
+  <h2 class="popup-title">MARCAÇÃO CONCLUÍDA</h2>
+  <div class="service-info">
+    <!-- Círculo pontilhado com ícone dentro -->
+    <div class="circle">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <p style="font-weight: bold;">Sucesso!</p>
+    <p>Obrigado pela sua marcação.</p>
+    <p>Iremos enviar um email de confirmação a confirmar a sua reserva.</p>
+    <button class="btn-close" onclick="window.location.href = '/'">FECHAR</button>
+  </div>
+</div>
+
+
+
+
+
+</div>
+<div class="button-container" style="margin-top:auto" v-show="!showSuccess">
+<button class="button left " style="margin: 0px 25px" @click="prevStep">- Anterior</button>
+<button class="button right " @click.prevent="nextStep(1)" :disabled="disabledNext">Próximo -></button>
+</div>
+</div>
+
+
+
+
+
+
+
+
+  <div class="popup-section section-middle desktop">
 
     <div class="service-selection">
           <h2 v-if="currentTab == 0" class="popup-title" style="color:black;">Selecione o serviço</h2>
@@ -215,13 +427,13 @@ OU
 
 
   </div>
-  <div class="button-container" style="margin-top:auto">
+  <div class="button-container" style="margin-top:auto" v-show="!showSuccess">
     <button class="button left " @click="prevStep">- Anterior</button>
     <button class="button right " @click.prevent="nextStep(1)" :disabled="disabledNext">Próximo -></button>
   </div>
   </div>
 
-  <div class="popup-section section-right" style="padding:20px">
+  <div class="popup-section section-right desktop" style="padding:20px">
   <div class="vertical-rectangle"></div>
   <h2 class="popup-title third">
     RESUMO

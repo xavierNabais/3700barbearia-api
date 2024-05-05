@@ -1,7 +1,7 @@
 <template>
 
 
-<section class="servico-bloco">
+<section class="servico-bloco desktop">
 
 <p style="font-size: 32px; color: white; font-weight: bold;">SERVIÇOS</p>
 <div class="separador">
@@ -33,6 +33,51 @@
 </div>
 </div>
 </section>
+
+
+
+
+
+<section class="servico-bloco mobile" style="height:auto">
+
+<p style="font-size: 32px; color: white; font-weight: bold;">SERVIÇOS</p>
+<div class="separador">
+                <img src="../../assets/images/bigode_line.png" alt="Bigode" style="width:50%;">
+            </div>
+
+
+<div class="servico">
+
+    <div class="servicesLeft" style="flex:1;">
+        <div class="blocks" style="justify-content:center;padding-bottom:10%">
+
+            <div v-for="dados in servicos" :key="dados.id" class="bloco-servico" style="text-align:center">
+                <div style="padding:10%">
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">{{ dados.Nome }}</h3>
+                    <p style="font-size:16px;line-height: 190%">{{ dados.Descricao }}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     </template>
     

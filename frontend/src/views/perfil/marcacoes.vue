@@ -8,7 +8,79 @@
     </div>
   </div>
 
-  <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;">
+
+
+  <div style="width: 100%; height: auto; background-color: white; padding-bottom: 10%;" class="mobile">
+    
+    <div class="single-title">
+      <p>Para Agendar ou Cancelar Agendamentos, clique no botão abaixo.</p>
+      <a href="/perfil/marcacoes"><button style="cursor: pointer;">VER MARCAÇÕES</button></a>
+    </div>
+
+
+      <div class="profile-section-left" style="padding:10% 0%">
+          <div class="item-container">
+
+            <div class="item">
+              <a href="/perfil" style="color:Black">Editar Perfil</a>
+            </div>
+              <hr class="divider">
+            <div class="item bold">
+              Marcações
+            </div>
+              <hr class="divider">
+            <div class="item">
+              <a href="/perfil/recompensa" style="color:Black">Recompensa</a>
+            </div>
+            <hr class="divider">
+          </div>
+
+        </div>
+
+      <div>
+          <div class="personal-info">
+            <button class="marcacoesButtons" :class="{ 'active': isAnterioresActive }" @click="buscarAnteriores">ANTERIORES</button>
+            <button class="marcacoesButtons" :class="{ 'active': !isAnterioresActive }" @click="buscarProximas" style="margin-left:5%">PRÓXIMAS</button>
+          </div>
+        <div  style="overflow-y:auto;height:fit-content;">
+          <div class="ag-courses_item" v-for="(dados, index) in marcacoes" :key="index" :class="{ 'no-hover': infoAberto === index }">
+            <a @click.prevent="toggleInfo(index)" href="#" class="ag-courses-item_link-marcacoes">
+              <div class="marcacao-divider">
+                <div class="marcacao-img" style="flex:1;margin-right: 5%;">
+                  <img src="../../assets/images/about_logo.jpg" style="width: 100%;">
+                </div>
+                <div class="marcacao-details" style="flex:4">
+                  <div class="marcacao-title">
+                    {{ dados.nomeServico }}
+                  </div>
+                  <div class="marcacao-desc">
+                    Barbeiro: <span style="font-weight: bold;">{{dados.nomeBarbeiro}}</span>
+                  </div>
+                  <div class="marcacao-time">
+                    {{ dados.Data }}
+                  </div>
+                  <div class="marcacao-price">
+                    {{  dados.precoServico }}€
+                  </div>
+                </div>
+                <div class="icon-container">
+                  <i class="fas fa-info-circle" @click.prevent="toggleInfo(index)"></i>
+                </div>
+              </div>
+            </a>
+            <div v-if="dados.mostrarInfo" class="additional-info">
+              <Info :serviceDefault="dados"/>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+  <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;" class="desktop">
     
     <div class="single-title">
       <p>Para Agendar ou Cancelar Agendamentos, clique no botão abaixo.</p>

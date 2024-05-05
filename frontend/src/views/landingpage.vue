@@ -6,35 +6,75 @@
 
 <Header />
 
-<div class="section">
-  <div class="content">
-    <div class="text">
-      <img src="../assets/images/logo.png" style="width: 50%;">
-      <p><span style="font-size: 24px;color: #F2B802;">Fresh & Clean</span></p>
-      <p><span style="font-weight: bold;font-size: 48px;">BARBEARIA 3700</span></p>
-      <p><span style="font-size: 24px; ">Descobre a Barberia 3700, o novo espaço de cortes de cabelo e barbas feito à medida para jovens da cidade. Ambiente moderno, estilo autêntico.</span></p>
-      <p><span style="font-size: 24px; font-weight: bold;">Marca já o teu horário!</span></p>
-      <button class="botao" @click="openPopup">AGENDA O TEU CORTE</button>
 
-<!-- Elemento de fundo escuro -->
-<div v-if="showPopup" class="modal-background" @click="closePopup"></div>
 
-<!-- Popup -->
-<div v-if="showPopup" class="popup">
-  <span class="close" @click="closePopup">&times;</span>
-  <Popup />
+<div class="desktop">
+    <div class="section">
+      <div class="content">
+        <div class="text">
+
+            <img src="../assets/images/logo.png" style="width: 50%;">
+            <p><span style="font-size: 24px;color: #F2B802;">Fresh & Clean</span></p>
+            <p><span style="font-weight: bold;font-size: 48px;">BARBEARIA 3700</span></p>
+            <p><span style="font-size: 24px; ">Descobre a Barberia 3700, o novo espaço de cortes de cabelo e barbas feito à medida para jovens da cidade. Ambiente moderno, estilo autêntico.</span></p>
+            <p><span style="font-size: 24px; font-weight: bold;">Marca já o teu horário!</span></p>
+            <button class="botao" @click="openPopup">AGENDA O TEU CORTE</button>
+
+    <!-- Elemento de fundo escuro -->
+    <div v-if="showPopup" class="modal-background" @click="closePopup"></div>
+
+    <!-- Popup -->
+    <div v-if="showPopup" class="popup">
+      <span class="close" @click="closePopup">&times;</span>
+      <Popup />
+    </div>
+
+        </div>
+        <div class="image">
+          <img src="../assets/images/main.jpg" alt="Entry Photo" style="width: 478px;">
+        </div>
+      </div>
+    </div>
+
+    <div class="fixed-button" :style="{ right: buttonHover ? '0' : '' }" @mouseover="buttonHover = true" @mouseleave="buttonHover = false">
+            <button @click="openPopup"> &#8592; AGENDAR CORTE</button>
+    </div>
 </div>
 
+
+
+<div class="mobile" style="width:100vw">
+        <div class="image" style="padding:20px">
+          <img src="../assets/images/main.jpg" alt="Entry Photo" style="width: 100%;margin-top: 25%;">
+        </div>
+        <div class="text" style="text-align: center;padding: 20px;color: white;">
+
+            <img src="../assets/images/logo.png" style="width: 50%;">
+            <p><span style="font-size: 24px;color: #F2B802;">Fresh & Clean</span></p>
+            <p><span style="font-weight: bold;font-size: 36px;">BARBEARIA 3700</span></p>
+            <p><span style="font-size: 16px;">Descobre a Barberia 3700, o novo espaço de cortes de cabelo e barbas feito à medida para jovens da cidade. Ambiente moderno, estilo autêntico.</span></p>
+            <button class="botao" @click="openPopup" style="margin:10% 0px">AGENDA O TEU CORTE</button>
+
+    <!-- Elemento de fundo escuro -->
+    <div v-if="showPopup" class="modal-background" @click="closePopup"></div>
+
+    <!-- Popup -->
+    <div v-if="showPopup" class="popup">
+      <span class="close" @click="closePopup">&times;</span>
+      <Popup />
     </div>
-    <div class="image">
-      <img src="../assets/images/main.jpg" alt="Entry Photo" style="width: 478px;">
+
+      </div>
+
+    <div class="fixed-button" style="bottom:0; width:100%; right: 0">
+            <button @click="openPopup" style="width:100%; height:50px">AGENDAR CORTE</button>
     </div>
-  </div>
 </div>
 
-<div class="fixed-button" :style="{ right: buttonHover ? '0' : '' }" @mouseover="buttonHover = true" @mouseleave="buttonHover = false">
-        <button @click="openPopup"> &#8592; AGENDAR CORTE</button>
-    </div>
+
+
+
+
 
 
 <Roller />
