@@ -83,7 +83,6 @@ exports.findAll = (req, res) => {
             });
         };
 
-        // Array de promessas para buscar detalhes de cada tipo
         const promessas = dados.map(marcacao => {
             return Promise.all([
                 buscarDetalhesUtilizador(marcacao),
@@ -91,7 +90,6 @@ exports.findAll = (req, res) => {
                 buscarDetalhesBarbeiro(marcacao)
             ]);
         });
-        // Aguarde todas as promessas serem resolvidas antes de enviar a resposta
         Promise.all(promessas)
             .then(() => {
                 dados.forEach(dado => {
@@ -110,7 +108,6 @@ exports.findAll = (req, res) => {
 };
 
 
-// Controller Procurar Marcações De User Específico
 exports.findSpecificNew = (req, res) => {
     marcacoesModel.getSpecificNew(req, (error, dados) => {
         if (error) {
@@ -120,7 +117,6 @@ exports.findSpecificNew = (req, res) => {
             return;
         }
 
-        // Função para formatar a data
         const formatarData = (data) => {
             const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
             const dataFormatada = new Date(data);
@@ -135,7 +131,6 @@ exports.findSpecificNew = (req, res) => {
             return `${diaSemana}, ${dia}/${mes}/${ano}, às ${horas}:${minutos}`;
         };
 
-            // Função para buscar o nome do barbeiro
             const getBarberName = (id_barbeiro) => {
                 return new Promise((resolve, reject) => {
                     barbeiroModel.FindById(id_barbeiro, (error, barbeiros) => {
@@ -153,7 +148,6 @@ exports.findSpecificNew = (req, res) => {
             };
 
 
-        // Função para buscar o nome e o preço do serviço
         const getServicoInfo = (id_servico) => {
             return new Promise((resolve, reject) => {
                 servicoModel.FindById(id_servico, (error, servico) => {
@@ -166,7 +160,6 @@ exports.findSpecificNew = (req, res) => {
             });
         };
 
-            // Função assíncrona para buscar todas as informações necessárias e formatar os dados
             const processarDados = async () => {
                 for (const marcacao of dados) {
                     marcacao.Data = formatarData(marcacao.Data);
@@ -180,7 +173,6 @@ exports.findSpecificNew = (req, res) => {
             };
 
 
-        // Executar o processamento assíncrono
         processarDados().catch(error => {
             res.status(500).send({
                 message: error.message || "Ocorreu um erro ao processar os dados das marcações"
@@ -199,7 +191,6 @@ exports.findSpecificOld = (req, res) => {
             return;
         }
 
-        // Função para formatar a data
         const formatarData = (data) => {
             const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
             const dataFormatada = new Date(data);
@@ -214,7 +205,6 @@ exports.findSpecificOld = (req, res) => {
             return `${diaSemana}, ${dia}/${mes}/${ano}, às ${horas}:${minutos}`;
         };
 
-            // Função para buscar o nome do barbeiro
             const getBarberName = (id_barbeiro) => {
                 return new Promise((resolve, reject) => {
                     barbeiroModel.FindById(id_barbeiro, (error, barbeiros) => {
@@ -232,7 +222,6 @@ exports.findSpecificOld = (req, res) => {
             };
 
 
-        // Função para buscar o nome e o preço do serviço
         const getServicoInfo = (id_servico) => {
             return new Promise((resolve, reject) => {
                 servicoModel.FindById(id_servico, (error, servico) => {
@@ -245,7 +234,6 @@ exports.findSpecificOld = (req, res) => {
             });
         };
 
-            // Função assíncrona para buscar todas as informações necessárias e formatar os dados
             const processarDados = async () => {
                 for (const marcacao of dados) {
                     marcacao.Data = formatarData(marcacao.Data);
@@ -259,7 +247,6 @@ exports.findSpecificOld = (req, res) => {
             };
 
 
-        // Executar o processamento assíncrono
         processarDados().catch(error => {
             res.status(500).send({
                 message: error.message || "Ocorreu um erro ao processar os dados das marcações"
@@ -353,21 +340,18 @@ exports.create = (req, res) => {
         const idServico = req.body.service.Id;
         const dataMarcacao = req.body.dateTime;
         const notas = req.body.notas;
-        // Consulta ao banco de dados para verificar se já existe uma marcação na mesma data para o mesmo barbeiro e serviço
         marcacoesModel.getByDateAndBarber(dataMarcacao,idBarbeiro, (error, marcacaoExistente) => {
             if (error) {
                 return res.status(500).send({
                     message: error.message || "Ocorreu um erro ao verificar a existência de marcações."
                 });
             }
-            // Se já existe uma marcação na mesma data, retornar uma mensagem indicando isso
             if (marcacaoExistente.length > 0) {
                 return res.status(400).send({
                     message: "Já existe uma marcação para este barbeiro e serviço nesta data."
                 });
                 
             }
-            // Se não existe uma marcação na mesma data, criar a nova marcação
             const novaMarcacao = new marcacoesModel({
                 id_barbeiro: idBarbeiro,
                 id_utilizador: idUtilizador,
@@ -383,7 +367,6 @@ exports.create = (req, res) => {
                     });
                 }
     
-                // Se a marcação for criada com sucesso, retornar os dados das marcações atualizados
                 marcacoesModel.getAll((error, dados) => {
                     if (error) {
                         return res.status(500).send({
@@ -428,9 +411,8 @@ exports.create = (req, res) => {
 
 exports.update = (req, res) => {
     const idMarcacao = req.params.id;
-    const newData = req.body.dateTime; // Supondo que a nova data esteja no corpo da requisição
-    const idBarbeiro = req.body.barber; // Supondo que o ID do barbeiro esteja no corpo da requisição
-    // Verificar se já existe uma marcação com a mesma data e hora para o mesmo barbeiro
+    const newData = req.body.dateTime; 
+    const idBarbeiro = req.body.barber; 
     marcacoesModel.getByDateAndBarber(newData, idBarbeiro, (error, marcacoes) => {
         if (error) {
             console.log('1');
@@ -445,8 +427,7 @@ exports.update = (req, res) => {
             });
         }
 
-        // Se não houver uma marcação existente para essa data e hora, proceda com o update
-        marcacoesModel.update(req, (error, dados) => {
+        marcacoesModel.update(req, (error) => {
             if (error) {
                 console.log('3');
                 res.status(500).send({

@@ -9,7 +9,6 @@
         </div>
       </button>
       <div class="dropdown-content" v-show="dropdownOpen">
-        <!-- Coloque aqui as opções do dropdown -->
         <a v-if="type == 2" href="/agenda">Agenda</a>
         <a href="/perfil">Editar Perfil</a>
         <a href="/perfil/marcacoes">Marcações</a>
@@ -32,23 +31,28 @@
       };
     },
     methods: {
-        logout() {
+      // Método para fazer logout
+      logout() {
+        // Remove os itens do localStorage relacionados ao utilizador
         localStorage.removeItem('userName'); 
         localStorage.removeItem('userId');
         localStorage.removeItem('type');
+        // Atualiza os dados do utilizador após o logout
         this.updateUserData();
-        },
+      },
+    // Método para alternar o estado do dropdown entre aberto e fechado
       toggleDropdown() {
         this.dropdownOpen = !this.dropdownOpen;
       },
+      // Método para atualizar os dados da sessão
       updateUserData() {
-      // Atualiza os dados do usuário a partir do localStorage
-      this.userId = localStorage.getItem('userId');
-      this.userName = localStorage.getItem('userName');
-      this.type = localStorage.getItem('type');
+        this.userId = localStorage.getItem('userId');
+        this.userName = localStorage.getItem('userName');
+        this.type = localStorage.getItem('type');
       }
     },
     mounted() {
+      // Quando o componente é montado, obtém os dados do localStorage e atualiza
       this.userId = localStorage.getItem('userId')
       this.userName = localStorage.getItem('userName');
       this.type = localStorage.getItem('type');
@@ -56,6 +60,7 @@
     }
   }
   </script>
+  
   
   <style scoped>
   .rotate {

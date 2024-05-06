@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Conteúdo da página -->
     
     <div class="footer">
     <div class="border-top">

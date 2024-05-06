@@ -5,7 +5,6 @@
         <div class="popup-content">
           <span class="close" @click="hideCreateModal">&times;</span>
           <h2>Criar marcação</h2>
-          <!-- Campos de edição com títulos -->
           <div class="input-group">
             <label for="barbeiro">Barbeiro:</label>
             <select id="id_barbeiro" name="id_barbeiro">
@@ -44,7 +43,6 @@
         <div class="popup-content">
           <span class="close" @click="closeEditPopup">&times;</span>
           <h2>Editar Utilizador</h2>
-          <!-- Campos de edição com títulos -->
           <div class="input-group">
             <label for="barbeiro">Barbeiro:</label>
             <select id="Id_barbeiro" name="Id_barbeiro" v-model="editedUser.Id_barbeiro" form="submit">
@@ -97,7 +95,6 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Aqui você pode iterar sobre os dados dos usuários e criar linhas para cada usuário -->
       <tr v-for="dados in marcacoes" :key="dados.id" class="ag-courses_item">
         <td>{{ dados.Id }}</td>
         <td>{{ dados.nomeBarbeiro }}</td>
@@ -105,9 +102,7 @@
         <td>{{ dados.nomeServico }}</td>
         <td>{{ dados.DataFormatada }}</td>
         <td>{{ dados.Notas }}</td>
-        <!-- Coluna de ações -->
         <td>
-          <!-- Aqui você pode adicionar botões para editar, excluir, etc. -->
           <button class="editPanel" @click.prevent="showEditConfirmation(dados.Id)" style="color:black;margin-right:25px;"><i class="fas fa-edit"></i></button>
           <button class="editPanel" @click.prevent="showDeleteConfirmation(dados.Id)" style="color:black;"><i class="fas fa-trash"></i></button>
         </td>
@@ -146,7 +141,7 @@
       export default {
         data() {
           return {
-            marcacoes: [], // Propriedade para armazenar os dados dos Marcaçãos
+            marcacoes: [], 
             utilizadores: [],
             barbeiros: [],
             servicos: [],
@@ -276,14 +271,11 @@
           }
         },
         openEditPopup() {
-        // Ocultar o modal de edição e exibir o popup de edição
         this.showEditModal = false;
         this.showEditPopup = true;
 
-        // Encontrar a marcação a ser editada
         const marcacao = this.marcacoes.find(marcacao => marcacao.Id === this.userIdToEdit);
 
-        // Definir os dados do utilizador editado com base na marcação encontrada
         this.editedUser = {
           Id_barbeiro: marcacao.Id_barbeiro,
           Id_utilizador: marcacao.Id_utilizador,
@@ -294,13 +286,10 @@
       },
 
       showEditConfirmation(userId) {
-        // Definir o ID do utilizador a ser editado
         this.userIdToEdit = userId;
 
-        // Exibir o modal de edição
         this.showEditModal = true;
 
-        // Carregar os dados do utilizador a ser editado
         this.editedUser = this.marcacoes.find(marcacao => marcacao.Id === userId);
       },
 

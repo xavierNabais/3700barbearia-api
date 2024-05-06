@@ -1,5 +1,6 @@
 <template>
 
+    <!-- DESKTOP -->
 
 <section class="servico-bloco desktop">
 
@@ -36,6 +37,7 @@
 
 
 
+    <!-- MOBILE -->
 
 
 <section class="servico-bloco mobile" style="height:auto">
@@ -81,34 +83,36 @@
     
     </template>
     
-    
     <script>
     export default {
-    name: 'SectionServicos',
-    data() {
-      return {
-        servicos: [], // Propriedade para armazenar os dados dos serviços
+      name: 'SectionServicos',
+      data() {
+        return {
+          servicos: [], 
         };
-    },
-    methods: {
-        async fetchServicos() {
-            try {
-                const response = await fetch('http://localhost:5000/painel/servicos');
-                const data = await response.json();
-                // Filtra os serviços com os nomes desejados
-                this.servicos = data.filter(servico => {
-                    const nome = servico.Nome.toLowerCase(); // Convertendo para minúsculas para evitar problemas de caixa
-                    return nome === 'corte' || nome === 'sobrancelhas' || nome === 'acabamento' || nome === 'penteado';
-                });
-            } catch (error) {
-                console.error('Erro ao buscar os dados dos serviços:', error);
-            }
+      },
+      methods: {
+        // Método assíncrono para obter os serviços
+        async obterServicos() {
+          try {
+            // Faz uma requisição para obter os serviços
+            const resposta = await fetch('http://localhost:5000/painel/servicos');
+            // Converte a resposta para JSON
+            const dados = await resposta.json();
+            // Filtra os serviços para obter serviços específicos
+            this.servicos = dados.filter(servico => {
+              const nome = servico.Nome.toLowerCase();
+              return nome === 'corte' || nome === 'sobrancelhas' || nome === 'acabamento' || nome === 'penteado';
+            });
+          } catch (erro) {
+            // Captura e regista qualquer erro na obtenção dos dados dos serviços
+            console.error('Erro ao obter os dados dos serviços:', erro);
+          }
         }
-    },
-    mounted() {
-      this.fetchServicos();
-    },
-    
+      },
+      mounted() {
+        this.obterServicos();
+      },
     }
-    
     </script>
+    

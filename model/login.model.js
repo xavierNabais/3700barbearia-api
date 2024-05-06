@@ -43,7 +43,6 @@ Login.findUser = (user, result) => {
 };
 
 // Model Procurar Utilizador
-// Model Procurar Utilizador
 Login.findUserGoogle = (user, result) => {
     const data = user.body.accessData;
     sql.query('SELECT * FROM utilizadores WHERE email = ?', data.email, (error, res) => {
@@ -60,22 +59,21 @@ Login.findUserGoogle = (user, result) => {
         } else {
             // Email não existe na base de dados, cria uma nova conta
 
-            // Extrai o nome e o apelido do objeto de dados
+            // Extrai o nome e o apelido dos dados do email logado
             const nome = data.given_name;
             const apelido = data.family_name;
 
-            // Gere uma senha aleatória
+            // Gere uma password aleatória
             const randomPassword = generateRandomPassword(10);
 
-            // Hash a senha aleatória usando bcrypt
+            // Hash da password aleatória usando bcrypt
             bcrypt.hash(randomPassword, 10, (err, hash) => {
                 if (err) {
-                    console.log("Erro ao gerar o hash da senha:", err);
+                    console.log("Erro ao gerar o hash da password:", err);
                     result(err, null);
                     return;
                 }
 
-                // Salve a nova conta de usuário com o hash da senha gerada, nome e apelido
                 sql.query('INSERT INTO utilizadores (nome, apelido, email, password) VALUES (?, ?, ?, ?)', [nome, apelido, data.email, hash], (error, res) => {
                     if (error) {
                         console.log("error: ", error);
@@ -85,7 +83,7 @@ Login.findUserGoogle = (user, result) => {
                 
                     console.log("Nova conta criada com sucesso");
                 
-                    // Recupera os dados do usuário recém-criado
+                    // Recupera os dados do utilizador recém-criado
                     sql.query('SELECT * FROM utilizadores WHERE id = ?', res.insertId, (error, user) => {
                         if (error) {
                             console.log("error: ", error);
@@ -93,7 +91,7 @@ Login.findUserGoogle = (user, result) => {
                             return;
                         }
                 
-                        // Retorna os dados completos do usuário recém-criado
+                        // Retorna os dados completos do utilizador recém-criado
                         result(null, user);
                     });
                 });                
@@ -103,7 +101,7 @@ Login.findUserGoogle = (user, result) => {
 };
 
 
-// Função para gerar uma senha aleatória
+// Função para gerar uma password aleatória
 function generateRandomPassword(length) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let password = '';

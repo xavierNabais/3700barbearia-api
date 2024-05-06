@@ -35,8 +35,8 @@ data() {
     marcacoes: [],
     eventList: [],
     calConfig: {
-      displayMode: 'week', // Modo de exibição da semana
-      editable: false, // Não permitir edição dos eventos
+      displayMode: 'week', 
+      editable: false, 
     },
     ptPTLocale: ptPTLocale,
   };
@@ -55,13 +55,13 @@ methods: {
     this.marcacoes = data;
     if (Array.isArray(this.marcacoes)) {
       this.eventList = this.marcacoes.map(marcacao => {
-        const dataHora = new Date(marcacao.Data); // Convertendo para objeto Date
+        const dataHora = new Date(marcacao.Data); 
         const dataFormatadaInicial = `${dataHora.getFullYear()}-${(dataHora.getMonth() + 1).toString().padStart(2, '0')}-${dataHora.getDate().toString().padStart(2, '0')} ${dataHora.getHours().toString().padStart(2, '0')}:${dataHora.getMinutes().toString().padStart(2, '0')}:${dataHora.getSeconds().toString().padStart(2, '0')}`;
-        const endDate = new Date(dataHora.getTime() + 45 * 60000); // Adiciona 45 minutos em milissegundos
+        const endDate = new Date(dataHora.getTime() + 45 * 60000);
         const dataFormatadaFinal = `${endDate.getFullYear()}-${(endDate.getMonth() + 1).toString().padStart(2, '0')}-${endDate.getDate().toString().padStart(2, '0')} ${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}:${endDate.getSeconds().toString().padStart(2, '0')}`;
         return {
-          start: dataFormatadaInicial, // Data com a hora definida
-          end: dataFormatadaFinal, // Data de término nula (opcional)
+          start: dataFormatadaInicial, 
+          end: dataFormatadaFinal,
           title: `Marcação com ${marcacao.nomeUtilizador}`,
         };
       });

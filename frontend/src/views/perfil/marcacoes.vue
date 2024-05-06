@@ -162,8 +162,8 @@ import Info from '../../views/perfil/Info.vue';
 export default {
 data() {
   return {
-    marcacoes: [], // Propriedade para armazenar os dados dos serviços
-    isAnterioresActive: true, // Inicialmente, o botão "ANTERIORES" está ativo
+    marcacoes: [],
+    isAnterioresActive: true, 
   };
 },
 methods: {
@@ -192,7 +192,7 @@ methods: {
     this.marcacoes[index].mostrarInfo = !this.marcacoes[index].mostrarInfo;
   },
   openPopup() {
-    this.$refs.Info.openPopup(); // Chame o método openPopup do componente PopupModal
+    this.$refs.Info.openPopup(); 
   },
 },
 

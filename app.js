@@ -27,7 +27,6 @@ app.use(session({
 var rotas = require("./routes/main.route");
 app.use("/", rotas);
 
-//Definir Rotas Principais
 var utilizadores = require("./routes/adminPanel.route");
 app.use("/", utilizadores);
 

@@ -43,7 +43,6 @@
   </script>
   
   <style scoped>
-  /* Estilos para o modal */
   .modal {
     position: fixed;
     top: 0;

@@ -11,6 +11,9 @@
 
 
 
+<!-- DESKTOP -->
+
+
     <div style="width: 100%; height: 1000px; background-color: white; padding-bottom: 10%;" class="desktop">
       
 
@@ -104,6 +107,10 @@
 
 
     </div>
+
+
+
+    <!-- MOBILE -->
 
     <div style="text-align:center;background-color: white; padding-bottom: 10%;" class="mobile">
       
@@ -223,8 +230,9 @@
           };
         },
         methods: {
+
+          // Função para autenticação do Google
           async googleCallback(response) {
-            // Obtém o token de acesso a partir do objeto de resposta
             const accessData = decodeCredential(response.credential);
 
 
@@ -240,10 +248,9 @@
               });
               const data = await response.json();
               
-              // Verifique se o login foi bem-sucedido
               if (response.ok) {
                 console.log(data);
-                localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('userId', data.userId); 
                 localStorage.setItem('userName', data.userName);
                 localStorage.setItem('type', data.type);
                 this.login_error = false;
@@ -259,6 +266,8 @@
               console.error('Erro ao efetuar login:', error);
             }
           },
+
+          // Função para realizar o login com email e password
           async login() {
             try {
               const response = await fetch('http://localhost:5000/login', {
@@ -273,10 +282,9 @@
               });
               const data = await response.json();
               
-              // Verifique se o login foi bem-sucedido
               if (response.ok) {
                 console.log(data);
-                localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('userId', data.userId); 
                 localStorage.setItem('userName', data.userName);
                 localStorage.setItem('type', data.type);
                 this.login_error = false;
@@ -292,6 +300,8 @@
               console.error('Erro ao efetuar login:', error);
             }
           },
+
+          // Função para realizar o registo de um novo utilizador
           async registo() {
             try {
               const response = await fetch('http://localhost:5000/registo', {
@@ -306,9 +316,8 @@
               });
               const data = await response.json();
               
-              // Verifique se o login foi bem-sucedido
               if (response.ok) {
-                localStorage.setItem('userId', data[0].Id); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('userId', data[0].Id); 
                 localStorage.setItem('type', 0);
                 this.registo_success = true;
                 setTimeout(() => {
@@ -317,10 +326,10 @@
                 }, 1500);
               } else {
                 this.registo_error = true;
-                console.log(data); // Se o login não foi bem-sucedido, imprima os dados do erro no console
+                console.log(data); 
               }
             } catch (error) {
-              console.error('Erro ao efetuar login:', error);
+              console.error('Erro ao efetuar registo:', error);
             }
           }
         }

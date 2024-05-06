@@ -1,5 +1,6 @@
 <template>
 
+    <!-- DESKTOP -->
 
             <section class="testemunhos-block desktop">
 
@@ -43,6 +44,7 @@
 
 
 
+    <!-- MOBILE -->
 
 
             <section class="testemunhos-block mobile" style="height:auto">

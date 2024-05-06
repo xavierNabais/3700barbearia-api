@@ -20,7 +20,7 @@
     mounted() {
     setTimeout(() => {
       this.isLoading = false;
-    }, 1500); // 3000 milissegundos = 3 segundos
+    }, 1500); 
   },
     name: 'loadingIcon',
   };
@@ -33,7 +33,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,8 +54,8 @@
   transform: translate(-50%, -50%);
   width: 80px;
   height: 80px;
-  border: 4px solid #333333; /* Cor do círculo cinzento */
-  border-top: 4px solid #F2B709; /* Cor da borda do círculo de rotação */
+  border: 4px solid #333333; 
+  border-top: 4px solid #F2B709; 
   border-radius: 50%;
   animation: spin 2s linear infinite;
 }
@@ -69,7 +69,7 @@ overflow-y: hidden;}
   transform: translate(-50%, -50%);
   width: 50px;
   height: 50px;
-  background-image: url('..//assets/images/loading-01.png'); /* Substitua pelo caminho real da imagem */
+  background-image: url('..//assets/images/loading-01.png'); 
   background-size: cover;
 }
 
@@ -92,8 +92,8 @@ overflow-y: hidden;}
   left: 0;
   width: 100%;
   background-color: #333333;
-  z-index: 1000; /* Garanta que o fundo cinza esteja na frente de todos os outros elementos */
-  transition: opacity 1s, height 1s; /* Adiciona uma transição suave para a propriedade de opacidade e altura */
+  z-index: 1000; 
+  transition: opacity 1s, height 1s;
 
 }
   </style>

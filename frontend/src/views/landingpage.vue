@@ -20,10 +20,8 @@
             <p><span style="font-size: 24px; font-weight: bold;">Marca já o teu horário!</span></p>
             <button class="botao" @click="openPopup">AGENDA O TEU CORTE</button>
 
-    <!-- Elemento de fundo escuro -->
     <div v-if="showPopup" class="modal-background" @click="closePopup"></div>
 
-    <!-- Popup -->
     <div v-if="showPopup" class="popup">
       <span class="close" @click="closePopup">&times;</span>
       <Popup />
@@ -55,10 +53,8 @@
             <p><span style="font-size: 16px;">Descobre a Barberia 3700, o novo espaço de cortes de cabelo e barbas feito à medida para jovens da cidade. Ambiente moderno, estilo autêntico.</span></p>
             <button class="botao" @click="openPopup" style="margin:10% 0px">AGENDA O TEU CORTE</button>
 
-    <!-- Elemento de fundo escuro -->
     <div v-if="showPopup" class="modal-background" @click="closePopup"></div>
 
-    <!-- Popup -->
     <div v-if="showPopup" class="popup">
       <span class="close" @click="closePopup">&times;</span>
       <Popup />
@@ -138,14 +134,12 @@
     methods: {
       openPopup() {
         this.showPopup = true;
-        // Adicione a classe ao body para desativar o scroll
         document.body.classList.add('no-scroll');
       },
       closePopup() {
         this.showPopup = false;
-        // Remova a classe do body para reativar o scroll
         document.body.classList.remove('no-scroll');
-        this.currentTab = 0; // Reinicie a guia atual ao fechar o popup
+        this.currentTab = 0; 
       },
     },
 

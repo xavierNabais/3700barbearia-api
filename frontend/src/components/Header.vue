@@ -4,9 +4,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Barbearia 3700</title>
-    
+
+        <!-- MOBILE -->
     <div class="header">
-      <!-- Menu para dispositivos móveis -->
       <nav class="mobile-menu">
         <div class="mobile-menu-icon" @click="toggleMobileMenu">
           <i class="fas fa-bars"></i>
@@ -26,7 +26,7 @@
         </div>
       </nav>
 
-      <!-- Menu para desktop -->
+    <!-- DESKTOP -->
       <nav class="menu">
         <ul class="menu-items">
           <li><a href="/">HOME</a></li>
@@ -55,31 +55,36 @@ export default {
     Dropdown,
   },
   data() {
+    // Define os dados iniciais do componente
     return {
       userName: '',
       type: '',
       userId: '',
       dropdownOpen: false,
-      mobileMenuOpen: false // Alterado para false
+      mobileMenuOpen: false 
     };
   },
   methods: {
+    // Método para fazer logout
     logout() {
-        localStorage.removeItem('userName'); 
-        localStorage.removeItem('userId');
-        localStorage.removeItem('type');
-        window.location.reload;
-        },
+      // Remove os itens do localStorage relacionados ao utilizador
+      localStorage.removeItem('userName'); 
+      localStorage.removeItem('userId');
+      localStorage.removeItem('type');
+      window.location.reload();
+    },
+    // Método para alternar o estado do dropdown entre aberto e fechado
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     },
+    // Método para alternar o estado do menu mobile entre aberto e fechado
     toggleMobileMenu() {
-      this.mobileMenuOpen = !this.mobileMenuOpen; // Altera o estado do menu móvel
-      this.dropdownOpen = false; // Fecha o dropdown do menu desktop ao abrir o menu móvel
+      this.mobileMenuOpen = !this.mobileMenuOpen; 
+      this.dropdownOpen = false; 
     }
   },
   mounted() {
-    // Recupera o userName do localStorage
+    // Quando o componente é montado, obtém os dados do localStorage para serem utilizados
     this.userId = localStorage.getItem('userId')
     this.userName = localStorage.getItem('userName');
     this.type = localStorage.getItem('type');
@@ -88,9 +93,7 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos do cabeçalho */
 
-/* Estilos para o menu móvel */
 .mobile-menu {
   display:none;
   align-items: center;
@@ -111,11 +114,11 @@ export default {
 .mobile-menu-items-container {
   display: none;
   position: fixed;
-  top: 90px; /* Ajuste conforme necessário */
+  top: 90px; 
   left: 0;
   background-color: rgb(20, 20, 20);
   width: 100%;
-  z-index: 100; /* Ajuste conforme necessário */
+  z-index: 100;
 }
 
 .mobile-menu-items {
@@ -132,7 +135,7 @@ export default {
 
 .mobile-menu-items li {
   margin-bottom: 10px;
-  list-style-type: none; /* Remover a bolinha */
+  list-style-type: none; 
   border-bottom:1px solid white;
   padding: 15px 10px;
 }
@@ -142,7 +145,6 @@ export default {
   text-decoration: none;
 }
 
-/* Estilos para o logo */
 .logo {
   flex: 1;
   text-align: center;

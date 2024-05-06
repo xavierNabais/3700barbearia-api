@@ -1,4 +1,6 @@
 <template>
+
+    <!-- DESKTOP -->
         <section class="barbearia desktop">
             <p style="font-size: 32px; color: white; font-weight: bold;">A BARBEARIA</p>
             <div class="separador">
@@ -50,6 +52,7 @@
 
 
 
+    <!-- MOBILE -->
 
         <section class="barbearia mobile">
             <p style="font-size: 32px; color: white; font-weight: bold;">A BARBEARIA</p>
@@ -136,21 +139,21 @@ name: 'SectionBarbearia',
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 430px; /* Altura da div */
+  height: 430px; 
   padding:5% 0;
 }
 
 .logotipo {
-  width: 150px; /* Largura do logotipo */
-  height: auto; /* Altura do logotipo */
+  width: 150px; 
+  height: auto; 
 }
 
 .quadrado {
-  width: 430px; /* Largura do quadrado */
-  height: 230px; /* Altura do quadrado */
-  border: 1px solid #ddd; /* Borda cinza claro */
-  margin: 5px; /* Espaçamento entre os quadrados */
-  position: relative; /* Posição relativa para posicionar o logotipo */
+  width: 430px; 
+  height: 230px; 
+  border: 1px solid #ddd; 
+  margin: 5px; 
+  position: relative; 
   opacity:0.3;
   transition:0.4s;
 }
@@ -160,10 +163,10 @@ name: 'SectionBarbearia',
 }
 
 .centro {
-  position: absolute; /* Posição absoluta para centralizar o logotipo */
-  top: 50%; /* Alinhamento vertical ao centro */
-  left: 50%; /* Alinhamento horizontal ao centro */
-  transform: translate(-50%, -50%); /* Centralizar */
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
 }
 
 </style>

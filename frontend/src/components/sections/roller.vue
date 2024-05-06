@@ -2,7 +2,6 @@
     <section class="roller">
       <div class="roller-container" ref="rollerContainer">
         <div class="roller-content">
-          <!-- Conteúdo da seção aqui -->
           <div class="item"><i class="fas fa-scissors"></i>DEGRADÊ</div>
           <div class="item"><i class="fas fa-scissors"></i>TOPETE</div>
           <div class="item"><i class="fas fa-scissors"></i>UNDERCUT</div>
@@ -16,8 +15,6 @@
           <div class="item"><i class="fas fa-scissors"></i>FRANJA</div>
           <div class="item"><i class="fas fa-scissors"></i>MOHAWK</div>
           <div class="item"><i class="fas fa-scissors"></i>MOICANO</div>
-
-          <!-- Adicione mais itens conforme necessário -->
         </div>
       </div>
     </section>
@@ -27,25 +24,25 @@
   export default {
     name: 'RollerSection',
     mounted() {
-      // Função para iniciar a animação de rolagem
       this.startRoller();
     },
     methods: {
+      // Método para iniciar o roller
       startRoller() {
         const rollerContainer = this.$refs.rollerContainer;
         const rollerContent = rollerContainer.querySelector('.roller-content');
-        // Clone o conteúdo para garantir que ele seja contínuo ao rolar
+        // Clona o conteúdo do roller
         const clonedContent = rollerContent.cloneNode(true);
+        // Adiciona o conteúdo clonado ao final do conteúdo original
         rollerContent.appendChild(clonedContent);
-        // Inicia a animação de rolagem
-        let scrollAmount = 1; // Ajuste a velocidade de rolagem conforme necessário (aqui está definido como 1)
-        const scrollDelay = 20; // Ajuste o intervalo de rolagem conforme necessário
+        let scrollAmount = 1; 
+        const scrollDelay = 20; 
+        // Inicia um intervalo para fazer o roller
         setInterval(() => {
-          // Atualiza a posição de rolagem
           rollerContainer.scrollLeft += scrollAmount;
-          // Verifica se a animação atingiu o final do conteúdo original
+          // Verifica se o roller chegou ao final do conteúdo
           if (rollerContainer.scrollLeft >= rollerContent.offsetWidth / 2) {
-            // Retorna para a posição inicial
+            // Se chegou ao final, volta ao início
             rollerContainer.scrollLeft = 0;
           }
         }, scrollDelay);
@@ -53,6 +50,7 @@
     }
   }
   </script>
+  
   
   
   
@@ -66,7 +64,7 @@
   
   .roller-container {
     display: flex;
-    animation: roll 60s linear infinite; /* Defina a duração e a repetição da animação */
+    animation: roll 60s linear infinite; 
   }
   
   .roller-content {
@@ -88,7 +86,6 @@
     font-size:26px;
   }
 
-  /* Animação de rolagem */
   @keyframes roll {
     0% {
       transform: translateX(0);

@@ -23,14 +23,12 @@ export default {
     methods: {
       openPopup() {
         this.showPopup = true;
-        // Adicione a classe ao body para desativar o scroll
         document.body.classList.add('no-scroll');
       },
       closePopup() {
         this.showPopup = false;
-        // Remova a classe do body para reativar o scroll
         document.body.classList.remove('no-scroll');
-        this.currentTab = 0; // Reinicie a guia atual ao fechar o popup
+        this.currentTab = 0; 
       },
     },
     componente: {

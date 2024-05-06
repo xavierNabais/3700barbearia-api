@@ -87,31 +87,29 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  // Verifica se a rota é para o painel
   if (to.path.startsWith('/painel')) {
     try {
       const isAdmin = localStorage.getItem('type');
 
-      // Verifica se o usuário é um administrador
       if (isAdmin == 1) {
-        next(); // Permite o acesso à próxima rota
+        next(); 
       } else {
-        next('/404'); // Redireciona para uma página de acesso negado ou outra página adequada
+        next('/404');
       }
     } catch (error) {
       console.error('Erro ao verificar permissões:', error);
-      next('/404'); // Redireciona para uma página de erro em caso de falha na chamada de API
+      next('/404'); 
     }
   } else if (to.path.startsWith('/perfil')) {
     const userId = localStorage.getItem('userId');
 
     if (userId) {
-      next(); // Permite o acesso à próxima rota se o userId existir
+      next(); 
     } else {
-      next('/login'); // Redireciona para a página de login se o userId não existir
+      next('/login'); 
     }
   } else {
-    next(); // Permite o acesso à próxima rota se não for uma rota do painel ou perfil
+    next(); 
   }
 });
 

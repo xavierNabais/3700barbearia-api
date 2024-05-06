@@ -6,7 +6,6 @@
         <div class="popup-content">
           <span class="close" @click="closeEditPopup">&times;</span>
           <h2>Editar Utilizador</h2>
-          <!-- Campos de edição com títulos -->
           <div class="input-group">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" v-model="editedUser.Nome" placeholder="Nome">
@@ -43,7 +42,6 @@
       <div class="popup-content">
         <span class="close" @click="closeCreatePopup">&times;</span>
         <h2>Criar Barbeiro</h2>
-        <!-- Campos de edição com títulos -->
         <div class="input-group">
           <label for="nome">Nome:</label>
           <input type="text" id="nome" name="nome">
@@ -92,16 +90,13 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Aqui você pode iterar sobre os dados dos usuários e criar linhas para cada usuário -->
       <tr v-for="dados in barbeiros" :key="dados.id" class="ag-courses_item">
         <td>{{ dados.Id }}</td>
         <td>{{ dados.Nome }}</td>
         <td>{{ dados.Descricao }}</td>
         <td>{{ dados.Especializacao }}</td>
         <td>{{ dados.Ativo }}</td>
-        <!-- Coluna de ações -->
         <td>
-          <!-- Aqui você pode adicionar botões para editar, excluir, etc. -->
           <button class="editPanel" @click.prevent="showEditConfirmation(dados.Id)" style="color:black;margin-right:25px;"><i class="fas fa-edit"></i></button>
           <button class="editPanel" @click.prevent="showDeleteConfirmation(dados.Id)" style="color:black;"><i class="fas fa-trash"></i></button>
         </td>
@@ -142,7 +137,7 @@
         data() {
           return {
             utilizadores: [],
-            barbeiros: [], // Propriedade para armazenar os dados dos barbeiros
+            barbeiros: [], 
             showEditModal: false,
             showDeleteModal: false,
             userIdToEdit: null,
@@ -250,7 +245,6 @@
           openEditPopup() {
             this.showEditModal = false;
             this.showEditPopup = true;
-            // Carregar os dados do utilizador a ser editado
             this.editedUser = this.barbeiros.find(user => user.Id === this.userIdToEdit);
           },
           closeEditPopup() {

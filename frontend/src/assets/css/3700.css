@@ -3,7 +3,7 @@ body {
   background-color: #111111;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Para esconder o scroll horizontal */
+  overflow-x: hidden; 
 }
 html{
   margin: 0;
@@ -17,23 +17,21 @@ a {
 }
 
 
-/* Para o peso bold */
 .bold {
   font-family: 'Inter', sans-serif;
   font-weight: bold;
 }
 
-/* Para o estilo light (mais fino) */
 .light {
   font-family: 'Inter', sans-serif;
-  font-weight: lighter; /* Peso específico para light na fonte Inter */
+  font-weight: lighter; 
 }
 
 
 .header {
   position: absolute;
   width: 100%;
-  z-index: 2; /* Garante que o menu fique acima da seção */
+  z-index: 2; 
 }
 
 
@@ -93,7 +91,7 @@ a {
 }
 
 .menu-items li {
-  margin-right: 20px; /* Espaçamento entre os itens do menu */
+  margin-right: 20px; 
 }
 
 .dropdown {
@@ -166,20 +164,16 @@ a {
 
 
 
-
-
-/* Estilos do fundo escuro */
 .modal-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Cor escura com transparência */
-  z-index: 999; /* Z-index alto para ficar por cima de tudo */
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
-/* Estilos do popup */
 .popup {
   position: fixed;
   top: 50%;
@@ -190,10 +184,10 @@ a {
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Z-index ainda mais alto que o fundo escuro */
-  overflow-y: auto; /* Adicionado para permitir scroll apenas quando necessário */
-  display: flex; /* Novo */
-  flex-wrap: nowrap; /* Novo */
+  z-index: 1000;  
+  overflow-y: auto; 
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .popup-section {
@@ -208,7 +202,7 @@ a {
 .section-middle {
   flex:1;
   width:45%;
-  max-height: 100%; /* Defina a altura máxima que deseja para a seção */
+  max-height: 100%; 
 }
 
 .section-right {
@@ -235,17 +229,15 @@ a {
   font-size: 13px;
 }
 
-/* Estilos do botão de fechar */
 .close {
   position: absolute;
   top: 10px;
   right: 10px;
   font-size: 24px;
   cursor: pointer;
-  color: white; /* Cor preta */
+  color: white;
 }
 
-/* Estilos para desativar o scroll vertical */
 .no-scroll {
   overflow-y: hidden;
 }
@@ -285,7 +277,7 @@ a {
 
 .summary-info {
   padding: 20px 10px;
-  border-bottom: 1px solid #f0f0f033;; /* Cinza quase branco */
+  border-bottom: 1px solid #f0f0f033;
   color: white;
 }
 
@@ -508,15 +500,15 @@ a {
 
 .slideshow-inner {
   display: flex;
-  animation: slide 5s infinite alternate; /* 5 segundos por certificado */
+  animation: slide 5s infinite alternate; 
 }
 
 @keyframes slide {
   0% {
-    transform: translateX(calc(100% + 300px)); /* Começa no final */
+    transform: translateX(calc(100% + 300px));
   }
   100% {
-    transform: translateX(0); /* Move lentamente para a esquerda até o início */
+    transform: translateX(0);
   }
 
 }
@@ -526,7 +518,7 @@ a {
 
 .certificado {
   flex: 0 0 auto;
-  width: 300px; /* Defina a largura desejada para cada certificado */
+  width: 300px; 
 }
 
 .certificado img {
@@ -579,7 +571,7 @@ a {
   border: none;
   border-top: 1px solid #F4B604;
   margin:0 auto;
-  max-width: 36px; /* Largura máxima desejada */
+  max-width: 36px; 
 }
 
 
@@ -597,7 +589,7 @@ a {
 }
 
 .imagem-conteudo {
-  width: 60%; /* Ajuste conforme necessário */
+  width: 60%; 
 }
 
 .conteudo-texto {
@@ -685,8 +677,8 @@ a {
 
 
 .padding-container {
-  overflow-y: auto; /* Permite rolagem vertical apenas dentro desta seção */
-  padding: 20px; /* Adiciona o padding apenas a esta div */
+  overflow-y: auto; 
+  padding: 20px;
 }
 
 .service-selection {
@@ -697,23 +689,23 @@ a {
 }
 
 .tab {
-  position: relative; /* Adiciona posição relativa para a tab */
+  position: relative; 
 }
 
 
 .service-info{
-  overflow-y: auto; /* Permite rolagem vertical apenas dentro desta seção */
+  overflow-y: auto;
 }
 
 
 
 
 .highlight-button {
-  display: inline-block; /* Garante que os botões fiquem lado a lado */
-  margin-right: 10px; /* Adiciona espaço entre os botões */
+  display: inline-block; 
+  margin-right: 10px; 
   background-color:white;
   border: 0.1px solid #FCD666;
-  cursor: pointer; /* Alterar cursor ao passar por cima do botão */
+  cursor: pointer; 
   padding:10px;
   border-radius: 10px;
 }
@@ -748,13 +740,13 @@ a {
 
 .blocks {
   display: flex;
-  flex-wrap: wrap; /* Permite que os blocos de serviço sejam distribuídos em várias linhas */
+  flex-wrap: wrap;
   flex: 2;
   justify-content: flex-end;
 }
 .block{
   display: flex;
-  flex-wrap: wrap; /* Permite que os blocos de serviço sejam distribuídos em várias linhas */
+  flex-wrap: wrap;
   flex: 2;
   justify-content: flex-start;
   margin-left:10%;
@@ -846,7 +838,7 @@ a {
 }
 
 .bloco-servico img {
-  width: 50px; /* Ajuste conforme necessário */
+  width: 50px;
 }
 
 .servico-conteudo {
@@ -887,34 +879,34 @@ a {
 
 
 .portfolio-items {
-  overflow-x: hidden; /* Oculta a barra de rolagem horizontal */
-  position: relative; /* Para posicionar os botões de navegação */
+  overflow-x: hidden;
+  position: relative; 
   margin-top: 5%;
 }
 
 .gallery-wrap {
-  display: flex; /* Mantém os elementos em linha */
+  display: flex; 
   overflow-x: hidden;
-  scroll-behavior: smooth; /* Adiciona rolagem suave */
+  scroll-behavior: smooth;
 }
 
 .gallery {
-  display: flex; /* Mantém as imagens em linha */
+  display: flex; 
 }
 
 .gallery img {
-  margin-right: 10px; /* Espaçamento entre as imagens */
+  margin-right: 10px; 
   width:35%;
 }
 
 
 
 #backBtn {
-  left: 10px; /* Posiciona o botão anterior à esquerda */
+  left: 10px; 
 }
 
 #nextBtn {
-  right: 10px; /* Posiciona o botão próximo à direita */
+  right: 10px; 
 }
 
 
@@ -931,27 +923,27 @@ a {
 
 .fixed-button {
   position: fixed;
-  bottom: 150px; /* Distância do fundo da página */
-  right: -10%; /* Distância da borda direita da página */
-  z-index: 99; /* Z-index para garantir que o botão esteja sempre acima de outros elementos */
-  transition: right 0.3s ease; /* Adiciona uma transição suave */
+  bottom: 150px;
+  right: -10%; 
+  z-index: 99;
+  transition: right 0.3s ease; 
 
 }
 
 
 .fixed-button button {
-  padding: 10px 20px; /* Espaçamento interno do botão */
+  padding: 10px 20px;
   background: #F2B709;
-  color: #000000; /* Cor do texto do botão */
-  border: none; /* Remover a borda do botão */
-  cursor: pointer; /* Alterar cursor ao passar por cima do botão */
-  font-size: 20px; /* Tamanho do texto do botão */
+  color: #000000; 
+  border: none;
+  cursor: pointer; 
+  font-size: 20px; 
   width: 250px;
   height: 60px;
 }
 
 .fixed-button button:hover {
-  background-color: #ecd58d; /* Cor de fundo do botão ao passar o mouse */
+  background-color: #ecd58d;
 }
 
 
@@ -1091,7 +1083,7 @@ a {
   margin-bottom: 10%;
 }
 
-/* Estilize o mapa do Google Maps conforme necessário */
+
 .mapa iframe {
   width: 100%;
   height: 400px;
@@ -1219,18 +1211,18 @@ a {
   }
   
   .profile-section-left {
-    flex: 1; /* As duas seções ocupam o mesmo espaço */
-    height: 200px; /* Altura de exemplo */
-    margin-right: 10px; /* Espaçamento entre as seções */
+    flex: 1; 
+    height: 200px; 
+    margin-right: 10px;
     text-align: center;
     flex: 1;
     font-size: 24px;
   }
 
   .profile-section-right {
-    flex: 1; /* As duas seções ocupam o mesmo espaço */
-    height: 200px; /* Altura de exemplo */
-    margin-right: 10px; /* Espaçamento entre as seções */
+    flex: 1; 
+    height: 200px; 
+    margin-right: 10px; 
   }
   
   .profile-container {
@@ -1238,7 +1230,7 @@ a {
     margin: 0 auto;
     display: flex;
     width: 85%;
-    margin: 0 auto; /* Centraliza a div container na página */
+    margin: 0 auto; 
     display: flex;
     margin-top:5%;
   }
@@ -1321,7 +1313,7 @@ a {
   }
   label {
     display: inline-block;
-    width: 150px; /* Ajuste conforme necessário */
+    width: 150px;
   }
 
     input{
@@ -1333,8 +1325,6 @@ a {
   }
   
   input {
-/* Rectangle 33 */
-
     box-sizing: border-box;
     width: 347px;
     height: 48px;
@@ -1523,6 +1513,7 @@ button.savePanel:hover {
 
   .popup {
   width:90vw;
+  height:80%;
   }
 
   .service-selection{
@@ -1531,6 +1522,10 @@ button.savePanel:hover {
 
   .close{
     color:black;
+  }
+
+  .padding-container{
+    height:100%;
   }
 
 }

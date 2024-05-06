@@ -1,5 +1,6 @@
 <template>
 
+    <!-- DESKTOP -->
 
             <section class="contactos desktop">
 
@@ -41,6 +42,7 @@
 
 
 
+    <!-- MOBILE -->
 
             <section class="contactos mobile">
 

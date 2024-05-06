@@ -199,7 +199,6 @@ return `${this.months[this.currentMonth - 1]} ${this.currentYear}`;
 methods: {
   async deleteMarcacao(id) {
       try {
-        // Envia os dados para o servidor usando o método PUT
         const response = await fetch(`http://localhost:5000/painel/marcacoes/${id}`, {
           method: 'DELETE',
           headers: {
@@ -207,16 +206,13 @@ methods: {
           },
         });
 
-        // Verifica se a requisição foi bem-sucedida
         if (response.ok) {
           alert('A sua reserva foi eliminada com sucesso!');
         } else {
-          // Exibe uma mensagem de erro se a requisição falhar
           alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
         }
       } catch (error) {
         console.error('Erro ao eliminar reserva:', error);
-        // Exibe uma mensagem de erro se ocorrer um erro inesperado
         alert('Houve um erro ao eliminar a sua reserva. Por favor, tente novamente mais tarde.');
       }
   },
@@ -246,18 +242,15 @@ try {
   },
 getDayOfWeek(month, day) {
   const date = new Date(this.currentYear, month, day);
-  const dayOfWeek = date.toLocaleDateString('pt-PT', { weekday: 'short' }).slice(0, 3); // Abreviar para três letras
+  const dayOfWeek = date.toLocaleDateString('pt-PT', { weekday: 'short' }).slice(0, 3);
   return dayOfWeek;
 },
 
 filterServicosPorCategoria(categoria) {
-  // Restaura a lista completa de serviços
   this.servicos = [];
-  // Busca novamente todos os serviços
   this.fetchServicos().then(() => {
-    // Aplica o filtro com base na categoria selecionada
     this.servicos = this.servicos.filter(servico => servico.Categoria === categoria);
-    this.categoriaAtiva = categoria; // Atualiza a categoria ativa
+    this.categoriaAtiva = categoria; 
   });
 },
 
@@ -298,38 +291,32 @@ updateDaysInMonth() {
   const endDay = Math.min(this.currentPage * 7, daysInMonth);
   const days = [];
 
-  // Extrai informações da data do serviço padrão
   const dateParts = this.serviceDefault.Data.split(",")[1].trim().split(" ")[0].split("/");
   const timeParts = this.serviceDefault.Data.split("às")[1].trim().split(":");
   const serviceDay = parseInt(dateParts[0], 10);
   const serviceMonth = parseInt(dateParts[1], 10);
   const serviceYear = parseInt(dateParts[2], 10);
-  const serviceHour = parseInt(timeParts[0].trim(), 10); // Remove espaços em branco em torno da hora
-  const serviceMinute = parseInt(timeParts[1].trim().split(" ")[0], 10); // Remove espaços em branco e "às" dos minutos
+  const serviceHour = parseInt(timeParts[0].trim(), 10); 
+  const serviceMinute = parseInt(timeParts[1].trim().split(" ")[0], 10); 
 
-  // Adiciona dias do mês anterior, se necessário
   const prevMonthDays = new Date(this.currentYear, this.currentMonth - 1, 0).getDate();
-  const prevMonth = this.currentMonth === 1 ? 12 : this.currentMonth - 1; // Verifica se o mês atual é janeiro
+  const prevMonth = this.currentMonth === 1 ? 12 : this.currentMonth - 1; 
   for (let i = startDay; i <= Math.min(endDay, prevMonthDays); i++) {
     days.push({ day: i, month: prevMonth });
   }
 
-  // Adiciona dias do mês atual
   for (let i = Math.max(startDay, prevMonthDays + 1); i <= endDay; i++) {
     days.push({ day: i, month: this.currentMonth });
   }
 
-  // Adiciona dias do próximo mês, se necessário
   const nextMonthDays = 7 - days.length % 7;
   if (nextMonthDays < 7) {
     for (let i = 1; i <= nextMonthDays; i++) {
       days.push({ day: i, month: this.currentMonth});
     }
-    // Define o próximo mês e ano
     this.nextMonthYear = this.currentYear + (this.currentMonth === 12 ? 1 : 0);
     this.nextMonth = this.currentMonth === 12 ? 1 : this.currentMonth + 1;
   } else {
-    // Se não houver dias do próximo mês, limpa os valores
     this.nextMonthYear = null;
     this.nextMonth = null;
   }
@@ -337,7 +324,6 @@ updateDaysInMonth() {
   this.daysInMonth = days;
   this.totalPages = Math.ceil(daysInMonth / 7);
 
-  // Seleciona o dia, mês e ano do serviço padrão
   this.selectDay({ day: serviceDay, month: serviceMonth, year: serviceYear });
 
   this.selectedHour = serviceHour;
@@ -367,13 +353,11 @@ async selectDay(day) {
   try {
     const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month+1}-${day.day}&barbeiro=${this.barbeiro}`);
     const data = await response.json();
-    // Extrai os horários das marcações e formata-os para corresponder ao formato dos botões de horas
     const blockedTimes = data.map(marcacao => {
       const hora = new Date(marcacao.Data).getHours();
       const minutos = new Date(marcacao.Data).getMinutes();
       return `${hora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
     });
-    // Desabilita os botões de horas correspondentes aos horários das marcações
     this.availableTimes = this.availableTimes.map(time => {
       return {
         time: time,
@@ -412,7 +396,6 @@ if (this.currentPage > 1) {
   } else {
     this.currentMonth--;
   }
-  // Atualiza a página inicial para exibir os dias do mês anterior
   const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
   this.currentPage = Math.ceil(daysInMonth / 7);
   this.updateDaysInMonth();
@@ -432,13 +415,11 @@ this.currentTab = 0;
 },
 nextStep() {
   if (this.currentTab < 3) {
-    // Incrementa o currentTab
     this.currentTab++;
   }
 },
 prevStep() {
   if (this.currentTab > 0) {
-      // Em outros casos, apenas decrementa o currentTab
       this.currentTab--;
   }
 },
@@ -455,23 +436,17 @@ selectService(service) {
 
   selectDateTime(time) {
     this.selectedTime = time;
-    // Verifica se um dia foi selecionado anteriormente
     if (this.selectedDay !== null && this.selectedMonth !== null && this.selectedYear !== null) {
-        // Concatena a hora selecionada ao dia, mês e ano selecionados
         const selectedDateTime = `${this.selectedYear}-${this.selectedMonth}-${this.selectedDay} ${time}`;
-        // Define o valor completo da data e hora selecionadas
         this.selectedDateTime = selectedDateTime;
     } else {
-        // Se nenhum dia foi selecionado, exibe uma mensagem de erro
         console.error('Por favor, selecione um dia antes de selecionar a hora.');
     }
 },
 
   async updateBooking() {
-    // Verifica se todas as seleções foram feitas
     if (this.selectedService && this.selectedBarber && this.selectedDateTime) {
       try {
-        // Constrói o objeto de dados a ser enviado
         const dataToSend = {
           service: this.selectedService,
           barber: this.selectedBarber,
@@ -480,7 +455,6 @@ selectService(service) {
           notas: this.selectedNotas,
         };
         const marcacaoId = this.serviceDefault.Id;
-        // Envia os dados para o servidor usando o método PUT
         const response = await fetch(`http://localhost:5000/painel/marcacoes/${marcacaoId}`, {
           method: 'PUT',
           headers: {
@@ -489,32 +463,25 @@ selectService(service) {
           body: JSON.stringify(dataToSend),
         });
 
-        // Verifica se a requisição foi bem-sucedida
         if (response.ok) {
-          // Limpa as seleções do usuário
           this.selectedService = null;
           this.selectedBarber = null;
           this.selectedDateTime = null;
-          // Exibe uma mensagem de sucesso para o usuário
           alert('A sua reserva foi enviada com sucesso!');
         } else {
-          // Exibe uma mensagem de erro se a requisição falhar
           alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
         }
       } catch (error) {
         console.error('Erro ao enviar reserva:', error);
-        // Exibe uma mensagem de erro se ocorrer um erro inesperado
         alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
       }
     } else {
-      // Se alguma seleção estiver faltando, exibe uma mensagem para o usuário
       alert('Por favor, selecione um serviço, um barbeiro e um horário antes de enviar sua reserva.');
     }
   },
 
 },
 props: {
-    // Definindo as propriedades esperadas
     serviceDefault: {
       type: String,
       required: true
@@ -533,14 +500,13 @@ mounted() {
   this.fetchServicos();
   this.fetchBarbeiros();
 
-  // Extrai informações da data do serviço padrão
   const dateParts = this.serviceDefault.Data.split(",")[1].trim().split(" ")[0].split("/");
   const timeParts = this.serviceDefault.Data.split("às")[1].trim().split(":");
   const serviceDay = parseInt(dateParts[0], 10);
   const serviceMonth = parseInt(dateParts[1], 10);
   const serviceYear = parseInt(dateParts[2], 10);
-  const serviceHour = parseInt(timeParts[0].trim(), 10); // Remove espaços em branco em torno da hora
-  const serviceMinute = parseInt(timeParts[1].trim().split(" ")[0], 10); // Remove espaços em branco e "às" dos minutos
+  const serviceHour = parseInt(timeParts[0].trim(), 10);
+  const serviceMinute = parseInt(timeParts[1].trim().split(" ")[0], 10);
 
 
   this.selectedHour = serviceHour;
@@ -558,14 +524,11 @@ mounted() {
   const today = new Date();
   const currentDay = today.getDate();
 
-  // Definir o dia atual como selecionado
   this.selectedDay = currentDay;
 
-  // Calcular a página que contém o dia atual
-  const dayPosition = currentDay % 7 === 0 ? 7 : currentDay % 7; // Posição do dia na semana
+  const dayPosition = currentDay % 7 === 0 ? 7 : currentDay % 7; 
   this.currentPage = Math.ceil((currentDay + (7 - dayPosition)) / 7);
 
-  // Atualizar os dias do mês para a página que contém o dia atual
   this.updateDaysInMonth();
 }
 
@@ -651,11 +614,11 @@ outline: none;
 display: flex;
 flex-wrap: wrap;
 justify-content: space-between;
-gap: 20px; /* Espaço entre as horas */
+gap: 20px; 
 }
 
 .time-slot {
-width: calc(25% - 10px); /* Calcula a largura para quatro horas por linha com espaço entre elas */
+width: calc(25% - 10px);
 text-align: center;
 }
 
@@ -665,17 +628,17 @@ text-align: center;
 display: flex;
 flex-wrap: wrap;
 justify-content: space-between;
-gap: 10px; /* Espaço entre as horas */
+gap: 10px; 
 margin-top:10%;
 }
 
 .hour-button {
-width: calc(25% - 10px); /* Calcula a largura para quatro horas por linha com espaço entre elas */
+width: calc(25% - 10px);
 text-align: center;
 padding: 10px;
-border: 1px solid #ccc; /* Borda sólida */
-border-radius: 10px; /* Borda arredondada */
-cursor: pointer; /* Cursor do mouse */
+border: 1px solid #ccc; 
+border-radius: 10px; 
+cursor: pointer; 
 }
 
 
@@ -703,24 +666,24 @@ background-color: #2626264d;
   position: sticky;
   bottom: 0;
   width: 100%;
-  background-color: #ffffff; /* Cor de fundo dos botões */
-  padding: 10px 0; /* Espaçamento interno */
-  box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1); /* Sombra para separar dos elementos abaixo */
-  z-index: 2; /* Garante que os botões fiquem na parte superior */
+  background-color: #ffffff; 
+  padding: 10px 0; 
+  box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+  z-index: 2; 
   text-align:center;
   gap:10%;
 }
 
 .button {
-  color: #000000; /* Cor do texto */
+  color: #000000; 
   padding: 10px 20px;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Adicionando a transição para a propriedade transform */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
   border: none;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Sombra para separar dos elementos abaixo */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); 
   background-color:white;
   border:1px solid #FCD666;
-  margin: 0 50px; /* Margem horizontal de 10 pixels */
+  margin: 0 50px; 
 }
 
 .button:hover {
@@ -754,19 +717,19 @@ background-color: #2626264d;
 }
 
 .prevB:hover {
-transform: translateX(-5px); /* Move o botão 5 pixels para cima */
+transform: translateX(-5px);
 }
 .nextB:hover {
-transform: translateX(5px); /* Move o botão 5 pixels para cima */
+transform: translateX(5px); 
 }
 .left:hover {
-transform: translateX(-5px); /* Move o botão 5 pixels para cima */
+transform: translateX(-5px); 
 }
 .right:hover {
-transform: translateX(5px); /* Move o botão 5 pixels para cima */
+transform: translateX(5px); 
 }
 .dayActive{
-  transform: translateY(-5px); /* Move o botão 5 pixels para cima */
+  transform: translateY(-5px); 
   background-color:#F2B709!important;
 }
 
@@ -786,12 +749,12 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999; /* Garante que o GIF de carregamento esteja acima de outros elementos */
+  z-index: 999;
 }
 
 .loading-container img {
-  width: 50px; /* Ajuste o tamanho conforme necessário */
-  height: 50px; /* Ajuste o tamanho conforme necessário */
+  width: 50px; 
+  height: 50px; 
 }
 
 
@@ -804,7 +767,7 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 .social-login, .input-container, .button-container {
   width: 100%;
   margin-bottom: 10px;
-  font-family: "Inter", sans-serif; /* Altere para o font-family desejado */
+  font-family: "Inter", sans-serif; 
 }
 
 .social-login {
@@ -824,7 +787,7 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 }
 .horizontal-line-container {
     display: inline-block;
-    margin: 0 10px; /* Ajuste a margem conforme necessário */
+    margin: 0 10px; 
     width: 10vw;
 }
 

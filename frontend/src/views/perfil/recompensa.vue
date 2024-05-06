@@ -46,7 +46,6 @@
           </div>
 
           <div class="form-container" style="width: 100%; margin-bottom: 5%;">
-            <!-- Primeiras imagens com borda amarela -->
             <div class="first-five">
               <img :src="require('@/assets/images/about_logo.jpg')"
                   class="image-border gold-border"
@@ -101,7 +100,6 @@
           </div>
 
           <div class="form-container" style="width: 100%; margin-bottom: 5%;">
-            <!-- Primeiras imagens com borda amarela -->
             <div class="first-five">
               <img :src="require('@/assets/images/about_logo.jpg')"
                   class="image-border gold-border"
@@ -129,23 +127,21 @@ import Footer from '../../components/Footer.vue';
 export default {
   data() {
     return {
-      userId: '', // ID do usuário logado
-      utilizador: {}, // Dados do usuário
-      isButtonDisabled: true, // Inicialmente o botão está desativado
+      userId: '', 
+      utilizador: {}, 
+      isButtonDisabled: true, 
     };
   },
   methods: {
     async fetchUtilizador() {
       try {
-        // Faça uma requisição para obter os dados do usuário com base no ID
         const response = await fetch(`http://localhost:5000/painel/utilizadores/${this.userId}`);
         const data = await response.json();
         this.utilizador = data;
-        // Verifica se o usuário tem pontos suficientes para a marcação gratuita
         if (this.utilizador.Pontos < 10) {
-          this.isButtonDisabled = true; // Desativa o botão se o usuário não tiver pontos suficientes
+          this.isButtonDisabled = true; 
         } else {
-          this.isButtonDisabled = false; // Ativa o botão se o usuário tiver pontos suficientes
+          this.isButtonDisabled = false; 
         }
       } catch (error) {
         console.error('Erro ao buscar os dados do utilizador:', error);
@@ -171,10 +167,9 @@ export default {
 }
 
 .profile-anterior {
-  /* Estilos padrão do botão */
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #F2B707; /* Verde */
+  background-color: #F2B707; 
   border: none;
   color: white;
   text-align: center;
@@ -188,8 +183,7 @@ export default {
 }
 
 .profile-anterior.disabled {
-  /* Estilos quando o botão está desativado */
-  background-color: #cccccc; /* Cinza */
+  background-color: #cccccc;
   cursor: not-allowed;
   width:300px;
 }

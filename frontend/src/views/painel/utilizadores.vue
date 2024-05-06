@@ -53,7 +53,6 @@
         <div class="popup-content">
           <span class="close" @click="closeEditPopup">&times;</span>
           <h2>Editar Utilizador</h2>
-          <!-- Campos de edição com títulos -->
           <div class="input-group">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" v-model="editedUser.Nome" placeholder="Nome">
@@ -266,7 +265,6 @@ export default {
     openEditPopup() {
       this.showEditModal = false;
       this.showEditPopup = true;
-      // Carregar os dados do utilizador a ser editado
       this.editedUser = this.utilizadores.find(user => user.Id === this.userIdToEdit);
     },
     closeEditPopup() {
@@ -277,10 +275,8 @@ export default {
     },
         async submitEdit() {
       if (this.editedUser.Password.trim() == '') {
-        // Cria uma cópia do objeto editedUser
         const editedUserData = { ...this.editedUser };
 
-        // Remove a propriedade Password do objeto
         delete editedUserData.Password;
 
         try {
@@ -290,7 +286,7 @@ export default {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(editedUserData) // Envia a cópia do objeto sem a propriedade Password
+            body: JSON.stringify(editedUserData) 
           });
 
           if (response.ok) {
@@ -310,7 +306,7 @@ export default {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.editedUser) // Envia a cópia do objeto sem a propriedade Password
+            body: JSON.stringify(this.editedUser) 
           });
 
           if (response.ok) {

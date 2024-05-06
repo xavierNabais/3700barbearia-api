@@ -1,5 +1,6 @@
 <template>
 
+    <!-- DESKTOP -->
 
 <section class="portfolio-block desktop">
 
@@ -35,6 +36,7 @@
 
 
 
+    <!-- MOBILE -->
 
 
 <section class="portfolio-block mobile">
@@ -89,26 +91,23 @@
 export default {
   name: 'SectionPortfolio',
   mounted() {
+    // Seleciona todos os elementos com a classe "scroller"
     const scrollers = document.querySelectorAll(".scroller");
 
-    // Se o usuário não optou por reduzir o movimento, então adicionamos a animação
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      this.addAnimation(scrollers);
-    }
+
+    this.addAnimation(scrollers);
+
   },
   methods: {
     addAnimation(scrollers) {
       scrollers.forEach((scroller) => {
-        // Adicione data-animated="true" a cada `.scroller` na página
         scroller.setAttribute("data-animated", true);
 
-        // Faça um array dos elementos dentro de `.scroller-inner`
+        // Seleciona o conteúdo dentro do elemento "scroller"
         const scrollerInner = scroller.querySelector(".scroller__inner");
         const scrollerContent = Array.from(scrollerInner.children);
 
-        // Para cada item no array, clone-o
-        // adicione aria-hidden a ele
-        // adicione-o dentro de `.scroller-inner`
+        // Duplica cada item do conteúdo e oculta o duplicado
         scrollerContent.forEach((item) => {
           const duplicatedItem = item.cloneNode(true);
           duplicatedItem.setAttribute("aria-hidden", true);

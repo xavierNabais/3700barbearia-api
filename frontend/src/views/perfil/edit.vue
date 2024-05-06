@@ -426,8 +426,8 @@
             showConfirmationMessage: false,
             showEmailConfirmationMessage: false,
             showPasswordConfirmationMessage: false,
-            utilizador: [], // Propriedade para armazenar os dados do form nome, apelido, username
-            email: [], // Propriedade para armazenar os dados do form email
+            utilizador: [],
+            email: [], 
             password: [],
             perfilAtualizado1: false,
             perfilAtualizado2: false,
@@ -470,12 +470,12 @@
                       console.log('Perfil editado com sucesso!');
                       this.perfilAtualizado1 = true;
                       setTimeout(() => {
-                        localStorage.setItem('userName', this.utilizador.Nome); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                        localStorage.setItem('userName', this.utilizador.Nome); 
                         this.perfilAtualizado1 = false;
                         window.location.reload();
                       }, 1500);
                      } else {
-                      const responseData1 = await response.json(); // Obtem os dados da resposta JSON
+                      const responseData1 = await response.json(); 
                       this.erro1 = true;
                       this.erro1Message = responseData1;
                       console.error('Erro ao editar o perfil.');
@@ -492,11 +492,10 @@
                         return;
                     }
                     
-                    // Crie um objeto com as propriedades Old, New e Id
                     const data = {
                         Old: this.email.Old,
                         New: this.email.New,
-                        Id: userId // Busca o ID do usuário do localStorage
+                        Id: userId
                     };
 
                     const url = `http://localhost:5000/perfil/editar/2/${userId}`;
@@ -516,7 +515,7 @@
                             window.location.reload();
                         }, 1500);
                     } else {
-                      const responseData2 = await response.json(); // Obtem os dados da resposta JSON
+                      const responseData2 = await response.json(); 
                       console.error('Erro ao editar o perfil.');
                       this.erro2 = true;
                       this.erro2Message = responseData2;
@@ -533,11 +532,10 @@
                         return;
                     }
                     
-                    // Crie um objeto com as propriedades Old, New e Id
                     const data = {
                         Old: this.password.Old,
                         New: this.password.New,
-                        Id: userId // Busca o ID do usuário do localStorage
+                        Id: userId 
                     };
 
                     const url = `http://localhost:5000/perfil/editar/3/${userId}`;
@@ -558,7 +556,7 @@
                             window.location.reload();
                         }, 1500);
                     } else {
-                      const responseData3 = await response.json(); // Obtem os dados da resposta JSON
+                      const responseData3 = await response.json(); 
                       console.error('Erro ao editar o perfil.');
                       this.erro3 = true;
                       this.erro3Message = responseData3;
@@ -579,18 +577,15 @@
                   const response = await fetch(url);
                   const data = await response.json();
 
-                  // Verificar se há dados de utilizador
                   if (data && data.length > 0) {
                       const userData = data[0];
 
-                      // Verificar campos e atribuir valores padrão se estiverem vazios
                       this.utilizador = {
                           Nome: userData.Nome ? userData.Nome : '',
                           Apelido: userData.Apelido ? userData.Apelido : '',
                           Username: userData.Username ? userData.Username : ''
                       };
                   } else {
-                      // Se não houver dados, atribuir valores padrão vazios
                       this.utilizador = { Nome: '', Apelido: '', Username: '' };
                   }
               } catch (error) {

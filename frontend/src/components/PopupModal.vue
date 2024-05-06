@@ -3,7 +3,6 @@
 
 
   <div class="popup-section section-left desktop" style="padding:20px">
-  <!-- Indicador de progresso -->
   <div class="progress-indicator">
       <div class="progress-ball filled step"></div>
       <div class="progress-ball step"></div>
@@ -11,19 +10,17 @@
       <div class="progress-ball step"></div>
   </div>
 
-  <!-- Título e descrição -->
   <div class="section-content">
       <h2 class="popup-title-left">SERVIÇO</h2>
       <p class="popup-description">Nesta seção, os clientes podem escolher o serviço específico que desejam agendar na barbearia.</p>
   </div>
-  <!-- Conteúdo da Seção 1 -->
   </div>
 
 
 
 
 
-  <div class="popup-section section-middle mobile" style="overflow-x:hidden">
+  <div class="popup-section section-middle mobile" >
 
 <div class="service-selection">
       <h2 v-if="currentTab == 0" class="popup-title" style="color:black;padding:20px">Selecione o serviço</h2>
@@ -91,12 +88,10 @@
 </div>
 <div class="service-info" style="overflow-x:hidden">
 <div class="date-container">
-  <!-- Exibe o mês e o ano -->
   <p style="color:black; border-bottom:1px solid #F2B709;">{{ monthYear }}</p>
   <p style="color:black; margin-left: auto;border-bottom:1px solid #F2B709;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
 </div>
 <div class="pagination-wrapper">
-  <!-- Botões de navegação do calendário -->
   <button class="pagination-button prevB" @click.prevent="prevPage">&lt;</button>
   <div class="day-pagination">
     <div class="day-buttons" style="gap:5px">
@@ -115,7 +110,6 @@
   <button class="pagination-button nextB" @click.prevent="nextPage">&gt;</button>
 </div>
 
-<!-- Exibe as horas disponíveis para o dia selecionado -->
 <div class="available-times">
   <div v-if="dayUnavailable">
     <p style="color:black;margin-top:20%;text-align:center">Dia indisponível</p>
@@ -154,7 +148,6 @@
 <p style="font-size:14px">Entre ou cadastre-se para concluir a sua reserva</p>
 
 <div v-show="!showRegistrationForm">    
-<!-- Botões de login social -->
 <GoogleLogin :callback="googleCallback" prompt/>
 
 <button class="social-login">
@@ -170,7 +163,6 @@ OU
 </div>
 
 
-<!-- Formulário de login -->
 <form @submit.prevent="login()">
   <input type="email" placeholder="Nome de utilizador ou email" v-model="email" id="email" style="border: 1px solid black;width:100%;padding: 0px 10px">
   <br>
@@ -202,7 +194,6 @@ OU
 <div class="tab" v-show="showSuccess" style="text-align:center;color:black">
   <h2 class="popup-title">MARCAÇÃO CONCLUÍDA</h2>
   <div class="service-info">
-    <!-- Círculo pontilhado com ícone dentro -->
     <div class="circle">
       <i class="fas fa-check-circle"></i>
     </div>
@@ -218,9 +209,9 @@ OU
 
 
 </div>
-<div class="button-container" style="margin-top:auto" v-show="!showSuccess">
-<button class="button left " style="margin: 0px 25px" @click="prevStep">- Anterior</button>
-<button class="button right " @click.prevent="nextStep(1)" :disabled="disabledNext">Próximo -></button>
+<div class="button-container" style="margin-top:auto" >
+<button class="button left " style="margin: 0px 5%" @click="prevStep">« Anterior</button>
+<button class="button right " @click.prevent="nextStep(1)" :disabled="disabledNext" style="margin: 0px 5%">Próximo »</button>
 </div>
 </div>
 
@@ -299,12 +290,10 @@ OU
   </div>
   <div class="service-info">
     <div class="date-container">
-      <!-- Exibe o mês e o ano -->
       <p style="color:black; border-bottom:1px solid #F2B709;">{{ monthYear }}</p>
       <p style="color:black; margin-left: auto;border-bottom:1px solid #F2B709;">{{ nextMonthYear ? `${months[nextMonth - 1]} ${nextMonthYear}` : '' }}</p>
     </div>
     <div class="pagination-wrapper">
-      <!-- Botões de navegação do calendário -->
       <button class="pagination-button prevB" @click.prevent="prevPage">&lt;</button>
       <div class="day-pagination">
         <div class="day-buttons">
@@ -323,7 +312,6 @@ OU
       <button class="pagination-button nextB" @click.prevent="nextPage">&gt;</button>
     </div>
 
-    <!-- Exibe as horas disponíveis para o dia selecionado -->
     <div class="available-times">
       <div v-if="dayUnavailable">
         <p style="color:black;margin-top:20%;text-align:center">Dia indisponível</p>
@@ -363,7 +351,6 @@ OU
     <p style="font-size:14px">Entre ou cadastre-se para concluir a sua reserva</p>
 
 <div v-show="!showRegistrationForm">    
-    <!-- Botões de login social -->
     <GoogleLogin :callback="googleCallback" prompt/>
 
     <button class="social-login">
@@ -379,7 +366,6 @@ OU
 </div>
 
 
-    <!-- Formulário de login -->
     <form @submit.prevent="login()">
       <input type="email" placeholder="Nome de utilizador ou email" v-model="email" id="email" style="border: 1px solid black;width:100%;padding: 0px 10px">
       <br>
@@ -411,7 +397,6 @@ OU
     <div class="tab" v-show="showSuccess" style="text-align:center;color:black">
       <h2 class="popup-title">MARCAÇÃO CONCLUÍDA</h2>
       <div class="service-info">
-        <!-- Círculo pontilhado com ícone dentro -->
         <div class="circle">
           <i class="fas fa-check-circle"></i>
         </div>
@@ -428,8 +413,8 @@ OU
 
   </div>
   <div class="button-container" style="margin-top:auto" v-show="!showSuccess">
-    <button class="button left " @click="prevStep">- Anterior</button>
-    <button class="button right " @click.prevent="nextStep(1)" :disabled="disabledNext">Próximo -></button>
+    <button class="button left " @click="prevStep">« Anterior</button>
+    <button class="button right " @click.prevent="nextStep(1)" :disabled="disabledNext">Próximo »</button>
   </div>
   </div>
 
@@ -500,7 +485,7 @@ password: '',
 r_email: '',
 r_password: '',
 showRegistrationForm: false,
-loadingGif: false, // Variável para controlar a exibição do GIF
+loadingGif: false, 
 showPopup: false,
 currentTab: 0,
 marcacoes: [],
@@ -541,51 +526,51 @@ return `${this.months[this.currentMonth - 1]} ${this.currentYear}`;
 },
 },
 methods: {
+// Método assíncrono para obter as marcações
 async fetchMarcacoes() {
 try {
   const response = await fetch('http://localhost:5000/painel/marcacoes');
   this.marcacoes = await response.json();
 } catch (error) {
-  console.error('Erro ao buscar as marcações:', error);
+  console.error('Erro ao obter as marcações:', error);
 }
 },
+// Método assíncrono para obter os serviços
   async fetchServicos() {
   try {
     const response = await fetch('http://localhost:5000/painel/servicos');
     const data = await response.json();
     this.servicos = data;
   } catch (error) {
-    console.error('Erro ao buscar os dados dos serviços:', error);
+    console.error('Erro ao obter os dados dos serviços:', error);
   }
   },
+// Método para obter o dia da semana
 getDayOfWeek(month, day) {
   const date = new Date(this.currentYear, month, day);
-  const dayOfWeek = date.toLocaleDateString('pt-PT', { weekday: 'short' }).slice(0, 3); // Abreviar para três letras
+  const dayOfWeek = date.toLocaleDateString('pt-PT', { weekday: 'short' }).slice(0, 3); 
   return dayOfWeek;
 },
-
+// Método para filtrar os serviços por categoria
 filterServicosPorCategoria(categoria) {
-  // Restaura a lista completa de serviços
   this.servicos = [];
-  // Busca novamente todos os serviços
   this.fetchServicos().then(() => {
-    // Aplica o filtro com base na categoria selecionada
     this.servicos = this.servicos.filter(servico => servico.Categoria === categoria);
-    this.categoriaAtiva = categoria; // Atualiza a categoria ativa
+    this.categoriaAtiva = categoria; 
   });
 },
-
+// Método assíncrono para obter os barbeiros
 async fetchBarbeiros() {
 try {
   const response = await fetch('http://localhost:5000/painel/barbeiros');
   const data = await response.json();
   this.barbeiros = data;
 } catch (error) {
-  console.error('Erro ao buscar os dados dos barbeiros:', error);
+  console.error('Erro ao obter os dados dos barbeiros:', error);
 }
 },
+// Método para callback do Google Login
 async googleCallback(response) {
-            // Obtém o token de acesso a partir do objeto de resposta
             const accessData = decodeCredential(response.credential);
 
 
@@ -599,10 +584,9 @@ async googleCallback(response) {
                   accessData
                 })
               });              
-              // Verifique se o login foi bem-sucedido
               if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('userId', data.userId); 
                 localStorage.setItem('userName', data.userName);
                 localStorage.setItem('type', data.type);
                 this.currentTab = 3;
@@ -613,6 +597,7 @@ async googleCallback(response) {
               console.error('Erro ao efetuar login:', error);
             }
 },
+// Método assíncrono para fazer login
 async login() {
   try {
     const dataToSend = {
@@ -629,17 +614,18 @@ async login() {
         });
     if (response.ok) {
       const data = await response.json();
-      localStorage.setItem('userId', data.userId); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+      localStorage.setItem('userId', data.userId); 
       localStorage.setItem('userName', data.userName);
       localStorage.setItem('type', data.type);
       this.currentTab = 3;
     } else {
-      console.error('Erro ao buscar os dados dos barbeiros:', response.status);
+      console.error('Erro ao obter os dados do utilizador:', response.status);
     }
   } catch (error) {
-    console.error('Erro ao buscar os dados dos barbeiros:', error);
+    console.error('Erro ao obter os dados do utilizador:', error);
   }
 },
+// Método assíncrono para o registo
 async registo() {
             try {
               const response = await fetch('http://localhost:5000/registo', {
@@ -654,19 +640,19 @@ async registo() {
               });
               const data = await response.json();
               
-              // Verifique se o login foi bem-sucedido
               if (response.ok) {
-                localStorage.setItem('userId', data[0].Id); // Use sessionStorage se preferir que os dados sejam perdidos quando o navegador for fechado
+                localStorage.setItem('userId', data[0].Id); 
                 localStorage.setItem('type', 0);
                 this.currentTab = 3;
               } else {
                 this.registo_error = true;
-                console.log(data); // Se o login não foi bem-sucedido, imprima os dados do erro no console
+                console.log(data); 
               }
             } catch (error) {
-              console.error('Erro ao efetuar login:', error);
+              console.error('Erro ao efetuar registo:', error);
             }
 },
+// Método para avançar para o próximo mês
 nextMonth() {
 if (this.currentMonth === 12) {
   this.currentMonth = 1;
@@ -676,6 +662,7 @@ if (this.currentMonth === 12) {
 }
 this.updateDaysInMonth();
 },
+// Método para retroceder para o mês anterior
 prevMonth() {
 if (this.currentMonth === 1) {
   this.currentMonth = 12;
@@ -685,90 +672,112 @@ if (this.currentMonth === 1) {
 }
 this.updateDaysInMonth();
 },
+// Método para atualizar os dias no mês atual
 updateDaysInMonth() {
+    // Verifica se o mês e o ano estão definidos; se não estiverem, utiliza o mês e o ano atuais
   if (!this.currentMonth || !this.currentYear) {
     this.currentMonth = new Date().getMonth() + 1;
     this.currentYear = new Date().getFullYear();
   }
+
+    // Obtém o número de dias no mês atual
   const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
+
+    // Calcula o dia de início e fim na página atual do calendário
   const startDay = (this.currentPage - 1) * 7 + 1;
   const endDay = Math.min(this.currentPage * 7, daysInMonth);
+
+    // Array para armazenar os dias
   const days = [];
 
-  // Adiciona dias do mês anterior, se necessário
+    // Obtém o número de dias no mês anterior
   const prevMonthDays = new Date(this.currentYear, this.currentMonth - 1, 0).getDate();
-  const prevMonth = this.currentMonth === 1 ? 12 : this.currentMonth - 1; // Verifica se o mês atual é janeiro
+  const prevMonth = this.currentMonth === 1 ? 12 : this.currentMonth - 1; 
+
+    // Adiciona os dias do mês anterior à lista de dias
   for (let i = startDay; i <= Math.min(endDay, prevMonthDays); i++) {
     days.push({ day: i, month: prevMonth });
   }
-
-  // Adiciona dias do mês atual
+    // Adiciona os dias do mês atual à lista de dias
   for (let i = Math.max(startDay, prevMonthDays + 1); i <= endDay; i++) {
     days.push({ day: i, month: this.currentMonth });
   }
 
-  // Adiciona dias do próximo mês, se necessário
+    // Calcula o número de dias do mês seguinte para preencher a última semana
   const nextMonthDays = 7 - days.length % 7;
+    // Adiciona os dias do mês seguinte à lista de dias, se necessário
   if (nextMonthDays < 7) {
     for (let i = 1; i <= nextMonthDays; i++) {
       days.push({ day: i, month: this.currentMonth});
     }
-    // Define o próximo mês e ano
+    // Determina o ano e mês do próximo mês
     this.nextMonthYear = this.currentYear + (this.currentMonth === 12 ? 1 : 0);
     this.nextMonth = this.currentMonth === 12 ? 1 : this.currentMonth + 1;
   } else {
-    // Se não houver dias do próximo mês, limpa os valores
     this.nextMonthYear = null;
     this.nextMonth = null;
   }
 
+    // Atualiza a lista de dias, o número total de páginas e seleciona o dia atual
   this.daysInMonth = days;
   this.totalPages = Math.ceil(daysInMonth / 7);
 
-  // Chama a função selectDay com o dia atual
   const today = new Date();
   const currentDay = today.getDate();
+    // Seleciona o dia atual no calendário
   this.selectDay({ day: currentDay, month: this.currentMonth-1, year: this.currentYear });
 },
 
 
 
 
-
+// Método assíncrono para lidar com a seleção do dia pelo utilizador
 async selectDay(day) {
+    // Obtém a data atual
   const currentDate = new Date();
+    // Calcula a data selecionada pelo utilizador
   const selectedDate = new Date(this.currentYear, day.month, day.day+1);
 
-  // Verifica se o dia selecionado é anterior ao dia atual
+  // Verifica se a data selecionada é anterior à data atual
   if (selectedDate < currentDate) {
-    // Esconde os botões das horas e mostra o parágrafo indicando que o dia é impossível
-    this.dayUnavailable = true;
+    this.dayUnavailable = true; // Define que o dia está indisponível para seleção
   }
   else{
-    this.dayUnavailable = false;
+    this.dayUnavailable = false; // Define que o dia está disponível para seleção
   }
 
+    // Define o estado inicial para a seleção do tempo e exibe o ícone de loading
   this.selectedTime = "",
   this.loadingGif = true;
+
+    // Simulação de loading
   await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Após o loading, desativa o ícone de loading e define os horários disponíveis
   this.loadingGif = false;
   this.availableTimes = [
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
   "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
   "17:30", "18:00", "18:30", "19:00" ];
+
+    // Guarda o dia, mês e ano selecionados
   this.selectedDay = day.day;
   this.selectedMonth = day.month+1;
   this.selectedYear = this.currentYear; 
+
   try {
+        // Obtém as marcações do servidor para o dia selecionado
     const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month+1}-${day.day}&barbeiro=${this.barbeiro}`);
     const data = await response.json();
-    // Extrai os horários das marcações e formata-os para corresponder ao formato dos botões de horas
+
+        // Converte as marcações em horários bloqueados
     const blockedTimes = data.map(marcacao => {
       const hora = new Date(marcacao.Data).getHours();
       const minutos = new Date(marcacao.Data).getMinutes();
       return `${hora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
     });
-    // Desabilita os botões de horas correspondentes aos horários das marcações
+
+        // Atualiza os horários disponíveis, marcando aqueles que estão bloqueados
     this.availableTimes = this.availableTimes.map(time => {
       return {
         time: time,
@@ -776,42 +785,51 @@ async selectDay(day) {
       };
     });
   } catch (error) {
-    console.error('Erro ao buscar as marcações:', error);
+    console.error('Erro ao obter as marcações:', error);
   }
 },
 
-
+// Método para avançar para a próxima página do calendário ou para o próximo mês se a última página atual for atingida
 nextPage() {
+    // Verifica se há mais páginas disponíveis
 if (this.currentPage < this.totalPages) {
-  this.currentPage++;
+  this.currentPage++; // Avança para a próxima página
 } else {
+    // Se a última página foi atingida, reinicia a contagem para a primeira página
   this.currentPage = 1;
+
+    // Se o mês atual for dezembro, avança para o próximo ano e define o mês como janeiro
   if (this.currentMonth === 12) {
     this.currentMonth = 1;
     this.currentYear++;
   } else {
+    // Caso contrário, avança para o próximo mês
     this.currentMonth++;
   }
 }
+  // Atualiza os dias do mês conforme a mudança de página ou mês
 this.updateDaysInMonth();
 },
 
+// Método para voltar para a página anterior do calendário ou para o mês anterior se a primeira página atual for atingida
 prevPage() {
+    // Verifica se a página atual é maior que a primeira página
 if (this.currentPage > 1) {
-  this.currentPage--;
-  this.updateDaysInMonth();
+  this.currentPage--; // Volta para a página anterior
+  this.updateDaysInMonth(); // Atualiza os dias do mês
 } else {
+      // Se a primeira página foi atingida, ajusta o mês e o ano
   if (this.currentMonth === 1) {
-    this.currentMonth = 12;
-    this.currentYear--;
+    this.currentMonth = 12; // Define o mês como dezembro
+    this.currentYear--; // Volta para o ano anterior
   } else {
-    this.currentMonth--;
+    this.currentMonth--; // Volta para o mês anterior
   }
-  // Atualiza a página inicial para exibir os dias do mês anterior
+      // Obtém o número de dias no mês anterior para calcular a última página
   const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
-  this.currentPage = Math.ceil(daysInMonth / 7);
-  this.updateDaysInMonth();
-}
+  this.currentPage = Math.ceil(daysInMonth / 7); // Define a página como a última página do mês anterior
+  this.updateDaysInMonth(); // Atualiza os dias do mês
+} 
 },
 gotoStep(step) {
   this.currentTab = step;
@@ -822,51 +840,50 @@ this.showPopup = true;
 closePopup() {
 this.showPopup = false;
 },
-nextStep() {
-  if (this.currentTab < 4) {
-    // Incrementa o currentTab
-    this.currentTab++;
 
-    // Verifica se está no terceiro passo
+// Método para avançar para a próxima etapa do popup de marcação
+nextStep() {
+    // Verifica se a etapa atual é menor que 4 (número total de etapas)
+  if (this.currentTab < 4) {
+    this.currentTab++; // Avança para a próxima etapa
+
+    // Verifica se a etapa atual é a etapa de seleção de data e hora
     if (this.currentTab === 3) {
-      // Verifica se há um userId no localStorage
+      // Verifica se há um utilizador autenticado
       if (localStorage.getItem('userId')) {
-        // Se houver userId, permanece no popup 3 e desativa o botão "Próximo"
-        this.disabledNext = true;
+        this.disabledNext = true; // Desativa o botão "Próximo" se o utilizador estiver autenticado
       } else {
-        // Se não houver userId, avança para o popup 4 e habilita o botão "Próximo"
+        // Se não houver utilizador autenticado, avança para a etapa de login/registo
         this.currentTab = 4;
-        this.disabledNext = false;
+        this.disabledNext = false; // Habilita o botão "Próximo"
       }
     } else {
-      // Em outros passos que não sejam o terceiro, o botão "Próximo" deve estar habilitado
-      this.disabledNext = false;
+      this.disabledNext = false; // Habilita o botão "Próximo" para outras etapas
     }
   }
 
-  // Verifica se está na última aba e se há um userId
+  // Se estiver na etapa de confirmação e houver um utilizador autenticado, retrocede para a etapa de seleção de data e hora
   if (this.currentTab === 4 && localStorage.getItem('userId')) {
-    // Se estiver na última aba e houver um userId, ajusta o currentTab para evitar voltar para a página de login
     this.currentTab = 3;
-    // Desabilita o botão "Próximo" para evitar que o usuário avance além da última aba
-    this.disabledNext = true;
+    this.disabledNext = true; // Desativa o botão "Próximo"
   }
 },
+
+// Método para retroceder para a etapa anterior do popup de marcação
 prevStep() {
+    // Verifica se a mensagem de sucesso está exibida
   if (this.showSuccess === true) {
-    this.disabledNext = true;
+    this.disabledNext = true; // Desativa o botão "Próximo" se a mensagem de sucesso estiver exibida
   }
-  this.disabledNext = false;
+  this.disabledNext = false; // Habilita o botão "Próximo" para todas as situações
   if (this.currentTab > 0) {
+        // Verifica se a etapa atual é maior que 0 (primeira etapa)
     if (this.currentTab === 3) {
-      // Se estiver no popup 3 e voltar para trás, volta para o popup 2
-      this.currentTab = 2;
+      this.currentTab = 2; // Retrocede para a etapa de seleção de data e hora (etapa 2)
     } else if (this.currentTab === 4) {
-      // Se estiver no popup 4 e voltar para trás, volta para o popup 2
       this.currentTab = 2;
     } else {
-      // Em outros casos, apenas decrementa o currentTab
-      this.currentTab--;
+      this.currentTab--; // Retrocede para a etapa anterior
     }
   }
 },
@@ -887,25 +904,22 @@ selectService(service) {
   selectDateTime(time) {
     console.log(time);
     this.selectedTime = time;
-    // Verifica se um dia foi selecionado anteriormente
     if (this.selectedDay !== null && this.selectedMonth !== null && this.selectedYear !== null) {
-        // Concatena a hora selecionada ao dia, mês e ano selecionados
         const selectedDateTime = `${this.selectedYear}-${this.selectedMonth}-${this.selectedDay} ${time}`;
-        // Define o valor completo da data e hora selecionadas
         this.selectedDateTime = selectedDateTime;
     } else {
-        // Se nenhum dia foi selecionado, exibe uma mensagem de erro
         console.error('Por favor, selecione um dia antes de selecionar a hora.');
     }
     this.summary.selectedDateTime = this.selectedDay+'/'+this.selectedMonth+'/'+this.selectedYear+'-'+time;
 
 },
 
+// Método para submeter uma reserva
   async submitBooking() {
-    // Verifica se todas as seleções foram feitas
+    // Verifica se um serviço, um barbeiro e uma data/hora foram selecionados
     if (this.selectedService && this.selectedBarber && this.selectedDateTime) {
       try {
-        // Constrói o objeto de dados a ser enviado
+        // Preparação dos dados a enviar
         const dataToSend = {
           service: this.selectedService,
           barber: this.selectedBarber,
@@ -914,7 +928,6 @@ selectService(service) {
           notas: this.selectedNotas,
         };
 
-        // Envia os dados para o servidor usando o método PUT
         const response = await fetch('http://localhost:5000/painel/marcacoes', {
           method: 'POST',
           headers: {
@@ -923,26 +936,20 @@ selectService(service) {
           body: JSON.stringify(dataToSend),
         });
 
-        // Verifica se a requisição foi bem-sucedida
         if (response.ok) {
-          // Limpa as seleções do usuário
           this.selectedService = null;
           this.selectedBarber = null;
           this.selectedDateTime = null;
-          // Exibe uma mensagem de sucesso para o usuário
           this.currentTab = 5;
           this.showSuccess = true;
         } else {
-          // Exibe uma mensagem de erro se a requisição falhar
           alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
         }
       } catch (error) {
         console.error('Erro ao enviar reserva:', error);
-        // Exibe uma mensagem de erro se ocorrer um erro inesperado
         alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
       }
     } else {
-      // Se alguma seleção estiver faltando, exibe uma mensagem para o usuário
       alert('Por favor, selecione um serviço, um barbeiro e um horário antes de enviar sua reserva.');
     }
   },
@@ -955,14 +962,11 @@ mounted() {
   const today = new Date();
   const currentDay = today.getDate();
 
-  // Definir o dia atual como selecionado
   this.selectedDay = currentDay;
 
-  // Calcular a página que contém o dia atual
-  const dayPosition = currentDay % 7 === 0 ? 7 : currentDay % 7; // Posição do dia na semana
+  const dayPosition = currentDay % 7 === 0 ? 7 : currentDay % 7; 
   this.currentPage = Math.ceil((currentDay + (7 - dayPosition)) / 7);
 
-  // Atualizar os dias do mês para a página que contém o dia atual
   this.updateDaysInMonth();
 }
 
@@ -1047,11 +1051,11 @@ outline: none;
 display: flex;
 flex-wrap: wrap;
 justify-content: space-between;
-gap: 20px; /* Espaço entre as horas */
+gap: 20px;
 }
 
 .time-slot {
-width: calc(25% - 10px); /* Calcula a largura para quatro horas por linha com espaço entre elas */
+width: calc(25% - 10px); 
 text-align: center;
 }
 
@@ -1061,17 +1065,17 @@ text-align: center;
 display: flex;
 flex-wrap: wrap;
 justify-content: space-between;
-gap: 10px; /* Espaço entre as horas */
+gap: 10px; 
 margin-top:10%;
 }
 
 .hour-button {
-width: calc(25% - 10px); /* Calcula a largura para quatro horas por linha com espaço entre elas */
+width: calc(25% - 10px); 
 text-align: center;
 padding: 10px;
-border: 1px solid #ccc; /* Borda sólida */
-border-radius: 10px; /* Borda arredondada */
-cursor: pointer; /* Cursor do mouse */
+border: 1px solid #ccc; 
+border-radius: 10px; 
+cursor: pointer;
 }
 
 
@@ -1099,24 +1103,24 @@ background-color: #2626264d;
   position: sticky;
   bottom: 0;
   width: 100%;
-  background-color: #ffffff; /* Cor de fundo dos botões */
-  padding: 10px 0; /* Espaçamento interno */
-  box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1); /* Sombra para separar dos elementos abaixo */
-  z-index: 2; /* Garante que os botões fiquem na parte superior */
+  background-color: #ffffff; 
+  padding: 10px 0;
+  box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1); 
+  z-index: 2; 
   text-align:center;
   gap:10%;
 }
 
 .button {
-  color: #000000; /* Cor do texto */
+  color: #000000; 
   padding: 10px 20px;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Adicionando a transição para a propriedade transform */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
   border: none;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Sombra para separar dos elementos abaixo */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); 
   background-color:white;
   border:1px solid #FCD666;
-  margin: 0 50px; /* Margem horizontal de 10 pixels */
+  margin: 0 50px; 
 }
 
 .button:hover {
@@ -1150,19 +1154,19 @@ background-color: #2626264d;
 }
 
 .prevB:hover {
-transform: translateX(-5px); /* Move o botão 5 pixels para cima */
+transform: translateX(-5px);
 }
 .nextB:hover {
-transform: translateX(5px); /* Move o botão 5 pixels para cima */
+transform: translateX(5px); 
 }
 .left:hover {
-transform: translateX(-5px); /* Move o botão 5 pixels para cima */
+transform: translateX(-5px); 
 }
 .right:hover {
-transform: translateX(5px); /* Move o botão 5 pixels para cima */
+transform: translateX(5px); 
 }
 .dayActive{
-  transform: translateY(-5px); /* Move o botão 5 pixels para cima */
+  transform: translateY(-5px); 
   background-color:#F2B709!important;
 }
 
@@ -1182,12 +1186,12 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999; /* Garante que o GIF de carregamento esteja acima de outros elementos */
+  z-index: 999; 
 }
 
 .loading-container img {
-  width: 50px; /* Ajuste o tamanho conforme necessário */
-  height: 50px; /* Ajuste o tamanho conforme necessário */
+  width: 50px; 
+  height: 50px; 
 }
 
 
@@ -1200,7 +1204,7 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 .social-login, .input-container, .button-container {
   width: 100%;
   margin-bottom: 10px;
-  font-family: "Inter", sans-serif; /* Altere para o font-family desejado */
+  font-family: "Inter", sans-serif; 
 }
 
 .social-login {
@@ -1220,7 +1224,7 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 }
 .horizontal-line-container {
     display: inline-block;
-    margin: 0 10px; /* Ajuste a margem conforme necessário */
+    margin: 0 10px; 
     width: 10vw;
 }
 
@@ -1237,11 +1241,11 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 
 
 .circle {
-  width: 100px; /* Defina o tamanho do círculo conforme necessário */
-  height: 100px; /* Defina o tamanho do círculo conforme necessário */
-  border: 2px dotted black; /* Estilo de borda pontilhada */
-  border-radius: 50%; /* Formato de círculo */
-  position: relative; /* Necessário para posicionamento absoluto do ícone */
+  width: 100px; 
+  height: 100px; 
+  border: 2px dotted black;
+  border-radius: 50%; 
+  position: relative; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1249,20 +1253,20 @@ transform: translateX(5px); /* Move o botão 5 pixels para cima */
 }
 
 .circle i {
-  position: absolute; /* Posicionamento absoluto para o ícone */
-  font-size: 40px; /* Tamanho do ícone conforme necessário */
+  position: absolute; 
+  font-size: 40px; 
   color: #F4B604;
 }
 
 
 .btn-close {
-  background-color: #333; /* Cor de fundo do botão */
-  color: #fff; /* Cor do texto do botão */
-  border: none; /* Remover borda */
-  padding: 10px 20px; /* Espaçamento interno */
-  font-size: 16px; /* Tamanho da fonte */
-  cursor: pointer; /* Alterar cursor ao passar por cima */
-  border-radius: 5px; /* Formato de borda */
+  background-color: #333; 
+  color: #fff; 
+  border: none; 
+  padding: 10px 20px; 
+  font-size: 16px; 
+  cursor: pointer; 
+  border-radius: 5px; 
 }
 
 

@@ -37,22 +37,18 @@ Marcacoes.getByDateAndBarber = (data, idBarbeiro, result) => {
 Marcacoes.getByDate = (data,barbeiro, result) => {
 
 
-            // Quebrando a data em ano, mês e dia
             const partesData = data.split('-');
             let ano = partesData[0];
             let mes = parseInt(partesData[1]);
             let dia = parseInt(partesData[2]);
 
-            // Incrementando o mês e adicionando zeros à esquerda, se necessário
             if (mes < 10) {
                 mes = '0' + mes; // Adiciona zero à esquerda se o mês for menor que 10
             }
 
-            // Adicionando zeros à esquerda ao dia, se necessário
             if (dia < 10) {
                 dia = '0' + dia; // Adiciona zero à esquerda se o dia for menor que 10
             }  
-            // Formatando a nova data
             let Data = `${ano}-${mes}-${dia}`;
             let consulta = 'SELECT * FROM marcacoes WHERE DATE(Data) = ? AND id_barbeiro = ?';
             sql.query(consulta, [Data, barbeiro], (error, res) => {

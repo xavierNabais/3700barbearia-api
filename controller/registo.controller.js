@@ -12,13 +12,12 @@ exports.create = (req, res) => {
         });
     }
 
-    //Encriptar password
     const saltRounds = 10;
     const pwHashed = bcrypt.hashSync(req.body.password, saltRounds);
 
     const novoRegisto = new RegistoModel({
         email: req.body.email,
-        password: pwHashed, // Password encriptada
+        password: pwHashed, 
     })
 
     RegistoModel.create(novoRegisto, (error, data) => {
