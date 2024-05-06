@@ -33,7 +33,18 @@ Marcacoes.getByDateAndBarber = (data, idBarbeiro, result) => {
         result(null, res);
     });
 }
-
+Marcacoes.verifyDateAndBarber = (data, idBarbeiro, idMarcacao, result) => {
+    console.log(idMarcacao);
+    let consulta = 'SELECT * FROM marcacoes WHERE Data = ? AND id_barbeiro = ? AND Id != ?';
+    sql.query(consulta, [data, idBarbeiro, idMarcacao], (error, res) => {
+        if (error) {
+            console.log("Erro: ", error);
+            result(null, error);
+            return;
+        }
+        result(null, res);
+    });
+}
 Marcacoes.getByDate = (data,barbeiro, result) => {
 
 

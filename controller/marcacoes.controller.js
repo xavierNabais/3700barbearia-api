@@ -348,7 +348,7 @@ exports.create = (req, res) => {
             }
             if (marcacaoExistente.length > 0) {
                 return res.status(400).send({
-                    message: "Já existe uma marcação para este barbeiro e serviço nesta data."
+                    message: "Já existe uma marcação para este barbeiro nesta data."
                 });
                 
             }
@@ -413,7 +413,7 @@ exports.update = (req, res) => {
     const idMarcacao = req.params.id;
     const newData = req.body.dateTime; 
     const idBarbeiro = req.body.barber; 
-    marcacoesModel.getByDateAndBarber(newData, idBarbeiro, (error, marcacoes) => {
+    marcacoesModel.verifyDateAndBarber(newData, idBarbeiro, idMarcacao, (error, marcacoes) => {
         if (error) {
             console.log('1');
             return res.status(500).send({
@@ -422,6 +422,7 @@ exports.update = (req, res) => {
         }
 
         if (marcacoes.length > 0) {
+            console.log('2');
             return res.status(400).send({
                 message: "Já existe uma marcação para este barbeiro nesta data e hora."
             });

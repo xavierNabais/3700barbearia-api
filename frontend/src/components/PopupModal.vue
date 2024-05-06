@@ -139,6 +139,8 @@
         <textarea style="width:65vw;height:5vh" v-model="selectedNotas"></textarea>
   </div>
   <button class="submitAgenda" @click.prevent="submitBooking">ENVIAR RESERVA</button>
+  <p v-if="updateStatus"><b>Ocorreu um erro ao enviar a marcação.</b></p>
+  <p v-if="updateStatus">{{ this.updateError }}</p>
 </div>
 
 <div class="tab" v-show="currentTab === 4" style="padding:10px;color:black;">
@@ -342,6 +344,8 @@ OU
 
       </div>
         <button class="submitAgenda" @click.prevent="submitBooking">ENVIAR RESERVA</button>
+        <p v-if="updateStatus" style="color:black;text-align:center"><b>Ocorreu um erro ao enviar a marcação.</b></p>
+        <p v-if="updateStatus" style="color:black;text-align:center">{{ this.updateError }}</p>
   </div>
 
   <div class="tab" v-show="currentTab === 4" style="padding:10px;color:black;">
@@ -477,6 +481,8 @@ components: {
   },
 data() {
 return {
+updateStatus: false,
+updateError: '',
 dayUnavailable: false,
 showSuccess: false,
 disabledNext: false,
@@ -843,6 +849,7 @@ this.showPopup = false;
 
 // Método para avançar para a próxima etapa do popup de marcação
 nextStep() {
+  this.updateStatus = false; // Desativa a mensagem de erro
     // Verifica se a etapa atual é menor que 4 (número total de etapas)
   if (this.currentTab < 4) {
     this.currentTab++; // Avança para a próxima etapa
@@ -855,10 +862,10 @@ nextStep() {
       } else {
         // Se não houver utilizador autenticado, avança para a etapa de login/registo
         this.currentTab = 4;
-        this.disabledNext = false; // Habilita o botão "Próximo"
+        this.disabledNext = false; // Ativa o botão "Próximo"
       }
     } else {
-      this.disabledNext = false; // Habilita o botão "Próximo" para outras etapas
+      this.disabledNext = false; // Ativa o botão "Próximo" para outras etapas
     }
   }
 
@@ -871,11 +878,12 @@ nextStep() {
 
 // Método para retroceder para a etapa anterior do popup de marcação
 prevStep() {
+  this.updateStatus = false; // Desativa a mensagem de erro
     // Verifica se a mensagem de sucesso está exibida
   if (this.showSuccess === true) {
     this.disabledNext = true; // Desativa o botão "Próximo" se a mensagem de sucesso estiver exibida
   }
-  this.disabledNext = false; // Habilita o botão "Próximo" para todas as situações
+  this.disabledNext = false; // Ativa o botão "Próximo" para todas as situações
   if (this.currentTab > 0) {
         // Verifica se a etapa atual é maior que 0 (primeira etapa)
     if (this.currentTab === 3) {
@@ -943,14 +951,18 @@ selectService(service) {
           this.currentTab = 5;
           this.showSuccess = true;
         } else {
-          alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
+          const errorMessage = await response.json();
+          this.updateStatus = true;
+          console.log(errorMessage);
+          this.updateError = errorMessage.message;
         }
       } catch (error) {
         console.error('Erro ao enviar reserva:', error);
-        alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
+        this.showError = true;
       }
     } else {
-      alert('Por favor, selecione um serviço, um barbeiro e um horário antes de enviar sua reserva.');
+      this.showError = true;
+      this.errorMessage = 'Por favor selecione um serviço, um barbeiro e um horário antes de submeter a sua marcação.'
     }
   },
 },

@@ -134,6 +134,10 @@
 
   </div>
     <button class="submitAgenda" @click.prevent="updateBooking">ATUALIZAR MARCAÇÃO</button>
+    <p v-if="updateStatus"><b>Ocorreu um erro ao atualizar a marcação.</b></p>
+    <p v-if="updateStatus">{{ this.updateError }}</p>
+
+    <p v-if="updateSuccess">Marcação atualizada com sucesso!</p>
 </div>
 
 
@@ -160,6 +164,9 @@ components: {
   },
 data() {
 return {
+updateStatus: false,
+updateSuccess: false,
+updateError: '',
 showConfirmationMessage: false,
 currentTab: 0,
 marcacoes: [],
@@ -207,7 +214,7 @@ methods: {
         });
 
         if (response.ok) {
-          alert('A sua reserva foi eliminada com sucesso!');
+          window.location.reload();
         } else {
           alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
         }
@@ -422,6 +429,8 @@ prevStep() {
   if (this.currentTab > 0) {
       this.currentTab--;
   }
+  this.updateStatus = false;
+  this.updateSuccess = false;
 },
 
 
@@ -467,9 +476,13 @@ selectService(service) {
           this.selectedService = null;
           this.selectedBarber = null;
           this.selectedDateTime = null;
-          alert('A sua reserva foi enviada com sucesso!');
+          this.updateSuccess = true;
+          window.location.reload();
         } else {
-          alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
+          const errorMessage = await response.json();
+          this.updateStatus = true;
+          console.log(errorMessage);
+          this.updateError = errorMessage.message;
         }
       } catch (error) {
         console.error('Erro ao enviar reserva:', error);
