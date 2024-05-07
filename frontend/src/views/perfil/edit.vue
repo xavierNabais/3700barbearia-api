@@ -12,6 +12,11 @@
 
     <div style="width: 100%; height: 1200px; background-color: white; padding-bottom: 10%;" class="desktop">
       
+      <div v-if="alertMessage" style="left: 42vw; top:10%; position: fixed; background-color: black; color: white; padding: 20px 20px;border-radius:20px">
+        <i class="fas fa-info-circle" style="color:#F4B604"></i> <span style="margin-left:20px"> {{ alertMessage }} </span>
+      </div>
+
+
       <div class="single-title">
         <p>Para Agendar ou Cancelar Agendamentos, clique no botão abaixo.</p>
         <a href="/perfil/marcacoes"><button style="cursor: pointer;">VER MARCAÇÕES</button></a>
@@ -429,7 +434,8 @@
             utilizador: [],
             email: [], 
             password: [],
-            perfilAtualizado1: false,
+            alertStatus: false,
+            alertMessage: '',
             perfilAtualizado2: false,
             perfilAtualizado3: false,
             erro1: false,
@@ -466,9 +472,8 @@
                       body: JSON.stringify(this.utilizador),
                     });
                     if (response.ok) {
-                      this.erro1 = false;
-                      console.log('Perfil editado com sucesso!');
-                      this.perfilAtualizado1 = true;
+                      this.alertStatus = true;
+                      this.alertMessage = 'Perfil atualizado com sucesso!'
                       setTimeout(() => {
                         localStorage.setItem('userName', this.utilizador.Nome); 
                         this.perfilAtualizado1 = false;
@@ -508,8 +513,8 @@
                     });
                     if (response.ok) {
                         this.erro2 = false;
-                        console.log('Perfil editado com sucesso!');
-                        this.perfilAtualizado2 = true;
+                        this.alertStatus = true;
+                        this.alertMessage = 'Email atualizado com sucesso!'
                         setTimeout(() => {
                             this.perfilAtualizado2 = false;
                             window.location.reload();
@@ -549,8 +554,8 @@
 
                     if (response.ok) {
                         this.erro3 = false;
-                        console.log('Perfil editado com sucesso!');
-                        this.perfilAtualizado3 = true;
+                        this.alertStatus = true;
+                        this.alertMessage = 'Password atualizada com sucesso!'
                         setTimeout(() => {
                             this.perfilAtualizado3 = false;
                             window.location.reload();

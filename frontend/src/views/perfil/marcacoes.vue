@@ -39,12 +39,12 @@
 
       <div>
           <div class="personal-info">
-            <button class="marcacoesButtons" :class="{ 'active': isAnterioresActive }" @click="buscarAnteriores">ANTERIORES</button>
-            <button class="marcacoesButtons" :class="{ 'active': !isAnterioresActive }" @click="buscarProximas" style="margin-left:5%">PRÓXIMAS</button>
+            <button class="marcacoesButtons" :class="{ 'active': isAnterioresActive }" @click="procurarAnteriores">ANTERIORES</button>
+            <button class="marcacoesButtons" :class="{ 'active': !isAnterioresActive }" @click="procurarProximas" style="margin-left:5%">PRÓXIMAS</button>
           </div>
         <div  style="overflow-y:auto;height:fit-content;">
           <div class="ag-courses_item" v-for="(dados, index) in marcacoes" :key="index" :class="{ 'no-hover': infoAberto === index }">
-            <a @click.prevent="toggleInfo(index)" href="#" class="ag-courses-item_link-marcacoes">
+            <a v-if="!blockAnteriores" @click.prevent="toggleInfo(index)" href="#" class="ag-courses-item_link-marcacoes">
               <div class="marcacao-divider">
                 <div class="marcacao-img" style="flex:1;margin-right: 5%;">
                   <img src="../../assets/images/about_logo.jpg" style="width: 100%;">
@@ -65,6 +65,27 @@
                 </div>
                 <div class="icon-container">
                   <i class="fas fa-info-circle" @click.prevent="toggleInfo(index)"></i>
+                </div>
+              </div>
+            </a>
+            <a v-else class="ag-courses-item_link-marcacoes">
+              <div class="marcacao-divider">
+                <div class="marcacao-img" style="flex:1;margin-right: 5%;">
+                  <img src="../../assets/images/about_logo.jpg" style="width: 100%;">
+                </div>
+                <div class="marcacao-details" style="flex:4">
+                  <div class="marcacao-title">
+                    {{ dados.nomeServico }}
+                  </div>
+                  <div class="marcacao-desc">
+                    Barbeiro: <span style="font-weight: bold;">{{dados.nomeBarbeiro}}</span>
+                  </div>
+                  <div class="marcacao-time">
+                    {{ dados.Data }}
+                  </div>
+                  <div class="marcacao-price">
+                    {{  dados.precoServico }}€
+                  </div>
                 </div>
               </div>
             </a>
@@ -110,12 +131,12 @@
             <div class="info-header" style="margin-bottom: 5%;">
               <button class="profile-agendar">+ AGENDAR</button>
             </div>
-            <button class="marcacoesButtons" :class="{ 'active': isAnterioresActive }" @click="buscarAnteriores">ANTERIORES</button>
-            <button class="marcacoesButtons" :class="{ 'active': !isAnterioresActive }" @click="buscarProximas" style="margin-left:5%">PRÓXIMAS</button>
+            <button class="marcacoesButtons" :class="{ 'active': isAnterioresActive }" @click="procurarAnteriores">ANTERIORES</button>
+            <button class="marcacoesButtons" :class="{ 'active': !isAnterioresActive }" @click="procurarProximas" style="margin-left:5%">PRÓXIMAS</button>
           </div>
         <div  style="overflow-y:auto;height:700px;">
           <div class="ag-courses_item" v-for="(dados, index) in marcacoes" :key="index" :class="{ 'no-hover': infoAberto === index }">
-            <a @click.prevent="toggleInfo(index)" href="#" class="ag-courses-item_link-marcacoes">
+            <a v-if="!blockAnteriores" @click.prevent="toggleInfo(index)" href="#" class="ag-courses-item_link-marcacoes">
               <div class="marcacao-divider">
                 <div class="marcacao-img" style="flex:1;margin-right: 5%;">
                   <img src="../../assets/images/about_logo.jpg" style="width: 100%;">
@@ -136,6 +157,27 @@
                 </div>
                 <div class="icon-container">
                   <i class="fas fa-info-circle" @click.prevent="toggleInfo(index)"></i>
+                </div>
+              </div>
+            </a>
+            <a v-else class="ag-courses-item_link-marcacoes">
+              <div class="marcacao-divider">
+                <div class="marcacao-img" style="flex:1;margin-right: 5%;">
+                  <img src="../../assets/images/about_logo.jpg" style="width: 100%;">
+                </div>
+                <div class="marcacao-details" style="flex:4">
+                  <div class="marcacao-title">
+                    {{ dados.nomeServico }}
+                  </div>
+                  <div class="marcacao-desc">
+                    Barbeiro: <span style="font-weight: bold;">{{dados.nomeBarbeiro}}</span>
+                  </div>
+                  <div class="marcacao-time">
+                    {{ dados.Data }}
+                  </div>
+                  <div class="marcacao-price">
+                    {{  dados.precoServico }}€
+                  </div>
                 </div>
               </div>
             </a>
@@ -164,6 +206,7 @@ data() {
   return {
     marcacoes: [],
     isAnterioresActive: true, 
+    blockAnteriores: false,
   };
 },
 methods: {
@@ -174,18 +217,20 @@ methods: {
       this.marcacoes = data;
       console.log(this.marcacoes);
     } catch (error) {
-      console.error('Erro ao buscar os dados dos serviços:', error);
+      console.error('Erro ao procurar os dados dos serviços:', error);
     }
   },
-  async buscarAnteriores() {
+  async procurarAnteriores() {
     const userId = localStorage.getItem('userId');
     await this.fetchMarcacoes(`http://localhost:5000/perfil/marcacoes/anteriores/${userId}`);
     this.isAnterioresActive = true;
+    this.blockAnteriores = true;
   },
-  async buscarProximas() {
+  async procurarProximas() {
     const userId = localStorage.getItem('userId');
     await this.fetchMarcacoes(`http://localhost:5000/perfil/marcacoes/proximas/${userId}`);
     this.isAnterioresActive = false;
+    this.blockAnteriores = false;
   },
   toggleInfo(index) {
     this.infoAberto = this.infoAberto === index ? null : index;
@@ -197,7 +242,7 @@ methods: {
 },
 
 mounted() {
-  this.buscarProximas();
+  this.procurarProximas();
 },
 components: {
   Header,

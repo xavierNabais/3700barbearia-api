@@ -1,9 +1,11 @@
 <template>
-
+      <div v-if="alertMessage" style="left: 42vw; top:10%; position: fixed; background-color: black; color: white; padding: 20px 20px;border-radius:20px">
+        <i class="fas fa-info-circle" style="color:#F4B604"></i> <span style="margin-left:20px"> {{ alertMessage }} </span>
+      </div>
 
 <div class="popup-section section-middle">
   <button @click.prevent="deleteConfirmation()" class="marcacoesButtons" style="margin: 0px 20px;width:250px;font-size:14px"><i class="fas fa-close" style="margin: 0px 10px"></i>CANCELAR MARCAÇÃO</button>
-  
+  <p v-if="deleteStatus">{{deleteSuccess}}</p>
   
   <transition name="fade" appear>
       <p v-if="showConfirmationMessage" class="confirmation-message">
@@ -166,6 +168,8 @@ data() {
 return {
 updateStatus: false,
 updateSuccess: false,
+alertStatus: false,
+alertMessage: '',
 updateError: '',
 showConfirmationMessage: false,
 currentTab: 0,
@@ -214,13 +218,18 @@ methods: {
         });
 
         if (response.ok) {
-          window.location.reload();
+          this.alertStatus = true;
+          this.alertMessage = 'Marcação excluída com sucesso!'
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
-          alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
+          this.deleteStatus = true;
+          this.deleteSuccess = 'Ocorreu um erro ao apagar a marcação. Por favor tente novamente.';
         }
       } catch (error) {
-        console.error('Erro ao eliminar reserva:', error);
-        alert('Houve um erro ao eliminar a sua reserva. Por favor, tente novamente mais tarde.');
+        this.deleteStatus = true;
+        this.deleteSuccess = 'Ocorreu um erro ao apagar a marcação. Por favor tente novamente.';
       }
   },
 
@@ -449,7 +458,7 @@ selectService(service) {
         const selectedDateTime = `${this.selectedYear}-${this.selectedMonth}-${this.selectedDay} ${time}`;
         this.selectedDateTime = selectedDateTime;
     } else {
-        console.error('Por favor, selecione um dia antes de selecionar a hora.');
+        alert('Por favor, selecione um dia antes de selecionar a hora.');
     }
 },
 
@@ -476,8 +485,11 @@ selectService(service) {
           this.selectedService = null;
           this.selectedBarber = null;
           this.selectedDateTime = null;
-          this.updateSuccess = true;
-          window.location.reload();
+          this.alertStatus = true;
+          this.alertMessage = 'Marcação atualizada com sucesso!'
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         } else {
           const errorMessage = await response.json();
           this.updateStatus = true;
@@ -485,11 +497,12 @@ selectService(service) {
           this.updateError = errorMessage.message;
         }
       } catch (error) {
-        console.error('Erro ao enviar reserva:', error);
-        alert('Houve um erro ao enviar a sua reserva. Por favor, tente novamente mais tarde.');
+        this.updateStatus = true;
+        this.updateError = 'Ocorreu um erro ao atualizar a marcação.';
       }
     } else {
-      alert('Por favor, selecione um serviço, um barbeiro e um horário antes de enviar sua reserva.');
+      this.updateStatus = true;
+      this.updateError = 'Por favor selecione um serviço, um barbeiro e um horário.'
     }
   },
 
