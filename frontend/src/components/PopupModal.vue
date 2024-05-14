@@ -920,8 +920,7 @@ selectService(service) {
         console.error('Por favor, selecione um dia antes de selecionar a hora.');
     }
     this.summary.selectedDateTime = this.selectedDay+'/'+this.selectedMonth+'/'+this.selectedYear+'-'+time;
-
-},
+  },
 
 // Método para submeter uma reserva
   async submitBooking() {

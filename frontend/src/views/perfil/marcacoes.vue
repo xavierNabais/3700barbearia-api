@@ -128,9 +128,6 @@
 
       <div class="profile-section-right">
           <div class="personal-info">
-            <div class="info-header" style="margin-bottom: 5%;">
-              <button class="profile-agendar">+ AGENDAR</button>
-            </div>
             <button class="marcacoesButtons" :class="{ 'active': isAnterioresActive }" @click="procurarAnteriores">ANTERIORES</button>
             <button class="marcacoesButtons" :class="{ 'active': !isAnterioresActive }" @click="procurarProximas" style="margin-left:5%">PRÓXIMAS</button>
           </div>

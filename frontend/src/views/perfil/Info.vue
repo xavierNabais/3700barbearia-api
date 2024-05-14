@@ -110,7 +110,10 @@
 </div>
 <!-- Exibe as horas disponíveis para o dia selecionado -->
 <div class="available-times">
-  <div class="hour-row">
+  <div v-if="dayUnavailable">
+    <p style="color:black;margin-top:20%;text-align:center">Dia indisponível</p>
+  </div>
+  <div v-else class="hour-row">
     <button v-for="time in availableTimes" :key="time.time" class="hour-button btn" 
       :class="{ 'selected': selectedTime === time.time, 'blocked': time.blocked }"  
       @click.prevent="selectDateTime(time.time)">
@@ -299,38 +302,43 @@ if (this.currentMonth === 1) {
 this.updateDaysInMonth();
 },
 updateDaysInMonth() {
+    // Verifica se o mês e o ano estão definidos; se não estiverem, utiliza o mês e o ano atuais
   if (!this.currentMonth || !this.currentYear) {
     this.currentMonth = new Date().getMonth() + 1;
     this.currentYear = new Date().getFullYear();
   }
+
+    // Obtém o número de dias no mês atual
   const daysInMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
+
+    // Calcula o dia de início e fim na página atual do calendário
   const startDay = (this.currentPage - 1) * 7 + 1;
   const endDay = Math.min(this.currentPage * 7, daysInMonth);
+
+    // Array para armazenar os dias
   const days = [];
 
-  const dateParts = this.serviceDefault.Data.split(",")[1].trim().split(" ")[0].split("/");
-  const timeParts = this.serviceDefault.Data.split("às")[1].trim().split(":");
-  const serviceDay = parseInt(dateParts[0], 10);
-  const serviceMonth = parseInt(dateParts[1], 10);
-  const serviceYear = parseInt(dateParts[2], 10);
-  const serviceHour = parseInt(timeParts[0].trim(), 10); 
-  const serviceMinute = parseInt(timeParts[1].trim().split(" ")[0], 10); 
-
+    // Obtém o número de dias no mês anterior
   const prevMonthDays = new Date(this.currentYear, this.currentMonth - 1, 0).getDate();
   const prevMonth = this.currentMonth === 1 ? 12 : this.currentMonth - 1; 
+
+    // Adiciona os dias do mês anterior à lista de dias
   for (let i = startDay; i <= Math.min(endDay, prevMonthDays); i++) {
     days.push({ day: i, month: prevMonth });
   }
-
+    // Adiciona os dias do mês atual à lista de dias
   for (let i = Math.max(startDay, prevMonthDays + 1); i <= endDay; i++) {
     days.push({ day: i, month: this.currentMonth });
   }
 
+    // Calcula o número de dias do mês seguinte para preencher a última semana
   const nextMonthDays = 7 - days.length % 7;
+    // Adiciona os dias do mês seguinte à lista de dias, se necessário
   if (nextMonthDays < 7) {
     for (let i = 1; i <= nextMonthDays; i++) {
       days.push({ day: i, month: this.currentMonth});
     }
+    // Determina o ano e mês do próximo mês
     this.nextMonthYear = this.currentYear + (this.currentMonth === 12 ? 1 : 0);
     this.nextMonth = this.currentMonth === 12 ? 1 : this.currentMonth + 1;
   } else {
@@ -338,43 +346,66 @@ updateDaysInMonth() {
     this.nextMonth = null;
   }
 
+    // Atualiza a lista de dias, o número total de páginas e seleciona o dia atual
   this.daysInMonth = days;
   this.totalPages = Math.ceil(daysInMonth / 7);
 
-  this.selectDay({ day: serviceDay, month: serviceMonth, year: serviceYear });
-
-  this.selectedHour = serviceHour;
-  this.selectedMinute = parseInt(serviceMinute) < 10 ? '0' + parseInt(serviceMinute) : serviceMinute;
-
-  this.selectedTime = `${this.selectedHour}:${this.selectedMinute}`;
-
+  const today = new Date();
+  const currentDay = today.getDate();
+    // Seleciona o dia atual no calendário
+  this.selectDay({ day: currentDay, month: this.currentMonth-1, year: this.currentYear });
 },
 
 
 
 
 
-
 async selectDay(day) {
+    // Obtém a data atual
+  const currentDate = new Date();
+    // Calcula a data selecionada pelo utilizador
+  const selectedDate = new Date(this.currentYear, day.month, day.day+1);
+
+  // Verifica se a data selecionada é anterior à data atual
+  if (selectedDate < currentDate) {
+    this.dayUnavailable = true; // Define que o dia está indisponível para seleção
+  }
+  else{
+    this.dayUnavailable = false; // Define que o dia está disponível para seleção
+  }
+
+    // Define o estado inicial para a seleção do tempo e exibe o ícone de loading
   this.selectedTime = "",
   this.loadingGif = true;
+
+    // Simulação de loading
   await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Após o loading, desativa o ícone de loading e define os horários disponíveis
   this.loadingGif = false;
   this.availableTimes = [
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
   "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
   "17:30", "18:00", "18:30", "19:00" ];
+
+    // Guarda o dia, mês e ano selecionados
   this.selectedDay = day.day;
   this.selectedMonth = day.month+1;
   this.selectedYear = this.currentYear; 
+
   try {
+        // Obtém as marcações do servidor para o dia selecionado
     const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month+1}-${day.day}&barbeiro=${this.barbeiro}`);
     const data = await response.json();
+
+        // Converte as marcações em horários bloqueados
     const blockedTimes = data.map(marcacao => {
       const hora = new Date(marcacao.Data).getHours();
       const minutos = new Date(marcacao.Data).getMinutes();
       return `${hora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
     });
+
+        // Atualiza os horários disponíveis, marcando aqueles que estão bloqueados
     this.availableTimes = this.availableTimes.map(time => {
       return {
         time: time,
@@ -382,7 +413,7 @@ async selectDay(day) {
       };
     });
   } catch (error) {
-    console.error('Erro ao buscar as marcações:', error);
+    console.error('Erro ao obter as marcações:', error);
   }
 },
 
@@ -450,6 +481,7 @@ selectService(service) {
   },
 
   selectBarber(barber) {
+    this.barbeiro = barber.Id;
     this.selectedBarber = barber.Id;
   },
 
