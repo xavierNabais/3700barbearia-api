@@ -1,0 +1,10 @@
+node_modules
+
+# Ficheiros temporários
+*.swp
+*~
+*.log
+
+# Ficheiros de sistema
+.DS_Store
+Thumbs.db
