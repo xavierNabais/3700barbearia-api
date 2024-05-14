@@ -11,6 +11,7 @@ import perfilMarcacoes from '../views/perfil/marcacoes.vue';
 import perfilRecompensa from '../views/perfil/recompensa.vue';
 import indexPainel from '../views/painel/index.vue';
 import NotFound from '../views/NotFound.vue';
+import { jwtDecode } from 'jwt-decode';
 
 const routes = [
   {
@@ -89,21 +90,26 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.path.startsWith('/painel')) {
     try {
-      const isAdmin = localStorage.getItem('type');
+      const token = localStorage.getItem('token');
 
-      if (isAdmin == 1) {
-        next(); 
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        if (decodedToken.admin === 1) {
+          next(); 
+        } else {
+          next('/404');
+        }
       } else {
-        next('/404');
+        next('/login');
       }
     } catch (error) {
       console.error('Erro ao verificar permissões:', error);
       next('/404'); 
     }
   } else if (to.path.startsWith('/perfil')) {
-    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
 
-    if (userId) {
+    if (token) {
       next(); 
     } else {
       next('/login'); 

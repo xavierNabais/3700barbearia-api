@@ -200,6 +200,7 @@
 import Header from '../../components/Header.vue';
 import Footer from '../../components/Footer.vue';
 import Info from '../../views/perfil/Info.vue';
+import {jwtDecode} from 'jwt-decode';
 
 export default {
 data() {
@@ -221,13 +222,19 @@ methods: {
     }
   },
   async procurarAnteriores() {
-    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+
+    const decoded = jwtDecode(token);
+    const userId = decoded.userId;
+
     await this.fetchMarcacoes(`http://localhost:5000/perfil/marcacoes/anteriores/${userId}`);
     this.isAnterioresActive = true;
     this.blockAnteriores = true;
   },
   async procurarProximas() {
-    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const decoded = jwtDecode(token);
+    const userId = decoded.userId;
     await this.fetchMarcacoes(`http://localhost:5000/perfil/marcacoes/proximas/${userId}`);
     this.isAnterioresActive = false;
     this.blockAnteriores = false;

@@ -424,7 +424,8 @@
       <script>
       import Header from '../../components/Header.vue';
       import Footer from '../../components/Footer.vue';
-      
+      import {jwtDecode} from 'jwt-decode';
+
       export default {
         data() {
           return {
@@ -458,7 +459,11 @@
           },
                 async submitForm1() {
                   try {
-                    const userId = localStorage.getItem('userId');
+                    const token = localStorage.getItem('token');
+
+                    const decoded = jwtDecode(token);
+                    const userId = decoded.userId;
+
                     if (!userId) {
                       console.error('UserId não encontrado na sessionStorage.');
                       return;
@@ -475,7 +480,6 @@
                       this.alertStatus = true;
                       this.alertMessage = 'Perfil atualizado com sucesso!'
                       setTimeout(() => {
-                        localStorage.setItem('userName', this.utilizador.Nome); 
                         this.perfilAtualizado1 = false;
                         window.location.reload();
                       }, 1500);
@@ -491,8 +495,11 @@
                 },
                 async submitForm2() {
                 try {
-                    const userId = localStorage.getItem('userId');
-                    if (!userId) {
+                  const token = localStorage.getItem('token');
+
+                  const decoded = jwtDecode(token);
+                  const userId = decoded.userId;
+                  if (!userId) {
                         console.error('UserId não encontrado na sessionStorage.');
                         return;
                     }
@@ -531,8 +538,12 @@
             },
             async submitForm3() {
                 try {
-                    const userId = localStorage.getItem('userId');
-                    if (!userId) {
+                  const token = localStorage.getItem('token');
+
+                  const decoded = jwtDecode(token);
+                  const userId = decoded.userId;
+
+                  if (!userId) {
                         console.error('UserId não encontrado na sessionStorage.');
                         return;
                     }
@@ -573,7 +584,11 @@
 
             async fetchUtilizador() {
               try {
-                  const userId = localStorage.getItem('userId');
+                const token = localStorage.getItem('token');
+
+                const decoded = jwtDecode(token);
+                const userId = decoded.userId;
+
                   if (!userId) {
                       console.error('UserId não encontrado na sessionStorage.');
                       return;

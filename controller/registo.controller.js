@@ -1,59 +1,49 @@
 const RegistoModel = require("../model/registo.model.js");
-var path = require('path');
-var bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const config = require("../config/config");
 
 
-//Controller Criar Novo Cliente
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
+    try {
+        if (!req.body) {
+            return res.status(400).send({
+                message: "O conteúdo não pode estar vazio!"
+            });
+        }
 
-    if(!req.body){
-        res.status(400).send({
-            message: "O conteúdo não pode estar vazio!"
+        // Verifica se o e-mail já está cadastrado
+        const existingClient = await RegistoModel.findOne({ where: { email: req.body.email } });
+        if (existingClient) {
+            return res.status(500).send({
+                message: "E-mail já cadastrado!"
+            });
+        }
+
+        // Cria o novo cliente
+        const createdClient = await RegistoModel.createCliente({
+            email: req.body.email,
+            password: req.body.password,
+        });
+
+        let token = jwt.sign(
+            {
+              email: createdClient.email,
+              userId: createdClient.id,
+              admin: createdClient.cargo,
+            },
+            config.secret,
+            { expiresIn: config.timer }
+          );
+
+        // Envia o novo cliente como resposta
+        res.status(200).json({
+            success: true,
+            token: token,
+          });
+    } catch (error) {
+        console.error("Erro ao criar cliente:", error);
+        res.status(500).send({
+            message: error.message || "Ocorreu um erro ao tentar criar um utilizador."
         });
     }
-
-    const saltRounds = 10;
-    const pwHashed = bcrypt.hashSync(req.body.password, saltRounds);
-
-    const novoRegisto = new RegistoModel({
-        email: req.body.email,
-        password: pwHashed, 
-    })
-
-    RegistoModel.create(novoRegisto, (error, data) => {
-        if (error)
-        //1 = Username existente
-            if (error === 1){
-            res.status(500).send({
-                message:
-                error.message || "Username existente!"
-            });
-            //2 = Email existente
-            } else if(error === 2) {
-                res.status(500).send({
-                    message:
-                    error.message || "Email existente!"
-                });                     
-            }
-            //Query error
-            else {
-                res.status(500).send({
-                    message:
-                    error.message || "Ocorreu um erro ao tentar criar um utilizador."
-                });
-            }
-            
-                else
-                RegistoModel.FindByUsername(data.insertId, (error, dados) => {
-                    if (error)
-                    res.status(500).send({
-                        message:
-                        error.message || "Ocorreu um erro ao tentar criar um utilizador."
-                    });
-                    else 
-                    console.log(dados);
-                    res.json(dados);
-                
-                });
-        });
 };

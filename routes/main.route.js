@@ -10,7 +10,7 @@ router.get("/", async function(req,res){
 });
 
     //Rota Verificação Login Cliente Backend
-    router.post("/login", loginController.getUser);
+    router.post("/login", loginController.login);
 
     //Rota Verificação Login Cliente Google Backend
     router.post("/login/google", loginController.getUserGoogle);

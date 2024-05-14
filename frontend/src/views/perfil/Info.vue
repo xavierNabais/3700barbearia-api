@@ -158,6 +158,7 @@
 
 <script>
 import Loading from '../../components/loading.vue';
+import {jwtDecode} from 'jwt-decode';
 
 export default {
 name: 'InfoMarcacao',
@@ -465,11 +466,14 @@ selectService(service) {
   async updateBooking() {
     if (this.selectedService && this.selectedBarber && this.selectedDateTime) {
       try {
+        const token = localStorage.getItem('token');
+        const decoded = jwtDecode(token);
+        const userId = decoded.userId;
         const dataToSend = {
           service: this.selectedService,
           barber: this.selectedBarber,
           dateTime: this.selectedDateTime,
-          utilizador: localStorage.getItem('userId'),
+          utilizador: userId,
           notas: this.selectedNotas,
         };
         const marcacaoId = this.serviceDefault.Id;

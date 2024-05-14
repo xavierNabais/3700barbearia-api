@@ -1,105 +1,52 @@
-//importação da ligação à base de dados
-const sql = require('./conexao.db');
-const bcrypt = require('bcrypt');
+const sequelize = require("sequelize");
+const db = require("../config/database");
+const bcrypt = require("bcrypt");
 
-//definição da tabela na bd de forma abstrata
-const Login = function (data) {
-    this.email = data.email;
-    this.password = data.password;
-};
-
-// Model Procurar Utilizador
-Login.findUser = (user, result) => {
-    sql.query('SELECT * FROM utilizadores WHERE email = ?', user.body.email, (error, res) => {
-        if (error) {
-            console.log("error: ", error);
-            result(error, null);
-            return;
-        }
-        if (res.length) {
-            const utilizador = res[0];
-            const senhaFornecida = user.body.password;
-            bcrypt.compare(senhaFornecida, utilizador.Password, (err, bcryptResult) => {
-                if (err) {
-                    console.log('error', err);
-                    // Lidar com erros na comparação
-                    result(err, null);
-                } else if (bcryptResult) {
-                    console.log(" Password correta");
-                    // Password correta, retorna o utilizador encontrado
-                    result(null, res);
-                } else {
-                    // Password incorreta
-                    console.log(" Password incorreta");
-                    verification = 1;
-                    result(verification, null);
-                }
-            });
-        } else {
-            verification = 2;
-            result(verification, null);
-        }
-    });
-};
-
-// Model Procurar Utilizador
-Login.findUserGoogle = (user, result) => {
-    const data = user.body.accessData;
-    sql.query('SELECT * FROM utilizadores WHERE email = ?', data.email, (error, res) => {
-        if (error) {
-            console.log("error: ", error);
-            result(error, null);
-            return;
-        }
-        if (res.length) {
-            console.log("Password correta");
-            console.log(res);
-            // Password correta, retorna o utilizador encontrado
-            result(null, res);
-        } else {
-            // Email não existe na base de dados, cria uma nova conta
-
-            // Extrai o nome e o apelido dos dados do email logado
-            const nome = data.given_name;
-            const apelido = data.family_name;
-
-            // Gere uma password aleatória
-            const randomPassword = generateRandomPassword(10);
-
-            // Hash da password aleatória usando bcrypt
-            bcrypt.hash(randomPassword, 10, (err, hash) => {
-                if (err) {
-                    console.log("Erro ao gerar o hash da password:", err);
-                    result(err, null);
-                    return;
-                }
-
-                sql.query('INSERT INTO utilizadores (nome, apelido, email, password) VALUES (?, ?, ?, ?)', [nome, apelido, data.email, hash], (error, res) => {
-                    if (error) {
-                        console.log("error: ", error);
-                        result(error, null);
-                        return;
-                    }
-                
-                    console.log("Nova conta criada com sucesso");
-                
-                    // Recupera os dados do utilizador recém-criado
-                    sql.query('SELECT * FROM utilizadores WHERE id = ?', res.insertId, (error, user) => {
-                        if (error) {
-                            console.log("error: ", error);
-                            result(error, null);
-                            return;
-                        }
-                
-                        // Retorna os dados completos do utilizador recém-criado
-                        result(null, user);
-                    });
-                });                
-            });
-        }
-    });
-};
-
+const Utilizador = db.define(
+  "utilizadores",
+  {
+    id: {
+      type: sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    username: {
+      type: sequelize.STRING,
+      allowNull: true,
+    },
+    nome: {
+      type: sequelize.STRING,
+      allowNull: false,
+    },
+    apelido: {
+      type: sequelize.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: sequelize.STRING,
+      allowNull: false,
+    },
+    pontos: {
+      type: sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0, 
+    },
+    cargo: {
+      type: sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0, 
+    },
+  },
+  {
+    timestamps: false, 
+    tableName: 'utilizadores' 
+  }
+);
 
 // Função para gerar uma password aleatória
 function generateRandomPassword(length) {
@@ -111,4 +58,54 @@ function generateRandomPassword(length) {
   return password;
 }
 
-module.exports = Login;
+// Model Procurar Utilizador pelo email e senha
+Utilizador.getUser = async (email, password) => {
+  try {
+    const user = await Utilizador.findOne({ where: { email: email } });
+
+    if (!user) {
+      return { error: "Email não encontrado" };
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return { error: "Senha incorreta" };
+    }
+
+    return { user };
+  } catch (error) {
+    console.error("Erro ao procurar usuário:", error);
+    throw new Error("Erro ao procurar usuário");
+  }
+};
+
+// Model Procurar Utilizador pelo email do Google
+Utilizador.findByGoogleEmail = async (email) => {
+  try {
+    const userEmail = email.body.accessData.email;
+    const givenName = email.body.accessData.given_name;
+    const familyName = email.body.accessData.family_name;
+
+    let user = await Utilizador.findOne({ where: { email: userEmail } });
+    if (!user) {
+      // Se o usuário não existir, cria uma nova conta
+      const randomPassword = generateRandomPassword(10);
+      const hash = await bcrypt.hash(randomPassword, 10);
+
+      user = await Utilizador.create({
+        nome: givenName,
+        apelido: familyName,
+        email: userEmail,
+        password: hash
+      });
+    }
+    return { user };
+
+  } catch (error) {
+    console.error("Erro ao procurar usuário pelo email do Google:", error);
+    throw new Error("Erro ao procurar usuário pelo email do Google");
+  }
+};
+
+module.exports = Utilizador;

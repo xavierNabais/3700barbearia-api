@@ -123,6 +123,7 @@
 <script>
 import Header from '../../components/Header.vue';
 import Footer from '../../components/Footer.vue';
+import {jwtDecode} from 'jwt-decode';
 
 export default {
   data() {
@@ -149,7 +150,9 @@ export default {
     },
   },
   mounted() {
-    this.userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const decoded = jwtDecode(token);
+    this.userId = decoded.userId;
     this.fetchUtilizador();
   },
   components: {

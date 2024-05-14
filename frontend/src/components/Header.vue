@@ -48,6 +48,7 @@
 
 <script>
 import Dropdown from '../components/HeaderDropdown.vue';
+import {jwtDecode} from 'jwt-decode';
 
 export default {
   name: 'AppHeader',
@@ -57,8 +58,6 @@ export default {
   data() {
     // Define os dados iniciais do componente
     return {
-      userName: '',
-      type: '',
       userId: '',
       dropdownOpen: false,
       mobileMenuOpen: false 
@@ -68,9 +67,7 @@ export default {
     // Método para fazer logout
     logout() {
       // Remove os itens do localStorage relacionados ao utilizador
-      localStorage.removeItem('userName'); 
-      localStorage.removeItem('userId');
-      localStorage.removeItem('type');
+      localStorage.removeItem('token');
       window.location.reload();
     },
     // Método para alternar o estado do dropdown entre aberto e fechado
@@ -84,10 +81,12 @@ export default {
     }
   },
   mounted() {
-    // Quando o componente é montado, obtém os dados do localStorage para serem utilizados
-    this.userId = localStorage.getItem('userId')
-    this.userName = localStorage.getItem('userName');
-    this.type = localStorage.getItem('type');
+    // Decodifica o token armazenado no localStorage
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwtDecode(token);
+      this.userId = decoded.userId;
+    }
   }
 }
 </script>

@@ -249,10 +249,7 @@
               const data = await response.json();
               
               if (response.ok) {
-                console.log(data);
-                localStorage.setItem('userId', data.userId); 
-                localStorage.setItem('userName', data.userName);
-                localStorage.setItem('type', data.type);
+                localStorage.setItem('token', data.token); 
                 this.login_error = false;
                 this.login_success = true;
                 setTimeout(() => {
@@ -283,10 +280,7 @@
               const data = await response.json();
               
               if (response.ok) {
-                console.log(data);
-                localStorage.setItem('userId', data.userId); 
-                localStorage.setItem('userName', data.userName);
-                localStorage.setItem('type', data.type);
+                localStorage.setItem('token', data.token); 
                 this.login_error = false;
                 this.login_success = true;
                 setTimeout(() => {
@@ -317,8 +311,7 @@
               const data = await response.json();
               
               if (response.ok) {
-                localStorage.setItem('userId', data[0].Id); 
-                localStorage.setItem('type', 0);
+                localStorage.setItem('token', data.token); 
                 this.registo_success = true;
                 setTimeout(() => {
                     this.registo_success = false;

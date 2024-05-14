@@ -473,6 +473,7 @@ OU
 <script>
 import Loading from '../components/loading.vue';
 import { decodeCredential } from 'vue3-google-login';
+import {jwtDecode} from 'jwt-decode';
 
 export default {
 name: 'PopupModal',
@@ -857,7 +858,7 @@ nextStep() {
     // Verifica se a etapa atual é a etapa de seleção de data e hora
     if (this.currentTab === 3) {
       // Verifica se há um utilizador autenticado
-      if (localStorage.getItem('userId')) {
+      if (localStorage.getItem('token')) {
         this.disabledNext = true; // Desativa o botão "Próximo" se o utilizador estiver autenticado
       } else {
         // Se não houver utilizador autenticado, avança para a etapa de login/registo
@@ -870,7 +871,7 @@ nextStep() {
   }
 
   // Se estiver na etapa de confirmação e houver um utilizador autenticado, retrocede para a etapa de seleção de data e hora
-  if (this.currentTab === 4 && localStorage.getItem('userId')) {
+  if (this.currentTab === 4 && localStorage.getItem('token')) {
     this.currentTab = 3;
     this.disabledNext = true; // Desativa o botão "Próximo"
   }
@@ -927,12 +928,17 @@ selectService(service) {
     // Verifica se um serviço, um barbeiro e uma data/hora foram selecionados
     if (this.selectedService && this.selectedBarber && this.selectedDateTime) {
       try {
+        const token = localStorage.getItem('token');
+
+        const decoded = jwtDecode(token);
+        const userId = decoded.userId;
+
         // Preparação dos dados a enviar
         const dataToSend = {
           service: this.selectedService,
           barber: this.selectedBarber,
           dateTime: this.selectedDateTime,
-          utilizador: localStorage.getItem('userId'),
+          utilizador: userId,
           notas: this.selectedNotas,
         };
 

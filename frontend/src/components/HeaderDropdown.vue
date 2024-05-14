@@ -20,6 +20,8 @@
   </template>
   
   <script>
+  import {jwtDecode} from 'jwt-decode';
+
   export default {
     name: 'HeaderDropdown',
     data() {
@@ -34,9 +36,7 @@
       // Método para fazer logout
       logout() {
         // Remove os itens do localStorage relacionados ao utilizador
-        localStorage.removeItem('userName'); 
-        localStorage.removeItem('userId');
-        localStorage.removeItem('type');
+        localStorage.removeItem('token'); 
         // Atualiza os dados do utilizador após o logout
         this.updateUserData();
       },
@@ -46,18 +46,19 @@
       },
       // Método para atualizar os dados da sessão
       updateUserData() {
-        this.userId = localStorage.getItem('userId');
-        this.userName = localStorage.getItem('userName');
-        this.type = localStorage.getItem('type');
+        const token = localStorage.getItem('token');
+        if (token) {
+          const decoded = jwtDecode(token);
+          this.userId = decoded.userId;
+          this.userName = decoded.userName;
+          this.type = decoded.admin;
+          console.log(decoded.admin);
+        }
       }
     },
     mounted() {
-      // Quando o componente é montado, obtém os dados do localStorage e atualiza
-      this.userId = localStorage.getItem('userId')
-      this.userName = localStorage.getItem('userName');
-      this.type = localStorage.getItem('type');
-      this.updateUserData();
-    }
+    this.updateUserData();
+  }
   }
   </script>
   
