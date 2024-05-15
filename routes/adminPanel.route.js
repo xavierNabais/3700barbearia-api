@@ -87,6 +87,12 @@ router.delete("/painel/barbeiros/:id", barbeiroController.remove);
 //Rota Visualização Painel de administrador
 router.get("/painel/marcacoes", marcacoesController.findAll);
 
+//Rota Obter Dados das Marcações de um barbeiro
+router.get("/painel/marcacoes/barbeiro/:id", marcacoesController.findAllFrom);
+
+//Rota Obter Dados das Marcações de um barbeiro
+router.get("/painel/marcacoes/:id", marcacoesController.findById);
+
 //Rota Obter dados das marcações anteriores ao dia de hoje
 router.get("/perfil/marcacoes/anteriores/:id", marcacoesController.findSpecificOld);
 

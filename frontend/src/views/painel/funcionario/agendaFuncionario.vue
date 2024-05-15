@@ -6,10 +6,28 @@
         <span class="title2">AGENDA</span>
       </div>
     </div>
-    <div style="width: 100%; height: 1200px; background-color: white; padding-bottom: 10%;">
-      <vue-cal :events="eventList" :config="calConfig" :disable-views="['years', 'year']" hide-weekends :locale="ptPTLocale" :time-from="7 * 60" :time-to="22 * 60" class="vuecal--blue-theme" />
-    
+    <div style="width: 72%; height: auto; background-color: white; margin:auto; margin-top:5%;">
+
+
+          <vue-cal
+          @event-click="openEventPopup"
+          style="height: 750px"
+          :events="eventList"
+          :config="calConfig"
+          :disable-views="['years', 'year']"
+          hide-weekends
+          :locale="ptPTLocale"
+          :time-from="7 * 60"
+          :time-to="22 * 60"
+          class="vuecal--blue-theme"
+          >
+          <!-- Remover hora do evento -->
+          <template #event="{ event }">
+            <div>{{ event.title }}</div>
+          </template>
+          </vue-cal>
     </div>
+
     <Footer />
   </div>
 </template>
@@ -18,6 +36,8 @@
 import Header from '../../../components/Header.vue';
 import Footer from '../../../components/Footer.vue';
 import VueCal from 'vue-cal';
+import {jwtDecode} from 'jwt-decode';
+
 import 'vue-cal/dist/vuecal.css';
 const ptPTLocale = {
   week: 'Semana',
@@ -25,8 +45,9 @@ const ptPTLocale = {
   day: 'Dia',
   "weekDays": ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"],
   "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-
-
+  selectedEvent: null,
+  isEventPopupOpen: false,
+  selectedMarcacaoId: null
 
 };
 export default {
@@ -34,6 +55,7 @@ data() {
   return {
     marcacoes: [],
     eventList: [],
+    selectedMarcacaoId: null,
     calConfig: {
       displayMode: 'week', 
       editable: false, 
@@ -44,12 +66,14 @@ data() {
 methods: {
   async fetchMarcacoes() {
   try {
-    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const decoded = jwtDecode(token);
+    const userId =  decoded.userId;
     if (!userId) {
       console.error('UserId não encontrado na sessionStorage.');
       return;
     }
-    const url = `http://localhost:5000/painel/marcacoes`;
+    const url = `http://localhost:5000/painel/marcacoes/barbeiro/${userId}`;
     const response = await fetch(url);
     const data = await response.json();
     this.marcacoes = data;
@@ -63,6 +87,7 @@ methods: {
           start: dataFormatadaInicial, 
           end: dataFormatadaFinal,
           title: `Marcação com ${marcacao.nomeUtilizador}`,
+          id: marcacao.Id,
         };
       });
     } else {
@@ -72,6 +97,14 @@ methods: {
     console.error('Erro ao buscar os dados das marcações:', error);
   }
 },
+openEventPopup(event) {
+      console.log(event.id);
+      this.selectedMarcacaoId = event.id;
+      this.isEventPopupOpen = true;
+    },
+closeEventPopup() {
+      this.isEventPopupOpen = false;
+    },
 },
 mounted() {
   this.fetchMarcacoes();    
@@ -86,6 +119,7 @@ name: 'agendaFuncionario',
 </script>
 
 <style scoped>
+
 
 
 </style>

@@ -108,6 +108,67 @@ exports.findAll = (req, res) => {
     }
 };
 
+exports.findAllFrom = (req, res) => {
+    const idUtilizador = req.params.id;
+
+    // Primeiro, vamos verificar qual o ID do barbeiro com id_utilizador = idUtilizador
+    barbeiroModel.findUserOfBarber(idUtilizador, (error, idBarbeiro) => {
+        if (error) {
+            res.status(500).send({
+                message: error.message || "Ocorreu um erro ao tentar aceder aos dados do barbeiro"
+            });
+            return;
+        }
+
+        // Verifica se foi encontrado um barbeiro com o id_utilizador fornecido
+        if (!idBarbeiro) {
+            res.status(404).send({
+                message: "Barbeiro não encontrado para o id de utilizador fornecido."
+            });
+            return;
+        }
+
+        // Agora que temos o ID do barbeiro, podemos buscar as marcações associadas a ele
+        marcacoesModel.getByBarber(idBarbeiro, (error, dados) => {
+            if (error) {
+                res.status(500).send({
+                    message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
+                });
+                return;
+            }
+
+            // Agora vamos buscar os detalhes do utilizador para cada marcação
+            const buscarDetalhesUtilizador = (marcacao) => {
+                return new Promise((resolve, reject) => {
+                    utilizadorModel.FindById(marcacao.Id_utilizador, (error, utilizador) => {
+                        if (error) {
+                            reject(error);
+                            return;
+                        }
+                        marcacao.nomeUtilizador = utilizador[0].Nome;
+                        resolve();
+                    });
+                });
+            };
+
+            // Map das promessas para buscar detalhes do utilizador para cada marcação
+            const promessas = dados.map(marcacao => buscarDetalhesUtilizador(marcacao));
+            // Execução das promessas
+            Promise.all(promessas)
+                .then(() => {
+                    res.json(dados);
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar detalhes do utilizador:", error);
+                    res.status(500).send({
+                        message: error.message || "Ocorreu um erro ao buscar detalhes do utilizador"
+                    });
+                });
+        });
+    });
+};
+
+
 
 exports.findSpecificNew = (req, res) => {
     marcacoesModel.getSpecificNew(req, (error, dados) => {
@@ -392,7 +453,7 @@ exports.create = (req, res) => {
                     const mailOptions = {
                         from: 'xavinabais0@gmail.com',
                         to: emailUtilizador,
-                        subject: 'Confirmação de Marcação Barbearia 3700',
+                        subject: 'Confirmação de Marcação - Barbearia 3700',
                         html: `
                         <div dir="ltr" class="es-wrapper-color" lang="pt" style="background-color:#FAFAFA"><!--[if gte mso 9]>
                         <v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">

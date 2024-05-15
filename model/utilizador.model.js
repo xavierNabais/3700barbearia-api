@@ -63,7 +63,7 @@ Utilizador.FindEmail = (dados, result) => {
 
 //Model Procurar ID Utilizador
 Utilizador.FindById = (id, result) => {
-    sql.query('SELECT * FROM utilizadores WHERE ID=?', [id], (error, res) => {
+    sql.query('SELECT * FROM utilizadores WHERE Id=?', [id], (error, res) => {
         if (error) {
             console.log("error: ", error);
             result(error, null);

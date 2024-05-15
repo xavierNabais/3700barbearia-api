@@ -53,6 +53,22 @@ Barbeiro.FindById = (id, result) => {
     });
 };
 
+//Model Procurar ID Barbeiro
+Barbeiro.findUserOfBarber = (id, result) => {
+    sql.query('SELECT Id FROM barbeiros WHERE Id_utilizador=?', [id], (error, res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(error, null);
+            return;
+        }
+        
+        if (res.length > 0) {
+            result(null, res);
+        } else {
+            result("Barbeiro não encontrado", null);
+        }
+    });
+};
 
 //Model Criar Barbeiro
 Barbeiro.create = (novoBarbeiro, result) => {
