@@ -445,8 +445,8 @@ exports.create = (req, res) => {
                         port: 587,
                         secure: false,
                         auth: {
-                            user: 'xavinabais0@gmail.com',
-                            pass: 'xsyk sxze iqwa zkys'
+                            user: 'SECRET_EMAIL',
+                            pass: 'SECRET_PW'
                         }
                     });
 
