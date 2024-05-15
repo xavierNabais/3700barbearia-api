@@ -104,7 +104,7 @@ controllers.getUserGoogle = async (req, res) => {
                   email: user.email,
                   userId: user.id,
                   userName: user.nome,
-                  admin: user.admin,
+                  admin: user.cargo,
               },
               config.secret,
               { expiresIn: config.timer }

@@ -593,9 +593,7 @@ async googleCallback(response) {
               });              
               if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem('userId', data.userId); 
-                localStorage.setItem('userName', data.userName);
-                localStorage.setItem('type', data.type);
+                localStorage.setItem('token', data.token);
                 this.currentTab = 3;
               } else {
                 console.error('Erro ao efetuar login:', response.status);
@@ -911,7 +909,6 @@ selectService(service) {
   },
 
   selectDateTime(time) {
-    console.log(time);
     this.selectedTime = time;
     if (this.selectedDay !== null && this.selectedMonth !== null && this.selectedYear !== null) {
         const selectedDateTime = `${this.selectedYear}-${this.selectedMonth}-${this.selectedDay} ${time}`;
@@ -985,6 +982,7 @@ mounted() {
   this.currentPage = Math.ceil((currentDay + (7 - dayPosition)) / 7);
 
   this.updateDaysInMonth();
+
 }
 
 };
