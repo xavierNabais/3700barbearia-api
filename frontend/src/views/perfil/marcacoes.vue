@@ -93,6 +93,10 @@
               <Info :serviceDefault="dados"/>
             </div>
 
+            <div v-if="dados.bloquearInfo">
+              <p>Não é possível visualizar as informações desta marcação pois faltam menos de 15 minutos. <br>Por favor contacte o estabelecimento caso necessite de alterar ou cancelar a marcação.</p>
+            </div>
+
           </div>
 
         </div>
@@ -181,7 +185,9 @@
             <div v-if="dados.mostrarInfo" class="additional-info">
               <Info :serviceDefault="dados"/>
             </div>
-
+            <div v-if="dados.bloquearInfo">
+              <p>Não é possível visualizar as informações desta marcação pois faltam menos de 15 minutos. <br>Por favor contacte o estabelecimento caso necessite de alterar ou cancelar a marcação.</p>
+            </div>
           </div>
 
         </div>
@@ -236,9 +242,40 @@ methods: {
     this.blockAnteriores = false;
   },
   toggleInfo(index) {
-    this.infoAberto = this.infoAberto === index ? null : index;
-    this.marcacoes[index].mostrarInfo = !this.marcacoes[index].mostrarInfo;
-  },
+    const marcação = this.marcacoes[index];
+    const dataHoraMarcação = marcação.Data;
+
+
+    // Verifica se a string de data e hora é válida
+    if (!dataHoraMarcação) {
+        console.error("String de data e hora da marcação inválida:", dataHoraMarcação);
+        return;
+    }
+
+    // Extrai a data e hora da string fornecida
+    const [, dataStr, horaStr, minutosStr] = dataHoraMarcação.match(/(\d{2}\/\d{2}\/\d{4}), às (\d{2}):(\d{2})/);
+
+    // Extrai ano, mês e dia da data extraída
+    const [dia, mês, ano] = dataStr.split('/');
+    
+    // Cria o objeto Date com os componentes de data e hora
+    const dataMarcação = new Date(ano, parseInt(mês) - 1, dia, parseInt(horaStr), parseInt(minutosStr));
+    const horaAtual = new Date();
+
+    // Calcula a diferença em minutos entre as duas datas
+    const diferençaEmMinutos = Math.round((dataMarcação - horaAtual) / (1000 * 60));
+
+    // Verifica se a diferença é maior que 15 minutos
+    if (diferençaEmMinutos > 15) {
+        // Abre a informação da marcação
+        this.infoAberto = this.infoAberto === index ? null : index;
+        marcação.mostrarInfo = !marcação.mostrarInfo;
+        marcação.bloquearInfo = false;
+    } else {
+        marcação.bloquearInfo = !marcação.bloquearInfo;
+        console.log("A marcação não pode ser aberta porque faltam menos de 15 minutos.");
+    }
+},
   openPopup() {
     this.$refs.Info.openPopup(); 
   },
