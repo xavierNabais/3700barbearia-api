@@ -111,7 +111,7 @@ Marcacoes.getSpecificOld = (id, result) => {
 };
 
 
-//Model Procurar ID Marcação
+// Model Procurar ID Marcação
 Marcacoes.FindById = (id, result) => {
     sql.query('SELECT * FROM marcacoes WHERE ID=?', [id], (error, res) => {
         if (error) {
@@ -121,13 +121,12 @@ Marcacoes.FindById = (id, result) => {
         }
         
         if (res.length > 0) {
-            result(null, res);
+            result(null, res[0]);
         } else {
             result("Marcação não encontrada", null);
         }
     });
 };
-
 
 //Model Criar Marcação
 Marcacoes.create = (novoServico, result) => {

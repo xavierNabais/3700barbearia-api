@@ -323,42 +323,65 @@ exports.findSpecificOld = (req, res) => {
 
 
 
+// Controller Procurar Marcação Consoante ID
+exports.findById = async (req, res) => {
+    try {
+        marcacoesModel.FindById(req.params.id, async (error, dados) => {
+            if (error) {
+                res.status(500).send({
+                    message: error.message || "Ocorreu um erro ao buscar os dados da marcação"
+                });
+                return;
+            }
 
-//Controller Procurar Marcação Consoante ID
-exports.findById = (req, res) => {
-    marcacoesModel.FindById(req, (error, dados) => {
-        if (error)
-        res.status(500).send({
-            message:
-            error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
-        });
-        else servicoModel.getActive((error, servico) => {
-                if (error) {
+            if (!dados) {
+                res.status(404).send({ message: "Marcação não encontrada" });
+                return;
+            }
+
+            // Buscar dados do utilizador
+            utilizadorModel.FindById(dados.Id_utilizador, (errorUtilizador, utilizador) => {
+                if (errorUtilizador) {
                     res.status(500).send({
-                        message: error.message || "Ocorreu um erro ao tentar aceder aos dados dos serviços ativos"
+                        message: errorUtilizador.message || "Ocorreu um erro ao tentar aceder aos dados do utilizador"
                     });
-                } else {
-                    barbeiroModel.getActive((error, barbeiro) => {
-                        if (error) {
-                            res.status(500).send({
-                                message: error.message || "Ocorreu um erro ao tentar aceder aos dados dos barbeiros ativos"
-                            });
-                        } else {
-                            utilizadorModel.getAll((error, utilizador) => {
-                                if (error) {
-                                    res.status(500).send({
-                                        message: error.message || "Ocorreu um erro ao tentar aceder aos dados dos utilizadores"
-                                    });
-                                } else {
-                                    res.json(utilizador, barbeiro, servico, dados);  
-                                }
-                            }); 
-                        }
-                    });  
+                    return;
                 }
+
+                // Buscar dados do barbeiro
+                barbeiroModel.FindById(dados.Id_barbeiro, (errorBarbeiro, barbeiro) => {
+                    if (errorBarbeiro) {
+                        res.status(500).send({
+                            message: errorBarbeiro.message || "Ocorreu um erro ao tentar aceder aos dados do barbeiro"
+                        });
+                        return;
+                    }
+
+                    // Buscar dados do serviço
+                    servicoModel.FindById(dados.Id_servico, (errorServico, servico) => {
+                        if (errorServico) {
+                            res.status(500).send({
+                                message: errorServico.message || "Ocorreu um erro ao tentar aceder aos dados do serviço"
+                            });
+                            return;
+                        }
+                        // Retornar dados da marcação, utilizador, barbeiro e serviço
+                        res.json({ dados, utilizador: utilizador[0], barbeiro: barbeiro[0], servico: servico[0] });
+                    });
+                });
             });
-    });
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "Ocorreu um erro ao buscar os dados da marcação, utilizador, barbeiro e serviço"
+        });
+    }
 };
+
+
+
+
+
 exports.getActive = (req, res) => {
     utilizadorModel.getAll((error, utilizador) => {
         if (error) {
