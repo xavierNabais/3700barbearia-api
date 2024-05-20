@@ -9,38 +9,44 @@
     <div style="width: 72%; height: auto; background-color: white; margin:auto; margin-top:5%;">
 
       <vue-cal
-        @event-click="openEventPopup"
-        style="height: 750px"
-        :events="eventList"
-        :config="calConfig"
-        :disable-views="['years', 'year']"
-        hide-weekends
-        :locale="ptPTLocale"
-        :time-from="7 * 60"
-        :time-to="22 * 60"
-        class="vuecal--blue-theme"
+      @event-click="openEventPopup"
+      style="height: 750px"
+      :events="eventList"
+      :config="calConfig"
+      :disable-views="['years', 'year']"
+      hide-weekends
+      :locale="ptPTLocale"
+      :time-from="7 * 60"
+      :time-to="22 * 60"
       >
+
+
         <!-- Remover hora do evento -->
         <template #event="{ event }">
           <div>{{ event.title }}</div>
         </template>
       </vue-cal>
 
-    <!-- Popup de detalhes da marcação -->
-    <div v-if="isEventPopupOpen" class="popup">
-      <div class="popup-content">
-          <p><b>Nome do Cliente:</b> {{ this.utilizadorNome }}</p>
-          <p><b>Serviço:</b> {{ this.servicoNome }}</p>
-          <p><b>Notas:</b> {{ this.notas }}</p>
-          <p><b>Data e Hora:</b> {{ this.data }}</p>
-        <button @click="closeEventPopup">Fechar</button>
+      <!-- Popup de detalhes da marcação -->
+      <div v-if="isEventPopupOpen" class="popup">
+        <div class="popup-content">
+          <span class="close-icon" @click="closeEventPopup"><i class="fas fa-times"></i></span>
+          <p><b>Nome do Cliente:</b> {{ utilizadorNome }}</p>
+          <p><b>Pontos:</b> {{ utilizadorPontos }}</p>
+          <p><b>Serviço:</b> {{ servicoNome }}</p>
+          <p><b>Notas:</b> {{ notas }}</p>
+          <p><b>Data e Hora:</b> {{ data }}</p>
+          <div class="popup-buttons">
+            <button class="popup-button" @click="confirmarEvento(utilizadorId)">Confirmar Marcação <i class="fas fa-check"></i></button>
+            <p style="font-style:italic;font-size:14px;">Quando confirmar a marcação irá incrementar 1 ponto ao utilizador.</p>
+          </div>
+        </div>
       </div>
-    </div>
-    
     </div>
     <Footer />
   </div>
 </template>
+
 
 <script>
 import VueCal from 'vue-cal';
@@ -70,6 +76,8 @@ export default {
       ptPTLocale: ptPTLocale,
       isEventPopupOpen: false,
       utilizadorNome: null,
+      utilizadorPontos: null,
+      utilizadorId: null,
       servicoNome: null,
       data: null,
       notas: null,
@@ -93,9 +101,11 @@ export default {
         });
         const data = await response.json();
         this.utilizadorNome = data.utilizador.Nome;
+        this.utilizadorPontos = data.utilizador.Pontos;
         this.servicoNome = data.servico.Nome;
         this.notas = data.dados.Notas;
         this.data = data.dados.Data;
+        this.utilizadorId = data.utilizador.Id;
         console.log(data);
       } catch (error) {
         console.error('Erro ao buscar os detalhes da marcação:', error);
@@ -123,7 +133,7 @@ export default {
             return {
               start: dataFormatadaInicial, 
               end: dataFormatadaFinal,
-              title: `Marcação com ${marcacao.nomeUtilizador}`,
+              title: `${marcacao.nomeUtilizador}`,
               id: marcacao.Id,
             };
           });
@@ -141,6 +151,26 @@ export default {
     },
     closeEventPopup() {
       this.isEventPopupOpen = false;
+    },
+    async confirmarEvento(userId) {
+      console.log(userId);
+      try {
+        const response = await fetch(`http://localhost:5000/utilizador/complete/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          console.log('Evento confirmado com sucesso!');
+          this.closeEventPopup();
+          this.fetchMarcacoes();
+        } else {
+          console.error('Erro ao confirmar o evento');
+        }
+      } catch (error) {
+        console.error('Erro ao confirmar o evento:', error);
+      }
     },
   },
   mounted() {
@@ -168,20 +198,22 @@ export default {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 20px;
   max-width: 400px;
-  width: 90%;
+  width: 80%;
   z-index: 1000;
-  height:auto;
+  height: auto;
 }
 
-/* Estilo do overlay de fundo */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
-  z-index: 999; /* Acima do conteúdo, mas abaixo do popup */
+.popup-content{
+  width:100%;
+}
+
+/* Estilo do ícone de fechar */
+.close-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
 }
 
 /* Estilo do título do popup */
@@ -198,24 +230,24 @@ export default {
 
 /* Estilo dos botões de ação */
 .popup-buttons {
-  text-align: right;
+  text-align: center;
 }
 
 /* Estilo dos botões do popup */
 .popup-button {
-  background-color: #007bff;
+  background-color: #F4B604;
   color: #ffffff;
   padding: 8px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
 /* Estilo dos botões do popup quando hover */
 .popup-button:hover {
-  background-color: #0056b3;
+  background-color: #F2B709;
 }
-
 
 </style>

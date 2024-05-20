@@ -1497,6 +1497,15 @@ button.savePanel:hover {
   display:none;
 }
 
+.vuecal__event{
+  height: auto!important;
+  margin-bottom: 10%!important;
+}
+
+.vuecal__event:hover{
+  background-color:#F4B604;
+  color:white;
+}
 @media (max-width: 768px) {
 
   .desktop{

@@ -325,6 +325,21 @@ exports.findSpecificOld = (req, res) => {
 
 // Controller Procurar Marcação Consoante ID
 exports.findById = async (req, res) => {
+    // Função para formatar a data
+    const formatarData = (data) => {
+        const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+        const dataFormatada = new Date(data);
+
+        const diaSemana = diasSemana[dataFormatada.getDay()];
+        const dia = String(dataFormatada.getDate()).padStart(2, '0');
+        const mes = String(dataFormatada.getMonth() + 1).padStart(2, '0');
+        const ano = dataFormatada.getFullYear();
+        const horas = String(dataFormatada.getHours()).padStart(2, '0');
+        const minutos = String(dataFormatada.getMinutes()).padStart(2, '0');
+
+        return `${diaSemana}, ${dia}/${mes}/${ano}, às ${horas}:${minutos}`;
+    };
+
     try {
         marcacoesModel.FindById(req.params.id, async (error, dados) => {
             if (error) {
@@ -365,8 +380,17 @@ exports.findById = async (req, res) => {
                             });
                             return;
                         }
+
+                        // Formatar a data da marcação
+                        const dataFormatada = formatarData(dados.Data);
+
                         // Retornar dados da marcação, utilizador, barbeiro e serviço
-                        res.json({ dados, utilizador: utilizador[0], barbeiro: barbeiro[0], servico: servico[0] });
+                        res.json({
+                            dados: { ...dados, Data: dataFormatada },
+                            utilizador: utilizador[0],
+                            barbeiro: barbeiro[0],
+                            servico: servico[0]
+                        });
                     });
                 });
             });
@@ -377,6 +401,7 @@ exports.findById = async (req, res) => {
         });
     }
 };
+
 
 
 

@@ -35,6 +35,9 @@ router.put("/perfil/editar/2/:id", utilizadorController.update2);
 //Rota Atualização Utilizador Password
 router.put("/perfil/editar/3/:id", utilizadorController.update3);
 
+//Rota Atribuir 1 Ponto Ao Utilizador
+router.put("/utilizador/complete/:id", utilizadorController.complete);
+
 //Rota Eliminar Utilizador
 router.delete("/painel/utilizadores/:id", utilizadorController.remove);
 

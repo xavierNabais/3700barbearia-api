@@ -176,4 +176,50 @@ Utilizador.remove = (id, result) => {
 };
 
 
+Utilizador.complete = (id, result) => {
+    // Primeiro, buscar os pontos atuais do utilizador
+    sql.query('SELECT Pontos FROM utilizadores WHERE id = ?', [id], (error, res) => {
+        if (error) {
+            console.log("error: ", error);
+            result(null, error);
+            return;
+        }
+
+        if (res.length > 0) {
+            const pontosAtuais = res[0].Pontos;
+
+            // Verificar se os pontos são 10
+            if (pontosAtuais === 10) {
+                // Resetar pontos para 1
+                sql.query('UPDATE utilizadores SET Pontos = 1 WHERE id = ?', [id], (error, res) => {
+                    if (error) {
+                        console.log("error: ", error);
+                        result(null, error);
+                        return;
+                    }
+
+                    console.log("Pontos resetados para 1 com sucesso!");
+                    result(null, res);
+                });
+            } else {
+                // Incrementar pontos
+                sql.query('UPDATE utilizadores SET Pontos = Pontos + 1 WHERE id = ?', [id], (error, res) => {
+                    if (error) {
+                        console.log("error: ", error);
+                        result(null, error);
+                        return;
+                    }
+
+                    console.log("Ponto incrementado com sucesso!");
+                    result(null, res);
+                });
+            }
+        } else {
+            result(null, { message: "Utilizador não encontrado" });
+        }
+    });
+};
+
+
+
 module.exports = Utilizador;
