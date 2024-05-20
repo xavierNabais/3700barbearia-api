@@ -213,7 +213,6 @@ methods: {
       const response = await fetch(url);
       const data = await response.json();
       this.marcacoes = data;
-      console.log(this.marcacoes);
     } catch (error) {
       console.error('Erro ao procurar os dados dos serviços:', error);
     }

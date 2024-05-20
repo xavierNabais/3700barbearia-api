@@ -171,7 +171,7 @@ exports.findAllFrom = (req, res) => {
 
 
 exports.findSpecificNew = (req, res) => {
-    marcacoesModel.getSpecificNew(req, (error, dados) => {
+    marcacoesModel.getSpecificNew(req, async (error, dados) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
@@ -179,6 +179,10 @@ exports.findSpecificNew = (req, res) => {
             return;
         }
 
+        // Ordenar as marcações por data
+        dados.sort((a, b) => new Date(a.Data) - new Date(b.Data));
+
+        // Função para formatar a data
         const formatarData = (data) => {
             const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
             const dataFormatada = new Date(data);
@@ -193,23 +197,24 @@ exports.findSpecificNew = (req, res) => {
             return `${diaSemana}, ${dia}/${mes}/${ano}, às ${horas}:${minutos}`;
         };
 
-            const getBarberName = (id_barbeiro) => {
-                return new Promise((resolve, reject) => {
-                    barbeiroModel.FindById(id_barbeiro, (error, barbeiros) => {
-                        if (error) {
-                            reject(error);
+        // Função para obter o nome do barbeiro
+        const getBarberName = (id_barbeiro) => {
+            return new Promise((resolve, reject) => {
+                barbeiroModel.FindById(id_barbeiro, (error, barbeiros) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        if (barbeiros.length > 0) {
+                            resolve(barbeiros[0].Nome);
                         } else {
-                            if (barbeiros.length > 0) {
-                                resolve(barbeiros[0].Nome);
-                            } else {
-                                resolve(null);
-                            }
+                            resolve(null);
                         }
-                    });
+                    }
                 });
-            };
+            });
+        };
 
-
+        // Função para obter informações do serviço
         const getServicoInfo = (id_servico) => {
             return new Promise((resolve, reject) => {
                 servicoModel.FindById(id_servico, (error, servico) => {
@@ -222,30 +227,27 @@ exports.findSpecificNew = (req, res) => {
             });
         };
 
-            const processarDados = async () => {
-                for (const marcacao of dados) {
-                    marcacao.Data = formatarData(marcacao.Data);
-                    const nomeBarbeiro = await getBarberName(marcacao.Id_barbeiro);
-                    marcacao.nomeBarbeiro = nomeBarbeiro !== null ? nomeBarbeiro : "Nome não encontrado";
-                    const infoServico = await getServicoInfo(marcacao.Id_servico);
-                    marcacao.nomeServico = infoServico.nome;
-                    marcacao.precoServico = infoServico.preco;
-                }
-                res.json(dados);
-            };
+        // Processamento dos dados
+        for (const marcacao of dados) {
+            // Formatar a data
+            marcacao.Data = formatarData(marcacao.Data);
+            // Obter o nome do barbeiro
+            const nomeBarbeiro = await getBarberName(marcacao.Id_barbeiro);
+            marcacao.nomeBarbeiro = nomeBarbeiro !== null ? nomeBarbeiro : "Nome não encontrado";
+            // Obter informações do serviço
+            const infoServico = await getServicoInfo(marcacao.Id_servico);
+            marcacao.nomeServico = infoServico.nome;
+            marcacao.precoServico = infoServico.preco;
+        }
 
-
-        processarDados().catch(error => {
-            res.status(500).send({
-                message: error.message || "Ocorreu um erro ao processar os dados das marcações"
-            });
-        });
+        // Enviar os dados formatados como resposta
+        res.json(dados);
     });
 };
 
 // Controller Procurar Marcações De User Específico
 exports.findSpecificOld = (req, res) => {
-    marcacoesModel.getSpecificOld(req, (error, dados) => {
+    marcacoesModel.getSpecificOld(req, async (error, dados) => {
         if (error) {
             res.status(500).send({
                 message: error.message || "Ocorreu um erro ao tentar aceder aos dados das marcações"
@@ -253,6 +255,10 @@ exports.findSpecificOld = (req, res) => {
             return;
         }
 
+        // Ordenar as marcações por data
+        dados.sort((a, b) => new Date(b.Data) - new Date(a.Data));
+
+        // Função para formatar a data
         const formatarData = (data) => {
             const diasSemana = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
             const dataFormatada = new Date(data);
@@ -267,23 +273,24 @@ exports.findSpecificOld = (req, res) => {
             return `${diaSemana}, ${dia}/${mes}/${ano}, às ${horas}:${minutos}`;
         };
 
-            const getBarberName = (id_barbeiro) => {
-                return new Promise((resolve, reject) => {
-                    barbeiroModel.FindById(id_barbeiro, (error, barbeiros) => {
-                        if (error) {
-                            reject(error);
+        // Função para obter o nome do barbeiro
+        const getBarberName = (id_barbeiro) => {
+            return new Promise((resolve, reject) => {
+                barbeiroModel.FindById(id_barbeiro, (error, barbeiros) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        if (barbeiros.length > 0) {
+                            resolve(barbeiros[0].Nome);
                         } else {
-                            if (barbeiros.length > 0) {
-                                resolve(barbeiros[0].Nome);
-                            } else {
-                                resolve(null);
-                            }
+                            resolve(null);
                         }
-                    });
+                    }
                 });
-            };
+            });
+        };
 
-
+        // Função para obter informações do serviço
         const getServicoInfo = (id_servico) => {
             return new Promise((resolve, reject) => {
                 servicoModel.FindById(id_servico, (error, servico) => {
@@ -296,26 +303,24 @@ exports.findSpecificOld = (req, res) => {
             });
         };
 
-            const processarDados = async () => {
-                for (const marcacao of dados) {
-                    marcacao.Data = formatarData(marcacao.Data);
-                    const nomeBarbeiro = await getBarberName(marcacao.Id_barbeiro);
-                    marcacao.nomeBarbeiro = nomeBarbeiro !== null ? nomeBarbeiro : "Nome não encontrado";
-                    const infoServico = await getServicoInfo(marcacao.Id_servico);
-                    marcacao.nomeServico = infoServico.nome;
-                    marcacao.precoServico = infoServico.preco;
-                }
-                res.json(dados);
-            };
+        // Processamento dos dados
+        for (const marcacao of dados) {
+            // Formatar a data
+            marcacao.Data = formatarData(marcacao.Data);
+            // Obter o nome do barbeiro
+            const nomeBarbeiro = await getBarberName(marcacao.Id_barbeiro);
+            marcacao.nomeBarbeiro = nomeBarbeiro !== null ? nomeBarbeiro : "Nome não encontrado";
+            // Obter informações do serviço
+            const infoServico = await getServicoInfo(marcacao.Id_servico);
+            marcacao.nomeServico = infoServico.nome;
+            marcacao.precoServico = infoServico.preco;
+        }
 
-
-        processarDados().catch(error => {
-            res.status(500).send({
-                message: error.message || "Ocorreu um erro ao processar os dados das marcações"
-            });
-        });
+        // Enviar os dados formatados como resposta
+        res.json(dados);
     });
 };
+
 
 
 

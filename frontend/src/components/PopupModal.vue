@@ -2,19 +2,6 @@
 
 
 
-  <div class="popup-section section-left desktop" style="padding:20px">
-  <div class="progress-indicator">
-      <div class="progress-ball filled step"></div>
-      <div class="progress-ball step"></div>
-      <div class="progress-ball step"></div>
-      <div class="progress-ball step"></div>
-  </div>
-
-  <div class="section-content">
-      <h2 class="popup-title-left">SERVIÇO</h2>
-      <p class="popup-description">Nesta seção, os clientes podem escolher o serviço específico que desejam agendar na barbearia.</p>
-  </div>
-  </div>
 
 
 
@@ -736,57 +723,63 @@ updateDaysInMonth() {
 
 
 
-// Método assíncrono para lidar com a seleção do dia pelo utilizador
 async selectDay(day) {
-    // Obtém a data atual
+  // Obtém a data e hora atuais
   const currentDate = new Date();
-    // Calcula a data selecionada pelo utilizador
-  const selectedDate = new Date(this.currentYear, day.month, day.day+1);
 
-  // Verifica se a data selecionada é anterior à data atual
-  if (selectedDate < currentDate) {
-    this.dayUnavailable = true; // Define que o dia está indisponível para seleção
-  }
-  else{
-    this.dayUnavailable = false; // Define que o dia está disponível para seleção
+  // Calcula a data selecionada pelo utilizador
+  const selectedDate = new Date(this.currentYear, day.month, day.day);
+
+  // Verifica se a data selecionada é inferior à data atual
+  this.dayUnavailable = currentDate.getTime() > selectedDate.getTime();
+
+  // Não bloquear o dia atual
+  if (selectedDate.toDateString() === currentDate.toDateString()) {
+  this.dayUnavailable = false;
   }
 
-    // Define o estado inicial para a seleção do tempo e exibe o ícone de loading
-  this.selectedTime = "",
+  // Define o estado inicial para a seleção do tempo e exibe o ícone de loading
+  this.selectedTime = "";
   this.loadingGif = true;
 
-    // Simulação de loading
+  // Simulação de loading
   await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Após o loading, desativa o ícone de loading e define os horários disponíveis
+  // Após o loading, desativa o ícone de loading e define os horários disponíveis
   this.loadingGif = false;
   this.availableTimes = [
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
-  "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
-  "17:30", "18:00", "18:30", "19:00" ];
+    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", 
+    "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", 
+    "17:30", "18:00", "18:30", "19:00"
+  ];
 
-    // Guarda o dia, mês e ano selecionados
+  // Guarda o dia, mês e ano selecionados
   this.selectedDay = day.day;
-  this.selectedMonth = day.month+1;
-  this.selectedYear = this.currentYear; 
+  this.selectedMonth = day.month + 1;
+  this.selectedYear = this.currentYear;
 
   try {
-        // Obtém as marcações do servidor para o dia selecionado
-    const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month+1}-${day.day}&barbeiro=${this.barbeiro}`);
+    // Obtém as marcações do servidor para o dia selecionado
+    const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month + 1}-${day.day}&barbeiro=${this.barbeiro}`);
     const data = await response.json();
 
-        // Converte as marcações em horários bloqueados
+    // Converte as marcações em horários bloqueados
     const blockedTimes = data.map(marcacao => {
       const hora = new Date(marcacao.Data).getHours();
       const minutos = new Date(marcacao.Data).getMinutes();
       return `${hora.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
     });
 
-        // Atualiza os horários disponíveis, marcando aqueles que estão bloqueados
+    // Verifica se a data selecionada é o dia atual
+    const isToday = selectedDate.toDateString() === currentDate.toDateString();
+
+    // Atualiza os horários disponíveis, marcando aqueles que estão bloqueados ou já passaram
     this.availableTimes = this.availableTimes.map(time => {
+      const [hour, minutes] = time.split(':').map(Number);
+      const hasPassed = isToday && (hour < currentDate.getHours() || (hour === currentDate.getHours() && minutes < currentDate.getMinutes()));
       return {
         time: time,
-        blocked: blockedTimes.includes(time)
+        blocked: hasPassed || blockedTimes.includes(time)
       };
     });
   } catch (error) {
@@ -910,6 +903,8 @@ selectService(service) {
 
   selectDateTime(time) {
     this.selectedTime = time;
+    console.log(time);
+    console.log(this.selectedDay);
     if (this.selectedDay !== null && this.selectedMonth !== null && this.selectedYear !== null) {
         const selectedDateTime = `${this.selectedYear}-${this.selectedMonth}-${this.selectedDay} ${time}`;
         this.selectedDateTime = selectedDateTime;

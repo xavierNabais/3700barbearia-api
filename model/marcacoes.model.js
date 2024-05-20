@@ -83,20 +83,24 @@ Marcacoes.getByDate = (data,barbeiro, result) => {
             });
 }
 
-//Model Procurar Marcações de Utilizador Específico
+//Model Procurar Próximas Marcações do Utilizador
 Marcacoes.getSpecificNew = (id, result) => {
-    sql.query('SELECT * FROM marcacoes WHERE id_utilizador=? AND Data > CURDATE()', [id.params.id], (error,res) => {
+    sql.query('SELECT * FROM marcacoes WHERE id_utilizador=? AND Data > NOW()', [id.params.id], (error,res) => {
         if (error) {
             console.log("error: ", error);
-            result(null, error);
+            result(error, null);
             return;
         }
-        result(null,res);
+        result(null, res);
     });
 };
-//Model Procurar Marcações de Utilizador Específico
+
+
+
+
+//Model Procurar Marcações Anteriores do Utilizador
 Marcacoes.getSpecificOld = (id, result) => {
-    sql.query('SELECT * FROM marcacoes WHERE id_utilizador=? AND Data < CURDATE()', [id.params.id], (error,res) => {
+    sql.query('SELECT * FROM marcacoes WHERE id_utilizador=? AND Data < NOW()', [id.params.id], (error,res) => {
         if (error) {
             console.log("error: ", error);
             result(null, error);
@@ -105,6 +109,7 @@ Marcacoes.getSpecificOld = (id, result) => {
         result(null,res);
     });
 };
+
 
 //Model Procurar ID Marcação
 Marcacoes.FindById = (id, result) => {
