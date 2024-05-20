@@ -32,16 +32,20 @@
         <div class="popup-content">
           <span class="close-icon" @click="closeEventPopup"><i class="fas fa-times"></i></span>
           <p><b>Nome do Cliente:</b> {{ utilizadorNome }}</p>
-          <p><b>Pontos:</b> {{ utilizadorPontos }}</p>
           <p><b>Serviço:</b> {{ servicoNome }}</p>
           <p><b>Notas:</b> {{ notas }}</p>
           <p><b>Data e Hora:</b> {{ data }}</p>
+          <p><b>Pontos:</b> {{ utilizadorPontos }}</p>
           <div class="popup-buttons">
-            <button class="popup-button" @click="confirmarEvento(utilizadorId)">Confirmar Marcação <i class="fas fa-check"></i></button>
+            <!-- Adicione a diretiva :disabled ao botão de confirmação -->
+            <button class="popup-button" @click="confirmarEvento(utilizadorId)" :disabled="disabled">Confirmar Marcação <i class="fas fa-check"></i></button>
             <p style="font-style:italic;font-size:14px;">Quando confirmar a marcação irá incrementar 1 ponto ao utilizador.</p>
+            <div v-if="confirmMessage" style="background-color: #F4B604;color: white; padding:20px">Marcação confirmada com sucesso!</div>
           </div>
         </div>
       </div>
+
+
     </div>
     <Footer />
   </div>
@@ -81,6 +85,8 @@ export default {
       servicoNome: null,
       data: null,
       notas: null,
+      disabled: false,
+      confirmMessage: false,
     };
   },
   methods: {
@@ -150,11 +156,13 @@ export default {
       this.fetchMarcacaoDetails(event.id);
     },
     closeEventPopup() {
+      this.confirmMessage = false,
       this.isEventPopupOpen = false;
     },
     async confirmarEvento(userId) {
       console.log(userId);
       try {
+        this.disabled = true;
         const response = await fetch(`http://localhost:5000/utilizador/complete/${userId}`, {
           method: 'PUT',
           headers: {
@@ -162,10 +170,10 @@ export default {
           },
         });
         if (response.ok) {
-          console.log('Evento confirmado com sucesso!');
-          this.closeEventPopup();
+          this.confirmMessage = true; 
           this.fetchMarcacoes();
-        } else {
+        }
+        else {
           console.error('Erro ao confirmar o evento');
         }
       } catch (error) {

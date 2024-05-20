@@ -338,8 +338,8 @@ exports.complete = (req,res) => {
                 port: 587,
                 secure: false,
                 auth: {
-                    user: 'xavinabais0@gmail.com',
-                    pass: 'elsr zmxa bexm mcvd'
+                    user: 'aaa',
+                    pass: 'aaa'
                 }
             });
             
