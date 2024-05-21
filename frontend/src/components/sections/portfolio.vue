@@ -2,7 +2,7 @@
 
     <!-- DESKTOP -->
 
-<section class="portfolio-block desktop">
+<section class="portfolio-block desktop" id="portfolio">
 
 <p style="font-size: 32px; color: white; font-weight: bold;">PORTFOLIO</p>
 <div class="separador">
@@ -39,7 +39,7 @@
     <!-- MOBILE -->
 
 
-<section class="portfolio-block mobile">
+<section class="portfolio-block mobile" id="portfolio">
 
 <p style="font-size: 32px; color: white; font-weight: bold;">PORTFOLIO</p>
 <div class="separador">

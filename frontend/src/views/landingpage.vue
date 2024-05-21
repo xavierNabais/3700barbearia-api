@@ -35,7 +35,7 @@
     </div>
 
     <div class="fixed-button" :style="{ right: buttonHover ? '0' : '' }" @mouseover="buttonHover = true" @mouseleave="buttonHover = false">
-            <button @click="openPopup"> &#8592; AGENDAR CORTE</button>
+            <button @click="openPopup"> « AGENDAR CORTE</button>
     </div>
 </div>
 

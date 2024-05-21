@@ -14,15 +14,16 @@
         <div class="mobile-menu-items-container" :class="{ 'ativo': mobileMenuOpen }">
           <ul class="mobile-menu-items">
             <li><a href="/">Home</a></li>
-            <li><a href="#">Agendar</a></li>
-            <li><a href="#">Contactos</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#contactos">Contactos</a></li>
             <li v-if="userName"><a href="/perfil">Minha Conta </a></li>
             <li v-if="!userId"><a href="/login">Entrar na minha conta » </a></li>
             <li v-if="userId"><a @click="logout" href="/">Logout</a></li>
           </ul>
         </div>
-        <div class="logo">
-          <a href="/"><img src="../assets/images/logo.png" alt="Logo"></a>
+        <div class="logo" style="margin-right: 15%;">
+          <a href="/"><img src="../assets/images/logo.png" alt="Logo" style="max-width: 25%;"></a>
         </div>
       </nav>
 
@@ -30,8 +31,8 @@
       <nav class="menu">
         <ul class="menu-items">
           <li><a href="/">HOME</a></li>
-          <li><a href="#">AGENDAR</a></li>
-          <li><a href="#">CONTACTOS</a></li>
+          <li><a href="#servicos">SERVIÇOS</a></li>
+          <li><a href="#portfolio">PORTFOLIO</a></li>
         </ul>
         <div class="dropdown" style="margin-left: 8%; align-self: self-end; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);">
           <button class="dropbtn">

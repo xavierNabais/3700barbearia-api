@@ -973,9 +973,15 @@ a {
 .testemunhos-block {
   text-align: center;
   padding-top: 5%;
-  background-color:white;
-  padding-bottom:10%;
+  background-color:#f3f3f3;
+  padding-bottom:5%;
 }
+
+.swiper-slide{
+  background-color: #f3f3f3!important;
+
+}
+
 
 .all_testemunho {
   text-align: left;
@@ -984,17 +990,28 @@ a {
 }
 
 .cada_testemunho{
+  padding-top: 5%;
+  text-align: left;
+  padding-left: 7%!important;
   float: left;
   width: 400px;
-  height:250px;
+  height:300px;
   background-color: #1E1E1E;
   color: white;
   margin:1%;
   padding-left:2%;
   background-image: url(http://localhost:8080/img/textura.1f719671.png);
+  box-shadow: 0 10px 10px 5px rgba(0, 0, 0, 0.5), /* Regular shadow */
+  0 6px 20px rgba(0, 0, 0, 0.1); /* Larger shadow */
+  transition: box-shadow 0.3s ease-in-out;
 }
-
-
+.cada_testemunho:hover{
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), /* Regular shadow on hover */
+  0 12px 40px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+}
+.cada_testemunho p{
+margin: 15px 0px;
+}
 
 
 
@@ -1516,9 +1533,6 @@ button.savePanel:hover {
     display:block;
   }
 
-  .footer{
-    display:none;
-  }
 
   .popup {
   width:90vw;

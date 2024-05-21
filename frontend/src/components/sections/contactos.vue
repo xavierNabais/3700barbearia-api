@@ -2,7 +2,7 @@
 
     <!-- DESKTOP -->
 
-            <section class="contactos desktop">
+            <section class="contactos desktop" id="contactos">
 
             <p style="font-size: 32px; color: white; font-weight: bold;">CONTACTOS</p>
             <div class="separador">
@@ -44,7 +44,7 @@
 
     <!-- MOBILE -->
 
-            <section class="contactos mobile">
+            <section class="contactos mobile" id="contactos">
 
                 <p style="font-size: 32px; color: white; font-weight: bold;">CONTACTOS</p>
                 <div class="separador">

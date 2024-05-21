@@ -9,13 +9,11 @@
         <div class="conteudo">
             <div class="conteudo-texto">
             <p style="font-size: 24px;color: white;line-height: 50px">
-                Bem-vindo à Barbearia [Nome] Localizada no coração da cidade, a Barbearia [Nome] oferece serviços de barbearia de alta qualidade para homens que procuram um corte de cabelo e barba impecáveis. Com uma equipe de barbeiros experientes e apaixonados, estamos comprometidos em proporcionar uma experiência de cuidado pessoal excepcional a cada cliente.
+                Bem-vindo à Barbearia 3700 Localizada no coração da cidade, ofereçemos serviços de barbearia de alta qualidade para homens que procuram um corte de cabelo e barba impecáveis. Com uma equipa de barbeiros, experientes e apaixonados, comprometidos em proporcionar uma experiência de cuidado pessoal excepcional a cada cliente.
             </p>
-            <div style="gap:30px;display: flex;margin-top:10%;">
+            <div style="gap:150px;display: flex;margin-top:10%; align-items: center;">
                 <div><img src="../../assets/images/aboutus.jpg" style="width:100%;" class="lightbox"></div>
-                <div><img src="../../assets/images/aboutus.jpg" style="width:100%" class="lightbox"></div>
-                <div><img src="../../assets/images/aboutus.jpg" style="width:100%" class="lightbox"></div>
-                <div><img src="../../assets/images/aboutus.jpg" style="width:100%" class="lightbox"></div>
+                <div><img src="../../assets/images/about2.png" style="width:85%" class="lightbox"></div>
             </div>
             </div>
         </div>
@@ -62,10 +60,11 @@
         <div class="conteudo" style="width:80%">
             <div class="conteudo-texto" style="padding:0">
             <p style="font-size: 16px;color: white;line-height: 35px;">
-                Bem-vindo à Barbearia [Nome] Localizada no coração da cidade, a Barbearia [Nome] oferece serviços de barbearia de alta qualidade para homens que procuram um corte de cabelo e barba impecáveis. Com uma equipe de barbeiros experientes e apaixonados, estamos comprometidos em proporcionar uma experiência de cuidado pessoal excepcional a cada cliente.
+                Bem-vindo à Barbearia 3700 Localizada no coração da cidade, ofereçemos serviços de barbearia de alta qualidade para homens que procuram um corte de cabelo e barba impecáveis. Com uma equipa de barbeiros, experientes e apaixonados, comprometidos em proporcionar uma experiência de cuidado pessoal excepcional a cada cliente.
             </p>
                 <div style="margin: 50px 0px 10px 0px"><img src="../../assets/images/aboutus.jpg" style="width:100%;border: 1px solid white;"></div>
-                <div style="margin: 10px 0px"><img src="../../assets/images/aboutus.jpg" style="width:100%;border: 1px solid white;"></div>
+                <div style="margin: 10px 0px"><img src="../../assets/images/about2.png" style="width:100%;border: 1px solid white;"></div>
+
             </div>
         </div>
 

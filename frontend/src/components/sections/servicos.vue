@@ -2,7 +2,7 @@
 
     <!-- DESKTOP -->
 
-<section class="servico-bloco desktop">
+<section class="servico-bloco desktop" id="servicos">
 
 <p style="font-size: 32px; color: white; font-weight: bold;">SERVIÇOS</p>
 <div class="separador">
@@ -15,11 +15,35 @@
     <div class="servicesLeft" style="flex:1;">
         <div class="blocks">
 
-            <div v-for="dados in servicos" :key="dados.id" class="bloco-servico">
+            <div class="bloco-servico">
                 <div style="margin-left:10%">
-                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">{{ dados.Nome }}</h3>
-                    <p style="font-size:16px;line-height: 190%">{{ dados.Descricao }}</p>
-                    <div style="margin-left:50%; width: 150px;"><img src="../../assets/images/tesoura.png" alt="Tesoura" style="width: 45%;"></div>
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">Corte de cabelo</h3>
+                    <p style="font-size:16px;line-height: 190%">Corte de cabelo personalizado conforme suas preferências e estilo.</p>
+                    <div style="margin-left:60%; width: 150px;"><img src="../../assets/images/tesoura.png" alt="Tesoura" style="width: 45%;"></div>
+                </div>
+            </div>
+
+            <div class="bloco-servico">
+                <div style="margin-left:10%">
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">Pintura</h3>
+                    <p style="font-size:16px;line-height: 190%">Coloração de cabelo para dar um toque único e moderno ao seu visual.</p>
+                    <div style="margin-left:60%; width: 150px;"><img src="../../assets/images/pincel.png" alt="Tesoura" style="width: 45%;"></div>
+                </div>
+            </div>
+
+            <div class="bloco-servico">
+                <div style="margin-left:10%">
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">Barba</h3>
+                    <p style="font-size:16px;line-height: 190%">Tratamento profissional para modelar e aparar a barba, mantendo-a impecável.</p>
+                    <div style="margin-left:60%; width: 150px;"><img src="../../assets/images/barbeador.png" alt="Tesoura" style="width: 45%;"></div>
+                </div>
+            </div>
+
+            <div class="bloco-servico">
+                <div style="margin-left:10%">
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">Tratamento Capilar</h3>
+                    <p style="font-size:16px;line-height: 190%">Um tratamento especializado para cabelos pintados.</p>
+                    <div style="margin-left:60%; width: 150px;"><img src="../../assets/images/cuidado-capilar.png" alt="Tesoura" style="width: 45%;"></div>
                 </div>
             </div>
 
@@ -40,7 +64,7 @@
     <!-- MOBILE -->
 
 
-<section class="servico-bloco mobile" style="height:auto">
+<section class="servico-bloco mobile" style="height:auto" id="servicos">
 
 <p style="font-size: 32px; color: white; font-weight: bold;">SERVIÇOS</p>
 <div class="separador">
@@ -53,10 +77,35 @@
     <div class="servicesLeft" style="flex:1;">
         <div class="blocks" style="justify-content:center;padding-bottom:10%">
 
-            <div v-for="dados in servicos" :key="dados.id" class="bloco-servico" style="text-align:center">
-                <div style="padding:10%">
-                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">{{ dados.Nome }}</h3>
-                    <p style="font-size:16px;line-height: 190%">{{ dados.Descricao }}</p>
+          <div class="bloco-servico">
+                <div style="margin-left:10%">
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">Corte de cabelo</h3>
+                    <p style="font-size:16px;line-height: 190%">Corte de cabelo personalizado conforme suas preferências e estilo.</p>
+                    <div style="margin-left:60%; width: 150px;"><img src="../../assets/images/tesoura.png" alt="Tesoura" style="width: 45%;"></div>
+                </div>
+            </div>
+
+            <div class="bloco-servico">
+                <div style="margin-left:10%">
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">Pintura</h3>
+                    <p style="font-size:16px;line-height: 190%">Coloração de cabelo para dar um toque único e moderno ao seu visual.</p>
+                    <div style="margin-left:60%; width: 150px;"><img src="../../assets/images/pincel.png" alt="Tesoura" style="width: 45%;"></div>
+                </div>
+            </div>
+
+            <div class="bloco-servico">
+                <div style="margin-left:10%">
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">Barba</h3>
+                    <p style="font-size:16px;line-height: 190%">Tratamento profissional para modelar e aparar a barba, mantendo-a impecável.</p>
+                    <div style="margin-left:60%; width: 150px;"><img src="../../assets/images/barbeador.png" alt="Tesoura" style="width: 45%;"></div>
+                </div>
+            </div>
+
+            <div class="bloco-servico">
+                <div style="margin-left:10%">
+                    <h3 style="color:#F1B809; text-transform: uppercase; font-size: 24px;">Tratamento Capilar</h3>
+                    <p style="font-size:16px;line-height: 190%">Um tratamento especializado para cabelos pintados.</p>
+                    <div style="margin-left:60%; width: 150px;"><img src="../../assets/images/cuidado-capilar.png" alt="Tesoura" style="width: 45%;"></div>
                 </div>
             </div>
 
