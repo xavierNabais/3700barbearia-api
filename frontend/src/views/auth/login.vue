@@ -178,13 +178,13 @@
                 <div>
                   <label for="email" class="login-label">Endereço de email</label>
                   <br>
-                  <input type="text" id="email" class="login" v-model="r_email"> 
+                  <input type="text" id="email" class="login" v-model="r_email" required> 
                 </div>
               </div>
               <div class="input-group">
                 <label for="password" class="login-label">Password</label>
                 <br>
-                <input type="password" id="password" class="login" v-model="r_password">
+                <input type="password" id="password" class="login" v-model="r_password" required>
               </div>
             </div>
             <p>Os seus dados pessoais serão usados para apoiar a sua experiência no site 3700barbershop.pt

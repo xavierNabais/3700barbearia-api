@@ -14,6 +14,7 @@ var path = require('path');
 
 //Rota Visualização Painel de administrador
 router.get("/painel/utilizadores", utilizadorController.findAll);
+
 //Rota Visualização Painel de administrador Utilizadores Funcionários
 router.get("/painel/funcionarios", utilizadorController.findWorkers);
 

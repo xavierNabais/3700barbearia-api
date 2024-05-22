@@ -1523,6 +1523,14 @@ button.savePanel:hover {
   background-color:#F4B604;
   color:white;
 }
+
+.swiper-button-prev, .swiper-button-next{
+  color:#F4B604!important;
+}
+
+.swiper-pagination-bullet-active{
+  background: #F4B604!important;
+}
 @media (max-width: 768px) {
 
   .desktop{
