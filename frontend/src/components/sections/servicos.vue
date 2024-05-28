@@ -140,25 +140,6 @@
           servicos: [], 
         };
       },
-      methods: {
-        // Método assíncrono para obter os serviços
-        async obterServicos() {
-          try {
-            // Faz uma requisição para obter os serviços
-            const resposta = await fetch('http://localhost:5000/painel/servicos');
-            // Converte a resposta para JSON
-            const dados = await resposta.json();
-            // Filtra os serviços para obter serviços específicos
-            this.servicos = dados.filter(servico => {
-              const nome = servico.Nome.toLowerCase();
-              return nome === 'corte' || nome === 'sobrancelhas' || nome === 'acabamento' || nome === 'penteado';
-            });
-          } catch (erro) {
-            // Captura e regista qualquer erro na obtenção dos dados dos serviços
-            console.error('Erro ao obter os dados dos serviços:', erro);
-          }
-        }
-      },
       mounted() {
         this.obterServicos();
       },

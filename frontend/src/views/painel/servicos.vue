@@ -143,7 +143,7 @@
         methods: {
         async fetchServicos() {
             try {
-              const response = await fetch('http://localhost:5000/painel/servicos');
+              const response = await fetch('api/painel/servicos');
               const data = await response.json();
               this.servicos = data;
             } catch (error) {
@@ -157,7 +157,7 @@
           const duracao = document.getElementById('duracao').value;
           const ativo = document.getElementById('ativo').value;
         try {
-          const response = await fetch(`http://localhost:5000/painel/servicos`, {
+          const response = await fetch(`api/painel/servicos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -183,7 +183,7 @@
         },
         async excluirServico() {
         try {
-          const response = await fetch(`http://localhost:5000/painel/servicos/${this.userIdToDelete}`, {
+          const response = await fetch(`api/painel/servicos/${this.userIdToDelete}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -203,7 +203,7 @@
         },
         async submitEdit() {
           try {
-            const response = await fetch(`http://localhost:5000/painel/servicos/${this.userIdToEdit}`, {
+            const response = await fetch(`api/painel/servicos/${this.userIdToEdit}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json'

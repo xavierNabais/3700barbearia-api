@@ -151,7 +151,7 @@
         methods: {
           async fetchUtilizadores() {
             try {
-              const response = await fetch('http://localhost:5000/painel/funcionarios');
+              const response = await fetch('api/painel/funcionarios');
               const data = await response.json();
               this.utilizadores = data;
             } catch (error) {
@@ -160,7 +160,7 @@
           },
           async fetchBarbeiros() {
             try {
-              const response = await fetch('http://localhost:5000/painel/barbeiros');
+              const response = await fetch('api/painel/barbeiros');
               const data = await response.json();
               this.barbeiros = data;
             } catch (error) {
@@ -174,7 +174,7 @@
           const especializacao = document.getElementById('especializacao').value;
           const ativo = document.getElementById('ativo').value;
           try {
-            const response = await fetch(`http://localhost:5000/painel/barbeiros`, {
+            const response = await fetch(`api/painel/barbeiros`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
@@ -200,7 +200,7 @@
             },
           async excluirBarbeiro(userIdToDelete) {
           try {
-            const response = await fetch(`http://localhost:5000/painel/barbeiros/${userIdToDelete}`, {
+            const response = await fetch(`api/painel/barbeiros/${userIdToDelete}`, {
               method: 'DELETE'
             });
 
@@ -219,7 +219,7 @@
           try {
             const id_utilizador = document.getElementById('id_utilizador').value;
             this.editedUser.Id_utilizador = id_utilizador;
-            const response = await fetch(`http://localhost:5000/painel/barbeiros/${this.userIdToEdit}`, {
+            const response = await fetch(`api/painel/barbeiros/${this.userIdToEdit}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json'

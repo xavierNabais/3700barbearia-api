@@ -523,7 +523,7 @@ methods: {
 // Método assíncrono para obter as marcações
 async fetchMarcacoes() {
 try {
-  const response = await fetch('http://localhost:5000/painel/marcacoes');
+  const response = await fetch('api/painel/marcacoes');
   this.marcacoes = await response.json();
 } catch (error) {
   console.error('Erro ao obter as marcações:', error);
@@ -532,7 +532,7 @@ try {
 // Método assíncrono para obter os serviços
   async fetchServicos() {
   try {
-    const response = await fetch('http://localhost:5000/painel/servicos');
+    const response = await fetch('api/painel/servicos');
     const data = await response.json();
     this.servicos = data;
   } catch (error) {
@@ -556,7 +556,7 @@ filterServicosPorCategoria(categoria) {
 // Método assíncrono para obter os barbeiros
 async fetchBarbeiros() {
 try {
-  const response = await fetch('http://localhost:5000/painel/barbeiros');
+  const response = await fetch('api/painel/barbeiros');
   const data = await response.json();
   this.barbeiros = data;
 } catch (error) {
@@ -569,7 +569,7 @@ async googleCallback(response) {
 
 
               try {
-              const response = await fetch('http://localhost:5000/login/google', {
+              const response = await fetch('api/login/google', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -597,7 +597,7 @@ async login() {
           password: this.password,
 
         };
-    const response = await fetch('http://localhost:5000/login', {
+    const response = await fetch('api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -620,7 +620,7 @@ async login() {
 // Método assíncrono para o registo
 async registo() {
             try {
-              const response = await fetch('http://localhost:5000/registo', {
+              const response = await fetch('api/registo', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -760,7 +760,7 @@ async selectDay(day) {
 
   try {
     // Obtém as marcações do servidor para o dia selecionado
-    const response = await fetch(`http://localhost:5000/painel/marcacoes?data=${this.currentYear}-${day.month + 1}-${day.day}&barbeiro=${this.barbeiro}`);
+    const response = await fetch(`api/painel/marcacoes?data=${this.currentYear}-${day.month + 1}-${day.day}&barbeiro=${this.barbeiro}`);
     const data = await response.json();
 
     // Converte as marcações em horários bloqueados
@@ -933,7 +933,7 @@ selectService(service) {
           notas: this.selectedNotas,
         };
 
-        const response = await fetch('http://localhost:5000/painel/marcacoes', {
+        const response = await fetch('api/painel/marcacoes', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

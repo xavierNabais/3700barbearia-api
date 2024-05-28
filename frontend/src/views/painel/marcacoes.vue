@@ -158,7 +158,7 @@
         methods: {
           async fetchMarcacoes() {
             try {
-              const response = await fetch('http://localhost:5000/painel/marcacoes');
+              const response = await fetch('api/painel/marcacoes');
               const data = await response.json();
               this.marcacoes = data;
             } catch (error) {
@@ -167,7 +167,7 @@
           },
           async fetchUtilizadores() {
             try {
-              const response = await fetch('http://localhost:5000/painel/utilizadores');
+              const response = await fetch('api/painel/utilizadores');
               const data = await response.json();
               this.utilizadores = data;
             } catch (error) {
@@ -176,7 +176,7 @@
           },
           async fetchBarbeiros() {
             try {
-              const response = await fetch('http://localhost:5000/painel/barbeiros');
+              const response = await fetch('api/painel/barbeiros');
               const data = await response.json();
               this.barbeiros = data;
             } catch (error) {
@@ -185,7 +185,7 @@
           },
           async fetchServicos() {
             try {
-              const response = await fetch('http://localhost:5000/painel/servicos');
+              const response = await fetch('api/painel/servicos');
               const data = await response.json();
               this.servicos = data;
             } catch (error) {
@@ -199,7 +199,7 @@
           const data = document.getElementById('data').value;
           const notas = document.getElementById('notas').value;
           try {
-            const response = await fetch(`http://localhost:5000/painel/marcacoes`, {
+            const response = await fetch(`api/painel/marcacoes`, {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
@@ -226,7 +226,7 @@
 
         async excluirMarcacao(userIdToDelete) {
         try {
-          const response = await fetch(`http://localhost:5000/painel/marcacoes/${userIdToDelete}`, {
+          const response = await fetch(`api/painel/marcacoes/${userIdToDelete}`, {
             method: 'DELETE'
           });
 
@@ -251,7 +251,7 @@
             this.editedUser.Data = document.getElementById('data').value;
             this.editedUser.Notas = document.getElementById('Notas').value;
 
-            const response = await fetch(`http://localhost:5000/painel/marcacoes/${this.userIdToEdit}`, {
+            const response = await fetch(`api/painel/marcacoes/${this.userIdToEdit}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json'

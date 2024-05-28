@@ -136,7 +136,7 @@ export default {
   methods: {
     async fetchUtilizador() {
       try {
-        const response = await fetch(`http://localhost:5000/painel/utilizadores/${this.userId}`);
+        const response = await fetch(`api/painel/utilizadores/${this.userId}`);
         const data = await response.json();
         this.utilizador = data;
         if (this.utilizador.Pontos < 10) {

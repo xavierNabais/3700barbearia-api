@@ -99,7 +99,7 @@ export default {
           console.error('UserId não encontrado na sessionStorage.');
           return;
         }
-        const url = `http://localhost:5000/painel/marcacoes/${id}`;
+        const url = `api/painel/marcacoes/${id}`;
         const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -126,7 +126,7 @@ export default {
           console.error('UserId não encontrado na sessionStorage.');
           return;
         }
-        const url = `http://localhost:5000/painel/marcacoes/barbeiro/${userId}`;
+        const url = `api/painel/marcacoes/barbeiro/${userId}`;
         const response = await fetch(url);
         const data = await response.json();
         this.marcacoes = data;
@@ -163,7 +163,7 @@ export default {
       console.log(userId);
       try {
         this.disabled = true;
-        const response = await fetch(`http://localhost:5000/utilizador/complete/${userId}`, {
+        const response = await fetch(`api/utilizador/complete/${userId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

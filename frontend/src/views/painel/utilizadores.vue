@@ -194,7 +194,7 @@ export default {
   methods: {
     async fetchUtilizadores() {
       try {
-        const response = await fetch('http://localhost:5000/painel/utilizadores');
+        const response = await fetch('api/painel/utilizadores');
         const data = await response.json();
         this.utilizadores = data;
       } catch (error) {
@@ -211,7 +211,7 @@ export default {
           const pontos = document.getElementById('pontos').value;
           const cargo = document.getElementById('cargo').value;
           try {
-            const response = await fetch('http://localhost:5000/painel/utilizadores', {
+            const response = await fetch('api/painel/utilizadores', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
@@ -240,7 +240,7 @@ export default {
             },
     async excluirUtilizador(userIdToDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/painel/utilizadores/${userIdToDelete}`, {
+        const response = await fetch(`api/painel/utilizadores/${userIdToDelete}`, {
           method: 'DELETE'
         });
 
@@ -281,7 +281,7 @@ export default {
 
         try {
           console.log(editedUserData);
-          const response = await fetch(`http://localhost:5000/painel/utilizadores/${this.userIdToEdit}`, {
+          const response = await fetch(`api/painel/utilizadores/${this.userIdToEdit}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
@@ -301,7 +301,7 @@ export default {
         }
       } else {
         try {
-          const response = await fetch(`http://localhost:5000/painel/utilizadores/${this.userIdToEdit}`, {
+          const response = await fetch(`api/painel/utilizadores/${this.userIdToEdit}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'

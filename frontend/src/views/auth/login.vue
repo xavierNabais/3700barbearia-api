@@ -237,7 +237,7 @@
 
 
               try {
-              const response = await fetch('http://localhost:5000/login/google', {
+              const response = await fetch('api/login/google', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -267,7 +267,7 @@
           // Função para realizar o login com email e password
           async login() {
             try {
-              const response = await fetch('http://localhost:5000/login', {
+              const response = await fetch('api/login', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -298,7 +298,7 @@
           // Função para realizar o registo de um novo utilizador
           async registo() {
             try {
-              const response = await fetch('http://localhost:5000/registo', {
+              const response = await fetch('api/registo', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'

@@ -229,7 +229,7 @@ methods: {
     const decoded = jwtDecode(token);
     const userId = decoded.userId;
 
-    await this.fetchMarcacoes(`http://localhost:5000/perfil/marcacoes/anteriores/${userId}`);
+    await this.fetchMarcacoes(`api/perfil/marcacoes/anteriores/${userId}`);
     this.isAnterioresActive = true;
     this.blockAnteriores = true;
   },
@@ -237,7 +237,7 @@ methods: {
     const token = localStorage.getItem('token');
     const decoded = jwtDecode(token);
     const userId = decoded.userId;
-    await this.fetchMarcacoes(`http://localhost:5000/perfil/marcacoes/proximas/${userId}`);
+    await this.fetchMarcacoes(`api/perfil/marcacoes/proximas/${userId}`);
     this.isAnterioresActive = false;
     this.blockAnteriores = false;
   },
